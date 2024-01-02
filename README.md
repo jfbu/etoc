@@ -9,11 +9,11 @@ It provides only etoc.sty, not the full etoc.dtx whose latest official release i
 
 But we have deliberately left inside the etoc.sty file code comments relative to current not yet released to CTAN work.
 
+# 1.2d 2023/10/29
+
 The first commit in this repo with etoc.sty contains its latest official release attow, i.e. 1.2d of 2023/10/29.
 
-The next commit is a development version aiming at supporting the "LaTeX tagged PDF" project:
-
-# 1.2e-dev-2024/01/01
+# 1.2e-dev 2024/01/02
 
 This tag (sic) corresponds to a development version of etoc aimed at supporting at least partially tagged PDF output.
 
@@ -46,7 +46,7 @@ contents per se, for example one can use it to count how many sections are
 contained in a chapter so the only result of execution of these commands is to
 update some counter or other user-defined macro to hold the result.
 
-Current status (as of 1.2e-dev-2024/01/02):
+Current status (as of 1.2e-dev 2024/01/02):
 \begin{itemize}
 \item a document loading \etoc and leaving it in compatibility mode, using
   only \toc and \localtoc should produce tagged TOCs as done by kernel code,
