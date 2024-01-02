@@ -30,8 +30,8 @@ Here is a description of what is hoped for at this stage:
 \label{etocthetaggednumber}
 
 For some years upstream \LaTeX{} maintainers have been engaged into a
-``\LaTeX{} Tagged PDF'' project to enable automatic tagging of \LaTeX{}
-document, see the relevant entries in
+``\LaTeX{} Tagged PDF'' project to enable automatic tagging of PDF
+documents produced via \LaTeX, see the relevant entries in
 \centeredline{\url{https://latex-project.org/news/latex2e-news/ltnews.pdf}}
 and a general overview in this 2020 paper
 \centeredline{\url{https://www.latex-project.org/publications/2020-FMi-TUB-tb129mitt-tagpdf.pdf}}
@@ -64,6 +64,10 @@ Current status (as of 1.2e-dev 2024/01/02):
   especially marked will not be so. 
 \end{itemize}
 
+Current bug (2024/01/02): the first compilation will cause \ctanpkg{tagpdf} to
+raise an error.  Next compilations are fine.  This will be fixed in due time,
+and is at this stage only an inconvenience.
+
 One can turn tagging on or off via \csb{etoctaggingon} and
 \csb{etoctaggingoff}.  Of course the former will have any effect only if the
 document has activated tagging (currently via \csa{DocumentMetadata}, see above
@@ -90,7 +94,6 @@ via specific line styles using \csb{etocthename}, \csb{etocthenumber},
 TOC has been parsed, via TikZ for example, will need to use
 \csb{etoctaggingoff} locally and users are currently on their own to add
 tagging manually to the TikZ (or whatever) rendering.
-
 ```
 
 # License
