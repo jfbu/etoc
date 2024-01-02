@@ -82,8 +82,8 @@ usable.  The latter contains the specific tagging instructions too.
 
 Currently the reason \csb{etocname} and \csb{etocpage} by themselves hold no
 tagging instruction is because the whole \marg{prefix} and \marg{contents}
-part of \csb{etocsetlinestyle} configuration have been prefixed and postfixed
-by tagging commands.  Whether this gives correct results is too be seen.
+part of \csb{etocsetstyle} configuration have been prefixed and postfixed
+by tagging commands.  Whether this gives correct results is to be seen.
 
 The author has neither the time nor the resources nor the appropriate tools to
 do any kind of testing beyond the most basic by himself.
