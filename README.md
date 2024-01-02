@@ -5,21 +5,26 @@ This repository will provide development snapshots from the [etoc](https://ctan.
 
 Comments via the issue tracker are welcome: please add `@jfbu` inside your bug report, my past experience of GitHub is that I would not be pinged otherwise.
 
-It provides only etoc.sty, not the full etoc.dtx whose latest official release is only on CTAN.
+It provides only `etoc.sty`, not the full `etoc.dtx` whose latest official release is only on CTAN.
 
 But we have deliberately left inside the etoc.sty file code comments relative to current not yet released to CTAN work.
 
-# 1.2d 2023/10/29
+### 1.2d 2023/10/29
 
 The first commit in this repo with etoc.sty contains its latest official release attow, i.e. 1.2d of 2023/10/29.
 
-# 1.2e-dev 2024/01/02
+### 1.2e-dev 2024/01/02
 
 This tag (sic) corresponds to a development version of etoc aimed at supporting at least partially tagged PDF output.
 
-You will find test files there which you can run via `latexmk -pdf test_tagging*tex` and check the log output for [tagpdf](https://ctan.org/pkg/tagpdf) warnings (none normally!) and if you have appropriate tools you can check if the tagging looks reasonable for the main TOC and the local TOCs.
+Please refer to the latex3/tagging-project for background information.
 
-Update: due to [#1](https://github.com/jfbu/etoc/issues/1), usage of `latexmk -pdf` has to be modified into `latexmk -f -pdf` and one has to hit RETURN each time TeX pauses to report the tagpdf error message, or `latexmk -f -interaction=nonstopmode -pdf` to avoid that.
+You will find here test files which you can run via `latexmk -pdf test_tagging*tex` and check the log output for [tagpdf](https://ctan.org/pkg/tagpdf) warnings (none normally!) and if you have appropriate tools you can check if the tagging looks reasonable for the main TOC and the local TOCs.
+
+> [!WARNING]
+> Due to [#1](https://github.com/jfbu/etoc/issues/1), usage of `latexmk -pdf` has to be modified into `latexmk -f -pdf` and one has to hit RETURN each time TeX pauses to report the tagpdf error message, or `latexmk -f -interaction=nonstopmode -pdf` to avoid that.
+
+(it is expected to fix this bug shortly)
 
 Here is a description of what is hoped for at this stage:
 
@@ -96,7 +101,7 @@ TOC has been parsed, via TikZ for example, will need to use
 tagging manually to the TikZ (or whatever) rendering.
 ```
 
-# License
+## License
 
 <pre>
 %     This Work may be distributed and/or modified under the
