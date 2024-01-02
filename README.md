@@ -19,6 +19,8 @@ This tag (sic) corresponds to a development version of etoc aimed at supporting 
 
 You will find test files there which you can run via `latexmk -pdf test_tagging*tex` and check the log output for [tagpdf](https://ctan.org/pkg/tagpdf) warnings (none normally!) and if you have appropriate tools you can check if the tagging looks reasonable for the main TOC and the local TOCs.
 
+Update: due to [#1](https://github.com/jfbu/etoc/issues/1), usage of `latexmk -pdf` has to be modified into `latexmk -f -pdf` and one has to hit RETURN each time TeX pauses to report the tagpdf error message, or `latexmk -f -interaction=nonstopmode -pdf` to avoid that.
+
 Here is a description of what is hoped for at this stage:
 
 ```latex
