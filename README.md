@@ -17,7 +17,7 @@ The first commit in this repo with etoc.sty contains its latest official release
 
 This tag (sic) corresponds to a development version of etoc aimed at supporting at least partially tagged PDF output.
 
-Please refer to the latex3/tagging-project for background information.
+Please refer to the [latex3/tagging-project](https://github.com/latex3/tagging-project) for background information.
 
 You will find here test files which you can run via `latexmk -pdf test_tagging*tex` and check the log output for [tagpdf](https://ctan.org/pkg/tagpdf) warnings (none normally!) and if you have appropriate tools you can check if the tagging looks reasonable for the main TOC and the local TOCs.
 
