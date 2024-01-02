@@ -1,0 +1,81 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+\documentclass{book}
+\usepackage{hyperref}
+\usepackage[localtoctotoc,ouroboros=false]{etoc}% stress test with localtoctotoc
+
+% Memo: the display style for local tocs will be chosen in this
+% default automatically with a title "one level down" : i.e.
+% in a \part, \localtableofcontents will use a \chapter*.
+% See doc on \etocclasstocstyle, \etocarticlestyle, etc...
+
+\etocchecksemptiness
+
+\begin{document}
+\tableofcontents
+
+\part{ONE}
+
+%\etocarticlestyle % if we want to use \section* rather than \chapter*
+\renewcommand\contentsname{Local contents}
+
+\localtableofcontents
+
+
+\chapter{Test chapter one}
+
+\localtableofcontents\label{toc:chap}
+
+\section{Section one one}
+\localtableofcontents*\ref{toc:chap}
+
+celle-ci sera vide
+\localtableofcontents\ref{emptytoc}%
+et rien ne doit apparaître
+
+\subsection{Subsection one one one}
+\subsection{Subsection one  one two}
+\section{Section one two}
+\subsection{Subsection one two one}
+\subsection{Subsection one  two two}
+
+\chapter{Test chapter two}
+
+\section*{Section two one PAS NUMERO}
+
+\etocsetlocaltop.toc{section}
+\localtableofcontents
+
+\subsection{Subsection two one one}
+\subsection{Subsection two one two}
+\section{Section two two}
+\subsection{Subsection two two one}
+\subsection{Subsection two  two two}
+\section{Section two three}
+\localtableofcontents\label{emptytoc}
+
+\part{TWO}
+\localtableofcontents*  % do not add to toc
+
+\chapter{Test chapter three}
+\section{Section three one}
+\subsection{Subsection three one one}
+\subsection{Subsection three one two}
+
+\chapter{Test chapter four}
+\localtableofcontents
+
+\section{Section four one}
+\subsection{Subsection four one one}
+\subsection{Subsection four one two}
+\subsection{Subsection four one three}
+\section{Section four two}
+\subsection{Subsection four two one}
+\subsection{Subsection four two two}
+\subsection{Subsection four two three}
+
+\end{document}

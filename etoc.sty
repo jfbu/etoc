@@ -22,12 +22,12 @@
 %% in the same archive or directory.)
 %%
 %% Package: etoc
-%% Version: 1.2d
+%% Version: 1.2e
 %% License: LPPL 1.3c
-%% Copyright (C) 2012-2023 Jean-Francois B.
+%% Copyright (C) 2012-2024 Jean-Francois B.
 %%                         jfbu on GitHub
 \NeedsTeXFormat{LaTeX2e}[2003/12/01]
-\ProvidesPackage{etoc}[2023/10/29 v1.2d Completely customisable TOCs (JFB)]
+\ProvidesPackage{etoc}[2024/01/02 v1.2e-dev Completely customisable TOCs (JFB)]
 \newif\ifEtoc@oldLaTeX
 \@ifl@t@r\fmtversion{2020/10/01}
   {}
@@ -36,7 +36,7 @@
    Since 1.1a (2023/01/14), etoc prefers LaTeX at least\MessageBreak
    as recent as 2020-10-01, for reasons of the .toc file,\MessageBreak
    and used to require it (from 1.1a to 1.2).\MessageBreak
-   This etoc (1.2d) does not *require* it, but has not been\MessageBreak
+   This etoc (1.2e) does not *require* it, but has not been\MessageBreak
    tested thoroughly on old LaTeX (especially if document\MessageBreak
    does not use hyperref) and retrofitting was done only\MessageBreak
    on basis of author partial remembrances of old context.\MessageBreak
@@ -127,6 +127,34 @@
 \def\etocdoesnotcheckemptiness {\Etoc@checksemptinessfalse }
 \newif\ifEtoc@notocifnotoc
 \def\etocnotocifnotoc {\Etoc@checksemptinesstrue\Etoc@notocifnotoctrue }
+%% dtx code comment left deliberately in etoc.sty
+%% \etocrelease{1.2e} starts minimal support for the ``\LaTeX{} tagged PDF''
+%% project.  Completely unstable code.   The \csbc{ifEtoc@tagactive}
+%% may not be needed or actually correctly used (as it is frozen here)
+%% but I use it in \csbc{Etoc@addtocontents}.
+\newif\ifEtoc@tagging
+\def\etoctaggingon {\Etoc@taggingtrue}
+\def\etoctaggingoff{\Etoc@taggingfalse}
+\newif\ifEtoc@tagactive % en ai-je vraiment besoin ?
+\ExplSyntaxOn
+\ifdefined\IfDocumentMetadataTF
+  \AtBeginDocument{%
+    \IfDocumentMetadataTF{\tag_if_active:T{\Etoc@tagactivetrue % frozen! bad?
+                                           \Etoc@taggingtrue}}{}%
+  }%
+\fi
+\ExplSyntaxOff
+\AtBeginDocument{%
+  \ifEtoc@tagactive
+    \PackageInfo{etoc}{Experimental tagging support activated}
+  \else
+    \Etoc@taggingfalse
+    \def\etoctaggingon{%
+      \PackageWarning{etoc}{Tagging is not active in the document\MessageBreak
+                            So \string\etoctaggingon\space is ignored}%
+    }%
+  \fi
+}
 \newcounter{etoc@tocid}
 \def\Etoc@tocext{toc}
 \def\Etoc@lofext{lof}
@@ -322,56 +350,98 @@
   \fi
   \Etoc@next{#1}%
 }
+\ExplSyntaxOn
 \def\Etoc@etoccontentsline@ #1#2#3#4{%
     \Etoc@doendsandbegin
+%% Experimental tagging support at \etocrelease{1.2e}.  We need to manually
+%% insert calls to the \LaTeX{} kernel tagging-related
+%% hooks, which is fragile as upstream will evolve regarding in particular
+%% current usage of ``config points''.
     \Etoc@global\edef\Etoc@prefix  {\expandafter\noexpand
          \csname Etoc@prefix@\the\numexpr\Etoc@level\endcsname }%
     \Etoc@global\edef\Etoc@contents{\expandafter\noexpand
          \csname Etoc@contents@\the\numexpr\Etoc@level\endcsname }%
     \ifEtoc@skipprefix \Etoc@global\def\Etoc@prefix{\@empty}\fi
     \global\Etoc@skipprefixfalse
+    \ifEtoc@tagging
+      \@contentsline@cfgpoint@before{#1}{#2}{#3}{#4}%
+    \fi
+    \gdef\@contentsline@destination{#4}% probably unneeded for us
     \Etoc@lxyz{#2}{#3}{#4}%
+    \ifEtoc@tagging
+          \tag_struct_begin:n{tag=Reference}%
+          \tag_mc_begin:n{tag=Reference}%
+    \fi
     \Etoc@prefix
     \Etoc@contents
+    \ifEtoc@tagging
+      \tag_mc_end:
+      \tag_struct_end:
+      \@contentsline@cfgpoint@after{#1}{#2}{#3}{#4}%
+    \fi
 }
+\ExplSyntaxOff
+\ExplSyntaxOn
 \def\Etoc@lxyz #1#2#3{%
     \ifEtoc@hyperref
        \Etoc@global\def\etocthelink##1{\hyperlink{#3}{##1}}%
     \else
        \Etoc@global\let\etocthelink\@firstofone
     \fi
-    \Etoc@global\def\etocthepage {#2}%
-    \ifEtoc@hyperref
-       \ifx\etocthepage\@empty
-         \Etoc@global\let\etocthelinkedpage\@empty
-       \else
-         \Etoc@global\def\etocthelinkedpage{\hyperlink {#3}{#2}}%
-       \fi
-    \else
-       \Etoc@global\let\etocthelinkedpage\etocthepage
-    \fi
+    \Etoc@global\def\etocthepage{#2}%
     \Etoc@global\def\etocthename{#1}%
     \futurelet\Etoc@getnb@token\Etoc@@getnb #1\hspace\etoc@
+%% dtx comment deliberately left in sty
+%% \etocrelease{1.2e} experimental tagging updates.  Add some check if
+%% \csb{etocthenumber} or \csb{etocthepage} are empty?
+    \ifEtoc@tagging
+      \Etoc@global\edef\etocthetaggednumber{%
+          \noexpand\tag_mc_end:
+          \noexpand\tag_struct_begin:n{tag=Lbl}%
+          \noexpand\tag_mc_begin:n{tag=Lbl}%
+          \unexpanded\expandafter{\etocthenumber}%
+          \noexpand\tag_mc_end:
+          \noexpand\tag_struct_end:
+          \noexpand\tag_mc_begin:n{tag=Reference}%
+      }%
+    \else
+      \Etoc@global\let\etocthetaggednumber\etocthenumber
+    \fi
     \ifEtoc@hyperref
-      \def\Etoc@tmp##1##2{\Etoc@global\def##2{\hyperlink{#3}{##1}}}%
+%% Leaving deliberately this dtx comment into the sty file which will
+%% be made public
+%% \etocrelease{1.2e} tagging: I learned the hard way that \csa{hyperlink}
+%% (or lower level \csa{hyper@linkstart}) needs to end a ``marked chunk''
+%% (or so I believe from code trace after misery) which explains why I inserted
+%% an |\tag_mc_begin:n{tag=Reference}| prior to |\Etoc@prefix\Etoc@contents|
+%% and why there is no \csa{etocthetaggedname} but only \csbc{etocthename},
+%% same for page, and there is only an \csbc{etocthetaggednumber}.
+     \def\Etoc@tmp##1##2{\Etoc@global\def##2{\hyperlink{#3}{##1}}}%
       \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthelinkedname
+      \ifx\etocthepage\@empty
+        \Etoc@global\let\etocthelinkedpage\@empty
+      \else
+        \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthelinkedpage
+      \fi
       \ifEtoc@numbered
-         \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthelinkednumber
+         \expandafter\Etoc@tmp\expandafter{\etocthetaggednumber}\etocthelinkednumber
       \else
          \Etoc@global\let\etocthelinkednumber\@empty
       \fi
     \else
       \Etoc@global\let\etocthelinkedname  \etocthename
-      \Etoc@global\let\etocthelinkednumber\etocthenumber
+      \Etoc@global\let\etocthelinkedpage  \etocthepage
+      \Etoc@global\let\etocthelinkednumber\etocthetaggednumber
     \fi
-    \Etoc@global\expandafter\let\csname etoclink \endcsname  \etocthelink
-    \Etoc@global\expandafter\let\csname etocname \endcsname  \etocthename
-    \Etoc@global\expandafter\let\csname etocnumber \endcsname\etocthenumber
-    \Etoc@global\expandafter\let\csname etocpage \endcsname  \etocthepage
+    \Etoc@global\expandafter\let\csname etoclink~\endcsname  \etocthelink
+    \Etoc@global\expandafter\let\csname etocname~\endcsname  \etocthename
+    \Etoc@global\expandafter\let\csname etocnumber~\endcsname\etocthetaggednumber
+    \Etoc@global\expandafter\let\csname etocpage~\endcsname  \etocthepage
     \ifEtoc@hyperref
       \Etoc@lxyz@linktoc
     \fi
 }
+\ExplSyntaxOff
 \def\Etoc@lxyz@linktoc{%
     \ifcase\Hy@linktoc
     \or
@@ -481,11 +551,33 @@
   \fi
   \global\let\Etoc@openouttoc\empty
 }
+%% dtx comment deliberately left in sty
+%% \etocrelease{1.2e} adds initial structure to support tagging.  Completely
+%% unstable code.  There is a subtlety here that we can \emph{not} (always)
+%% insert the \csa{@tarttoc} config point ``/before`` material here priori to
+%% |\the\Etoc@toctoks| due to local table of contents which (see the
+%% \csbc{Etoc@@startlocaltoc}) since the \etocrelease{1.2} (see
+%% \csbc{etocclasstocstyle}) may cause the TOC heading to originate from
+%% expansion of |\the\Etoc@toctoks| itself, and the \csa{@starttoc} tagging
+%% ``/before`` addition must not happen before the TOC title is typeset (as
+%% e.g. it may use a \csa{chapter*} command in a \csa{part} for |book|
+%% document class).
 \def\Etoc@toctoc{%
   \gdef\Etoc@stackofends{{-3}{}}%
   \global\let\Etoc@level\Etoc@minf
   \global\let\Etoc@virtualtop\Etoc@minf
+  \unless\ifEtoc@localtoc % si local toc voir dans \Etoc@@startlocaltoc
+    \ifEtoc@tagging
+    %%\ifEtoc@tagactive % do I need this here
+    \@starttoc@cfgpoint@before{toc}%
+    %%\fi
+  \fi\fi
   \the\Etoc@toctoks
+  \ifEtoc@tagging
+    %%\ifEtoc@tagactive % same remark, this seems superfluous
+    \@starttoc@cfgpoint@after{toc}%
+    %%\fi
+  \fi
   \ifEtoc@notactive
   \else
    \gdef\Etoc@level{-\thr@@}%
@@ -512,6 +604,19 @@
             \fi
           \fi
           \global\Etoc@notactivefalse
+%% dtx comment deliberately left in sty
+%% \etocrelease{1.2e} locates this here and not before \csbc{Etoc@toctoc} else
+%% \csbc{etocetoclocaltocmaketitle} could have kicked in and typeset a chapter
+%% title creating a Parent-Child tagging problem.
+%%
+%% Could this originate a problem perhaps if the toc file contents generate
+%% a |\begingroup/\endgroup| so that the group will be closed before the
+%% |\@starttoc@cfgpoint@after{toc}| is done?
+          \ifEtoc@tagging
+          %%\ifEtoc@tagactive % do I need this here
+            \@starttoc@cfgpoint@before{toc}%
+          %%\fi
+          \fi
        \fi
     \fi
 }
@@ -754,6 +859,9 @@
     \global\let\Etoc@virtualtop\Etoc@minf
     \gdef\Etoc@stackofends{{-3}{}}%
     \begingroup
+%% dtx comment deliberately left in sty
+%% \etocrelease{1.2e} turns off tagging unconditionally here.
+    \Etoc@taggingfalse
       \ifEtoc@localtoc
         \def\etoc@startlocaltoc##1{%
           \ifnum##1=\Etoc@tocid\relax
@@ -1118,6 +1226,11 @@
     \etocdefaultlines@setdeeperones
 }
 \def\etocnoprotrusion{\leavevmode\kern-\p@\kern\p@}
+%% dtx comment left deliberately in etoc.sty for public experimental release
+%% \etocrelease{1.2e} experimental code has decided that \csb{etocthenumber}
+%% would keep its original meaning so as not to break usage in numerical
+%% context.
+%% So here we need \csb{etocthetaggednumber} mark-up.
 \@ifclassloaded{memoir}{%
  \def\etocdefaultlines@setbook{%
  \Etoc@setstyle@b
@@ -1131,7 +1244,7 @@
    \leftskip  \etocminustwoleftmargin
    \rightskip \etocminustworightmargin
    \parfillskip \@flushglue
-   \vbox{\etocifnumbered{\etoclink{\etocbookname\enspace\etocthenumber:\quad}}{}%
+   \vbox{\etocifnumbered{\etoclink{\etocbookname\enspace\etocthetaggednumber:\quad}}{}%
          \etocname
          \baselineskip\etocbaselinespreadminustwo\baselineskip
          \par}%
@@ -1152,7 +1265,7 @@
    \leftskip  \etocminusoneleftmargin
    \rightskip \etocminusonerightmargin
    \parfillskip \@flushglue
-   \vbox{\etocifnumbered{\etoclink{\etocpartname\enspace\etocthenumber.\quad}}{}%
+   \vbox{\etocifnumbered{\etoclink{\etocpartname\enspace\etocthetaggednumber.\quad}}{}%
          \etocname
          \baselineskip\etocbaselinespreadminusone\baselineskip
          \par}%
@@ -1927,9 +2040,12 @@
    {}%
   }% end of at begin document
 }% end of not with memoir branch
+%% dtx comment deliberately left in sty
+%% \etocrelease{1.2e} attempts to mirror upstream \LaTeX{} if tagging is active.
 \def\Etoc@addtocontents #1#2{%
     \addtocontents {toc}{%
-      \protect\contentsline{#1}{#2}{\thepage}{\ifEtoc@hyperref\@currentHref\fi}%
+      \protect\contentsline{#1}{#2}{\thepage}%
+          {\ifEtoc@hyperref\@currentHref\else\ifEtoc@tagactive\@currentHref\fi\fi}%
       \ifdefined\protected@file@percent\protected@file@percent\fi
     }%
 }
