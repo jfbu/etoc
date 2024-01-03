@@ -27,7 +27,8 @@ Here is a description of what is hoped for at this stage:
 \section{Tagging}
 \label{etoctaggingon}
 \label{etoctaggingoff}
-\label{etocthetaggednumber}
+\label{etoctagginginlineoff}
+\label{etoctagthis}
 
 For some years upstream \LaTeX{} maintainers have been engaged into a
 ``\LaTeX{} Tagged PDF'' project to enable automatic tagging of PDF
@@ -66,20 +67,29 @@ Current status (as of 1.2e-dev 2024/01/03):
 
 One can turn tagging on or off via \csb{etoctaggingon} and
 \csb{etoctaggingoff}.  Of course the former will have any effect only if the
-document has activated tagging (currently via \csa{DocumentMetadata}, see above
-documentation).
+document has activated tagging (currently via \csa{DocumentMetadata}, see
+above documentation).  There is also a special purpose
+\csb{etoctagginginlineoff} for those rather special uses of \csb{etocsetstyle}
+which re-employ the kernel macros such as |\@dottedtocline| or |\l@section|,
+see \autoref{sec:anothercompat}.  This tells \etoc to free \csb{etocname},
+\csb{etocnumber} and \csb{etocpage} from contributing any tagging data by
+themselves, as it will be inserted by the \LaTeX{} kernel macros and nested
+marked chunks must be avoided (it also turns off \etoc added hyperlinking
+because the kernel |\@dottedtocline| or |\l@section| will originate it by
+themselves if tagging has been activated in the document).
 
-The macros \csb{etocname} and \csb{etocpage} keep the same meaning whether
-tagging is on or off.  The \csb{etocthenumber} also, because it may be used
-in numerical contexts in some user line styles (although in general it may only
-holds a textual representation of some numeric data).  So one should use the
-new \csb{etocthetaggednumber}, if for some reason \csb{etocnumber} is not
-usable.  The latter contains the specific tagging instructions too.
+These commands can not be used from inside the \marg{prefix} and \marg{contents}
+arguments of \csb{etocsetstyle}.
 
-Currently the reason \csb{etocname} and \csb{etocpage} by themselves hold no
-tagging instruction is because the whole \marg{prefix} and \marg{contents}
-part of \csb{etocsetstyle} configuration have been prefixed and postfixed
-by tagging commands.  Whether this gives correct results is to be seen.
+Commands \csb{etocname}, \csb{etocnumber} and \csb{etocpage} will now
+accomplish tagging tasks, as will \csb{etoclink} and the non-robust
+\csb{etocthelink}.  But \csb{etocthename}, \csb{etocthenumber}, and
+\csb{etocthepage} are kept as with no tagging.  This is especially important
+for \csb{etocthenumber} for backwards compatibility as it may be needed in
+some line styles as a numerical quantity (which it is not always, that depends
+on the various \csa{thesection} etc.... macros).  A (fragile attow) command
+\csb{etoctagthis} is a no-op if tagging is not activated, else it tags its
+argument with label |tag=Reference|.
 
 The author has neither the time nor the resources nor the appropriate tools to
 do any kind of testing beyond the most basic by himself.
@@ -89,7 +99,9 @@ via specific line styles using \csb{etocthename}, \csb{etocthenumber},
 \csb{etocthepage}, which are then rendered in a second stage, once the whole
 TOC has been parsed, via TikZ for example, will need to use
 \csb{etoctaggingoff} locally and users are currently on their own to add
-tagging manually to the TikZ (or whatever) rendering.
+tagging manually to the TikZ (or whatever) rendering.  Attow \csb{etoctagthis}
+can only be used from inside the \marg{prefix} and \marg{contents}
+arguments of \csb{etocsetstyle}.
 ```
 
 ## License

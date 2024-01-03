@@ -133,20 +133,29 @@
 %% may not be needed or actually correctly used (as it is frozen here)
 %% but I use it in \csbc{Etoc@addtocontents}.
 \newif\ifEtoc@tagging
-\def\etoctaggingon {\Etoc@taggingtrue}
-\def\etoctaggingoff{\Etoc@taggingfalse}
+\newif\ifEtoc@tagginginline
+\def\etoctaggingon {\Etoc@taggingtrue\Etoc@tagginginlinetrue}
+\def\etoctaggingoff{\Etoc@taggingfalse\Etoc@tagginginlinefalse}
+\def\etoctagginginlineoff{\Etoc@tagginginlinefalse}
 \newif\ifEtoc@tagactive % en ai-je vraiment besoin ?
 \ExplSyntaxOn
 \ifdefined\IfDocumentMetadataTF
   \AtBeginDocument{%
     \IfDocumentMetadataTF{\tag_if_active:T{\Etoc@tagactivetrue % frozen! bad?
-                                           \Etoc@taggingtrue}}{}%
+                                           \etoctaggingon}}{}%
   }%
 \fi
+\def\Etoc@tagthis #1{%
+                \tag_struct_begin:n{tag=Reference}%
+                \tag_mc_begin:n{tag=Reference}%
+                #1%
+                \tag_mc_end:
+                \tag_struct_end:
+                }%
 \ExplSyntaxOff
 \AtBeginDocument{%
   \ifEtoc@tagactive
-    \PackageInfo{etoc}{Experimental tagging support activated}
+    \PackageInfo{etoc}{Experimental tagging support activated}%
   \else
     \Etoc@taggingfalse
     \def\etoctaggingon{%
@@ -366,57 +375,45 @@
     \ifEtoc@tagging
       \@contentsline@cfgpoint@before{#1}{#2}{#3}{#4}%
     \fi
-    \gdef\@contentsline@destination{#4}% probably unneeded for us
+    \gdef\@contentsline@destination{#4}%
     \Etoc@lxyz{#2}{#3}{#4}%
-    \ifEtoc@tagging
-          \tag_struct_begin:n{tag=Reference}%
-          \tag_mc_begin:n{tag=Reference}%
-    \fi
     \Etoc@prefix
     \Etoc@contents
     \ifEtoc@tagging
-      \tag_mc_end:
-      \tag_struct_end:
       \@contentsline@cfgpoint@after{#1}{#2}{#3}{#4}%
     \fi
 }
-\ExplSyntaxOff
-\ExplSyntaxOn
 \def\Etoc@lxyz #1#2#3{%
-    \ifEtoc@hyperref
-       \Etoc@global\def\etocthelink##1{\hyperlink{#3}{##1}}%
-    \else
-       \Etoc@global\let\etocthelink\@firstofone
-    \fi
     \Etoc@global\def\etocthepage{#2}%
     \Etoc@global\def\etocthename{#1}%
     \futurelet\Etoc@getnb@token\Etoc@@getnb #1\hspace\etoc@
-%% dtx comment deliberately left in sty
-%% \etocrelease{1.2e} experimental tagging updates.  Add some check if
-%% \csb{etocthenumber} or \csb{etocthepage} are empty?
-    \ifEtoc@tagging
-      \Etoc@global\edef\etocthetaggednumber{%
-          \noexpand\tag_mc_end:
-          \noexpand\tag_struct_begin:n{tag=Lbl}%
-          \noexpand\tag_mc_begin:n{tag=Lbl}%
-          \unexpanded\expandafter{\etocthenumber}%
-          \noexpand\tag_mc_end:
-          \noexpand\tag_struct_end:
-          \noexpand\tag_mc_begin:n{tag=Reference}%
-      }%
+    \ifEtoc@tagginginline
+      \Etoc@global\let\etoctagthis\Etoc@tagthis
     \else
-      \Etoc@global\let\etocthetaggednumber\etocthenumber
+      \Etoc@global\let\etoctagthis\@firstofone
     \fi
     \ifEtoc@hyperref
-%% Leaving deliberately this dtx comment into the sty file which will
-%% be made public
-%% \etocrelease{1.2e} tagging: I learned the hard way that \csa{hyperlink}
-%% (or lower level \csa{hyper@linkstart}) needs to end a ``marked chunk''
-%% (or so I believe from code trace after misery) which explains why I inserted
-%% an |\tag_mc_begin:n{tag=Reference}| prior to |\Etoc@prefix\Etoc@contents|
-%% and why there is no \csa{etocthetaggedname} but only \csbc{etocthename},
-%% same for page, and there is only an \csbc{etocthetaggednumber}.
-     \def\Etoc@tmp##1##2{\Etoc@global\def##2{\hyperlink{#3}{##1}}}%
+      \ifEtoc@tagging
+        \Etoc@global\def\etocthetaggedlink##1{\Etoc@tagthis{\hyperlink{#3}{##1}}}%
+      \else
+        \Etoc@global\def\etocthetaggedlink##1{\hyperlink{#3}{##1}}%
+      \fi
+    \else
+      \Etoc@global\let\etocthetaggedlink\etoctagthis
+    \fi
+    \Etoc@global\let\etocthelink\etocthetaggedlink
+    \def\Etoc@tmp##1##2{\Etoc@global\expandafter\def\expandafter##2\expandafter{%
+                             \etocthelink{##1}%
+                             }%
+    }%
+%% under \etoctagginginlineoff regime for "another compatibility mode" methods
+%% which use \l@section of \@dottedtocline, we must not add hyperlinking
+%% ourselves. cf gh-#3
+    \ifEtoc@tagging
+      \unless\ifEtoc@tagginginline
+         \def\Etoc@tmp##1##2{\Etoc@global\def##2{##1}}%
+      \fi
+    \fi
       \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthelinkedname
       \ifx\etocthepage\@empty
         \Etoc@global\let\etocthelinkedpage\@empty
@@ -424,19 +421,72 @@
         \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthelinkedpage
       \fi
       \ifEtoc@numbered
-         \expandafter\Etoc@tmp\expandafter{\etocthetaggednumber}\etocthelinkednumber
+        \ifEtoc@tagginginline
+%% under \etoctagginginlineoff regime for "another compatibility mode" methods
+%% which use \l@section of \@dottedtocline, we must not add hyperlinking
+%% ourselves. cf gh-#3
+         \expandafter\Etoc@tmp\expandafter{\expanded{%
+            \noexpand\tag_mc_end:
+            \noexpand\tag_struct_begin:n{tag=Lbl}%
+            \noexpand\tag_mc_begin:n{tag=Lbl}%
+            \unexpanded\expandafter{\etocthenumber}%
+            \noexpand\tag_mc_end:
+            \noexpand\tag_struct_end:
+            \noexpand\tag_mc_begin:n{tag=Reference}}}\etocthelinkednumber
+        \else
+          \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthelinkednumber
+        \fi
       \else
-         \Etoc@global\let\etocthelinkednumber\@empty
+        \Etoc@global\let\etocthelinkednumber\@empty
+      \fi
+    \def\Etoc@tmp##1##2{\Etoc@global\expandafter\def\expandafter##2\expandafter{%
+                             \etoctagthis{##1}%
+                             }%
+    }%
+    \ifEtoc@tagging
+%% under \etoctagginginlineoff regime for "another compatibility mode" methods
+%% which use \l@section of \@dottedtocline, we must not add any tagging
+%% ourselves. cf gh-#3.
+      \unless\ifEtoc@tagginginline
+         \def\Etoc@tmp##1##2{\Etoc@global\def##2{##1}}%
+      \fi
+    \fi
+    \ifEtoc@hyperref
+%% "tagged" here in case of hyperref means here "tagged but not linked"
+      \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthetaggedname
+      \ifx\etocthepage\@empty
+        \Etoc@global\let\etocthetaggedpage\@empty
+      \else
+        \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthetaggedpage
+      \fi
+      \ifEtoc@numbered
+        \ifEtoc@tagginginline
+%% under \etoctagginginlineoff regime for "another compatibility mode" methods
+%% which use \l@section of \@dottedtocline, we must not add any tagging
+%% ourselves. cf gh-#3.
+          \expandafter\Etoc@tmp\expandafter{\expanded{%
+            \noexpand\tag_mc_end:
+            \noexpand\tag_struct_begin:n{tag=Lbl}%
+            \noexpand\tag_mc_begin:n{tag=Lbl}%
+            \unexpanded\expandafter{\etocthenumber}%
+            \noexpand\tag_mc_end:
+            \noexpand\tag_struct_end:
+            \noexpand\tag_mc_begin:n{tag=Reference}}}\etocthetaggednumber
+        \else
+          \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthetaggednumber
+        \fi
+      \else
+        \Etoc@global\let\etocthetaggednumber\@empty
       \fi
     \else
-      \Etoc@global\let\etocthelinkedname  \etocthename
-      \Etoc@global\let\etocthelinkedpage  \etocthepage
-      \Etoc@global\let\etocthelinkednumber\etocthetaggednumber
+      \Etoc@global\let\etocthetaggedname  \etocthelinkedname
+      \Etoc@global\let\etocthetaggednumber\etocthelinkednumber
+      \Etoc@global\let\etocthetaggedpage  \etocthelinkedpage
     \fi
     \Etoc@global\expandafter\let\csname etoclink~\endcsname  \etocthelink
-    \Etoc@global\expandafter\let\csname etocname~\endcsname  \etocthename
+    \Etoc@global\expandafter\let\csname etocname~\endcsname  \etocthetaggedname
     \Etoc@global\expandafter\let\csname etocnumber~\endcsname\etocthetaggednumber
-    \Etoc@global\expandafter\let\csname etocpage~\endcsname  \etocthepage
+    \Etoc@global\expandafter\let\csname etocpage~\endcsname  \etocthetaggedpage
     \ifEtoc@hyperref
       \Etoc@lxyz@linktoc
     \fi
@@ -1232,11 +1282,6 @@
 }
 \let\etocdefaultlines\etocfallbacklines
 \def\etocnoprotrusion{\leavevmode\kern-\p@\kern\p@}
-%% dtx comment left deliberately in etoc.sty for public experimental release
-%% \etocrelease{1.2e} experimental code has decided that \csb{etocthenumber}
-%% would keep its original meaning so as not to break usage in numerical
-%% context.
-%% So here we need \csb{etocthetaggednumber} mark-up.
 \@ifclassloaded{memoir}{%
  \def\etocfallbacklines@setbook{%
  \Etoc@setstyle@b
@@ -1250,7 +1295,7 @@
    \leftskip  \etocminustwoleftmargin
    \rightskip \etocminustworightmargin
    \parfillskip \@flushglue
-   \vbox{\etocifnumbered{\etoclink{\etocbookname\enspace\etocthetaggednumber:\quad}}{}%
+   \vbox{\etocifnumbered{\etoclink{\etocbookname\enspace\etocthenumber:\quad}}{}%
          \etocname
          \baselineskip\etocbaselinespreadminustwo\baselineskip
          \par}%
@@ -1271,7 +1316,7 @@
    \leftskip  \etocminusoneleftmargin
    \rightskip \etocminusonerightmargin
    \parfillskip \@flushglue
-   \vbox{\etocifnumbered{\etoclink{\etocpartname\enspace\etocthetaggednumber.\quad}}{}%
+   \vbox{\etocifnumbered{\etoclink{\etocpartname\enspace\etocthenumber.\quad}}{}%
          \etocname
          \baselineskip\etocbaselinespreadminusone\baselineskip
          \par}%

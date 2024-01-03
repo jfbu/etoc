@@ -1,0 +1,46 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+\documentclass{book}
+
+\usepackage{etoc}
+\etocchecksemptiness% problem shows whether or not this is used
+% \etocarticlestyle
+% \etocsettocstyle{\section*{\contentsname}}{}
+% \def\localtableofcontents{\begingroup\section*{\contentsname}\endgroup}
+\begin{document}
+% \etoctaggingoff
+
+\tableofcontents
+
+% \etoctaggingoff
+
+\part{ONE}
+
+%\etocarticlestyle % if we want to use \section* rather than \chapter*
+\renewcommand\contentsname{Local contents}
+
+\localtableofcontents
+
+%\etoctaggingoff
+
+\chapter{Test chapter one}
+
+\localtableofcontents
+
+\section{Section one one}
+
+\localtableofcontents
+
+%\subsection{Subsection}
+
+texte
+
+\localtableofcontents
+
+texte
+
+\end{document}

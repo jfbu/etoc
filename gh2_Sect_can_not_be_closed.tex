@@ -1,0 +1,27 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+\documentclass{book}
+
+\usepackage{etoc}
+
+\begin{document}
+
+% \tableofcontents
+
+\part{ONE}
+
+\etocsettocstyle{\section*{\contentsname}}{}% the structure Sect can not be closed
+
+% \etocsettocstyle{}{}% the structure Part can not be closed
+
+%\tracingmacros1
+\localtableofcontents
+%\tracingmacros0
+
+\chapter{Test chapter one}
+
+\end{document}

@@ -1,0 +1,64 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+\documentclass{book}
+\usepackage{etoc}
+\usepackage{hyperref}
+
+\etocchecksemptiness
+
+\etocsettocdepth{subsubsection}
+
+% Code slightly extended from etoc.pdf "Another compatibility mode"
+% (currently 2024/01/03 code snippet number 7)
+\makeatletter
+\newcommand{\MyLocalTOC}[1][section]{%
+  \begingroup
+  \etocsetstyle{chapter}{}{}
+    {\l@chapter{\numberline{\etocnumber}\etocname}{\etocpage}}{}%
+  \etocsetstyle{section}{}{}
+    {\l@section{\numberline{\etocnumber}\etocname}{\etocpage}}{}%
+  \etocsetstyle{subsection}{}{}
+    {\l@subsection{\numberline{\etocnumber}\etocname}{\etocpage}}{}%
+  \etocsetstyle{subsubsection}{}{}
+    {\l@subsubsection{\numberline{\etocnumber}\etocname}{\etocpage}}{}%
+  % etc... if further sectioning units are needed
+  %        (i.e. not excluded by tocdepth and actually there in document)
+  % Here #1 defaults to section, meaning this is appropriate
+  % for local TOC in a chapter
+  \etocsettocstyle{\@nameuse{#1}*{Local contents}}
+                  {}%
+  \etoctagginginlineoff
+  \localtableofcontents
+  \endgroup}
+\makeatother
+
+\begin{document}
+
+\tableofcontents
+
+\part{ONE}
+
+\MyLocalTOC
+
+\chapter{Test chapter one}
+
+\MyLocalTOC
+
+\section{Section one one}
+
+\MyLocalTOC[subsection]
+
+\subsection{Subsection one one one}
+
+celle-ci sera vide
+\MyLocalTOC
+et rien ne doit apparaître
+
+\subsection{Subsection one  one two}
+
+
+\end{document}
