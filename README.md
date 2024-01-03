@@ -13,18 +13,13 @@ But we have deliberately left inside the etoc.sty file code comments relative to
 
 The first commit in this repo with etoc.sty contains its latest official release attow, i.e. 1.2d of 2023/10/29.
 
-### 1.2e-dev 2024/01/02
+### 1.2e-dev 2024/01/03
 
-This tag (sic) corresponds to a development version of etoc aimed at supporting at least partially tagged PDF output.
+Development version of etoc aimed at supporting at least partially tagged PDF output.
 
 Please refer to the [latex3/tagging-project](https://github.com/latex3/tagging-project) for background information.
 
 You will find here test files which you can run via `latexmk -pdf test_tagging*tex` and check the log output for [tagpdf](https://ctan.org/pkg/tagpdf) warnings (none normally!) and if you have appropriate tools you can check if the tagging looks reasonable for the main TOC and the local TOCs.
-
-> [!WARNING]
-> Due to [#1](https://github.com/jfbu/etoc/issues/1), usage of `latexmk -pdf` has to be modified into `latexmk -f -pdf` and one has to hit RETURN each time TeX pauses to report the tagpdf error message, or `latexmk -f -interaction=nonstopmode -pdf` to avoid that.
-
-(it is expected to fix this bug shortly)
 
 Here is a description of what is hoped for at this stage:
 
@@ -53,7 +48,7 @@ contents per se, for example one can use it to count how many sections are
 contained in a chapter so the only result of execution of these commands is to
 update some counter or other user-defined macro to hold the result.
 
-Current status (as of 1.2e-dev 2024/01/02):
+Current status (as of 1.2e-dev 2024/01/03):
 \begin{itemize}
 \item a document loading \etoc and leaving it in compatibility mode, using
   only \toc and \localtoc should produce tagged TOCs as done by kernel code,
@@ -68,10 +63,6 @@ Current status (as of 1.2e-dev 2024/01/02):
   same remark applies about all material in the line styles which should be
   especially marked will not be so. 
 \end{itemize}
-
-Current bug (2024/01/02): the first compilation will cause \ctanpkg{tagpdf} to
-raise an error.  Next compilations are fine.  This will be fixed in due time,
-and is at this stage only an inconvenience.
 
 One can turn tagging on or off via \csb{etoctaggingon} and
 \csb{etoctaggingoff}.  Of course the former will have any effect only if the

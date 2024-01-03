@@ -27,7 +27,7 @@
 %% Copyright (C) 2012-2024 Jean-Francois B.
 %%                         jfbu on GitHub
 \NeedsTeXFormat{LaTeX2e}[2003/12/01]
-\ProvidesPackage{etoc}[2024/01/02 v1.2e-dev Completely customisable TOCs (JFB)]
+\ProvidesPackage{etoc}[2024/01/03 v1.2e-dev Completely customisable TOCs (JFB)]
 \newif\ifEtoc@oldLaTeX
 \@ifl@t@r\fmtversion{2020/10/01}
   {}
@@ -573,15 +573,19 @@
     %%\fi
   \fi\fi
   \the\Etoc@toctoks
-  \ifEtoc@tagging
-    %%\ifEtoc@tagactive % same remark, this seems superfluous
-    \@starttoc@cfgpoint@after{toc}%
-    %%\fi
-  \fi
   \ifEtoc@notactive
   \else
    \gdef\Etoc@level{-\thr@@}%
    \Etoc@doendsandbegin
+  \fi
+  \ifEtoc@tagging
+    \ifEtoc@localtoc
+      \unless\ifEtoc@notactive
+        \@starttoc@cfgpoint@after{toc}%
+      \fi
+    \else
+        \@starttoc@cfgpoint@after{toc}%
+    \fi
   \fi
 }
 \def\Etoc@@startlocaltoc#1#2{%
@@ -1118,6 +1122,7 @@
                       \expandafter\Etoc@setstyle@error
                     \fi {#1}%
 }
+\let\etocsetlinestyle\etocsetstyle
 \def\Etoc@setstyle@error #1{%
     \PackageWarning{etoc}{`#1' is unknown to etoc. \space Did you\MessageBreak
                     forget some \string\etocsetlevel{#1}{<level>}?\MessageBreak
@@ -1215,16 +1220,17 @@
 \def\etocabbrevpagename {p.~}
 \def\etocpartname       {Part}
 \def\etocbookname       {Book}
-\def\etocdefaultlines{%
+\def\etocfallbacklines{%
     \Etoc@standardlinesfalse
-    \etocdefaultlines@setbook
-    \etocdefaultlines@setpart
-    \etocdefaultlines@setchapter
-    \etocdefaultlines@setsection
-    \etocdefaultlines@setsubsection
-    \etocdefaultlines@setsubsubsection
-    \etocdefaultlines@setdeeperones
+    \etocfallbacklines@setbook
+    \etocfallbacklines@setpart
+    \etocfallbacklines@setchapter
+    \etocfallbacklines@setsection
+    \etocfallbacklines@setsubsection
+    \etocfallbacklines@setsubsubsection
+    \etocfallbacklines@setdeeperones
 }
+\let\etocdefaultlines\etocfallbacklines
 \def\etocnoprotrusion{\leavevmode\kern-\p@\kern\p@}
 %% dtx comment left deliberately in etoc.sty for public experimental release
 %% \etocrelease{1.2e} experimental code has decided that \csb{etocthenumber}
@@ -1232,7 +1238,7 @@
 %% context.
 %% So here we need \csb{etocthetaggednumber} mark-up.
 \@ifclassloaded{memoir}{%
- \def\etocdefaultlines@setbook{%
+ \def\etocfallbacklines@setbook{%
  \Etoc@setstyle@b
   {-2}%
   {\addpenalty\@M\etocskipfirstprefix}
@@ -1252,8 +1258,8 @@
    \endgroup}
   {}%
  }
- }{\let\etocdefaultlines@setbook\@empty}
-\def\etocdefaultlines@setpart{%
+ }{\let\etocfallbacklines@setbook\@empty}
+\def\etocfallbacklines@setpart{%
 \Etoc@setstyle@b
   {-1}%
   {\addpenalty\@M\etocskipfirstprefix}
@@ -1273,7 +1279,7 @@
    \endgroup}
   {}%
 }
-\def\etocdefaultlines@setchapter{%
+\def\etocfallbacklines@setchapter{%
 \Etoc@setstyle@b
   {0}%
   {\addpenalty\@M\etocskipfirstprefix}
@@ -1288,7 +1294,7 @@
    \endgroup}
   {\addpenalty{-\@highpenalty}\addvspace{\etocsepminusone}}%
 }
-\def\etocdefaultlines@setsection{%
+\def\etocfallbacklines@setsection{%
 \Etoc@setstyle@b
   {1}%
   {\addpenalty\@M\etocskipfirstprefix}
@@ -1323,7 +1329,7 @@
    \endgroup}
   {\addpenalty\@secpenalty\addvspace{\etocsepzero}}%
 }
-\def\etocdefaultlines@setsubsection{%
+\def\etocfallbacklines@setsubsection{%
 \Etoc@setstyle@b
   {2}%
   {\addpenalty\@medpenalty\etocskipfirstprefix}
@@ -1357,7 +1363,7 @@
    \endgroup}
   {\addpenalty\@secpenalty\addvspace{\etocsepone}}%
 }
-\def\etocdefaultlines@setsubsubsection{%
+\def\etocfallbacklines@setsubsubsection{%
 \Etoc@setstyle@b
   {3}%
   {\addpenalty\@M
@@ -1374,7 +1380,7 @@
     \endgroup
    \addpenalty{-\@highpenalty}}
 }
-\def\etocdefaultlines@setdeeperones{%
+\def\etocfallbacklines@setdeeperones{%
 \Etoc@setstyle@e{4}%
 \Etoc@setstyle@e{5}%
 \ifEtoc@deeplevels
@@ -2254,7 +2260,7 @@
             \let\protect\etoc@setlocaltop\protect\@gobble}{}}%
 \def\etocstandardlines {\Etoc@standardlinestrue}
 \def\etoctoclines      {\Etoc@standardlinesfalse}
-\etocdefaultlines
+\etocfallbacklines
 \etocstandardlines
 \def\etocstandarddisplaystyle{%
     \PackageWarningNoLine{etoc}{%
