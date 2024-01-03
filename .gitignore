@@ -1,2 +1,9 @@
 auto/
 LISMOIAVANTTOUTPUSH
+*.aux
+*.dvi
+*.log
+*.toc
+*.fls
+*.fdb_latexmk
+*.pdf
