@@ -1,27 +1,26 @@
 # etoc
+
 etoc.sty development repo and issue tracker
 
 This repository will provide development snapshots from the [etoc](https://ctan.org/pkg/etoc) LaTeX package by the author.
 
-Comments via the issue tracker are welcome: please add `@jfbu` inside your bug report, my past experience of GitHub is that I would not be pinged otherwise.
+It was opened to allow people to test the current code and receive comments via the issue tracker: please add `@jfbu` inside your bug report, my past experience of GitHub is that I would not be pinged otherwise.
 
-It provides only `etoc.sty`, not the full `etoc.dtx` whose latest official release is only on CTAN.
+The repository provides only `etoc.sty`, not the full `etoc.dtx` whose latest official release is only on CTAN.  But this version ot `etoc.sty` may contain deliberately comments which ultimately will be only in the `dtx` file.
 
-But we have deliberately left inside the etoc.sty file code comments relative to current not yet released to CTAN work.
+The first commit in this repo with etoc.sty contains version 1.2d of 2023/10/29 which contains no tagging related code yet.  By doing
 
-### 1.2d 2023/10/29
+```
+git diff 1.2d-2023/10/29.. etoc.sty
+```
 
-The first commit in this repo with etoc.sty contains its latest official release attow, i.e. 1.2d of 2023/10/29.
+you can see the on-going changes (some such as naming some internal macros with `fallbacklines` rather than `defaultlines` and providing `\etocfallbacklines` as an alias to `\etocdefaultlines`are unrelated).
 
-### 1.2e-dev 2024/01/03
-
-Development version of etoc aimed at supporting at least partially tagged PDF output.
+## Tagging
 
 Please refer to the [latex3/tagging-project](https://github.com/latex3/tagging-project) for background information.
 
-You will find here test files which you can run via `latexmk -pdf test_tagging*tex` and check the log output for [tagpdf](https://ctan.org/pkg/tagpdf) warnings (none normally!) and if you have appropriate tools you can check if the tagging looks reasonable for the main TOC and the local TOCs.
-
-Here is a description of what is hoped for at this stage:
+Here is a description from upstream dev `etoc.dtx` of what is hoped for at this stage:
 
 ```latex
 \section{Tagging}
