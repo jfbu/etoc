@@ -1,0 +1,45 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+\documentclass{book}
+
+\usepackage{etoc}
+%\etocchecksemptiness
+
+\begin{document}
+
+\tableofcontents
+
+\renewcommand\contentsname{Local contents}
+
+\part{ONE}
+
+\localtableofcontents
+
+
+\etoctaggingoff
+\etocframedstyle{\contentsname}
+
+\chapter{Test chapter one}
+
+\localtableofcontents
+
+\etoctaggingon
+\section{Section one one}
+
+\localtableofcontents
+
+\subsection{Subsection one one one}
+\subsection{Subsection one one two}
+\subsection{Subsection one one three}
+
+\section{Section one two}
+\section{Section one three}
+
+\chapter{Test chapter two}
+
+\section{Section two one}
+\end{document}
