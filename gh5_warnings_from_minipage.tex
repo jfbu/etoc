@@ -1,0 +1,101 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+\documentclass{book}
+\usepackage{hyperref}
+\usepackage{etoc}
+\etocchecksemptiness
+
+\begin{document}
+
+\tableofcontents
+
+\renewcommand\contentsname{Local contents}
+
+\part{ONE}
+
+\localtableofcontents
+
+% this uses a multicols 2-column environment
+\etocruledstyle{\contentsname}
+
+\etocsetlinestyle{section}
+   {\parindent0pt\etocskipfirstprefix}
+   {\par}
+   {\textbf{\etocname:}\hfill}% the minipage will be inserted here
+                              % when in paragraph mode
+   {\par}
+
+% Memo: \emph in place of \textit below raises tagging warning
+
+% Test a minipage inserted when in paragraph mode
+% Same problem from #4, warnings are raised (only on second compilation,
+% because here the minipage needs a subsection to be inserted
+\etocsetlinestyle{subsection}
+   {\begin{minipage}[c]{0.6\linewidth}\etocskipfirstprefix}
+   {\par}
+   {\etocnumber{} (\textit{page \etocpage})}%
+   {\end{minipage}}
+
+% commenting this out removes Warnings
+%\renewcommand\etocaftertitlehook{\AssignSocketPlug{tagsupport/minipage/before}{noop}%
+%                                 \AssignSocketPlug{tagsupport/minipage/after}{noop}}%
+
+\chapter{one}
+
+\localtableofcontents
+
+\section{one one}
+
+\etocfallbacklines
+\localtableofcontents
+
+\subsection{one one one}
+
+text
+
+\subsection{one one two}
+
+text
+
+\subsection{one one three}
+
+text
+
+\section{one two}
+
+\localtableofcontents
+
+\subsection{one two one}
+
+text
+
+\subsection{one two two}
+text
+
+\subsection{one two three}
+text
+
+\section{one three}
+
+\subsection{one three one}
+
+text
+
+\subsection{one three two}
+
+text
+
+\section{one four}
+
+\subsection{one four one}
+
+text
+
+\chapter{two}
+
+\section{two one}
+\end{document}
