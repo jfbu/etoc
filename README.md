@@ -8,9 +8,9 @@ This repository:
 
 The repository provides only `etoc.sty`, not the full `etoc.dtx` whose latest official release is only on CTAN.  But this version ot `etoc.sty` may contain deliberately comments which ultimately will be moved to the released `dtx` file.
 
-## Diffs
-
 [This diff](https://github.com/jfbu/etoc/compare/1.2d-2023-10-29...HEAD) compares current HEAD with latest CTAN release.
+
+## Relative diffs
 
 These diffs are with respect to the latest previous tag in this repo:
 
