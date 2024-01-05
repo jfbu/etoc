@@ -2,25 +2,33 @@
 
 etoc.sty development repo and issue tracker
 
-This repository will provide development snapshots from the [etoc](https://ctan.org/pkg/etoc) LaTeX package by the author.
+This repository:
+- serves as an issue tracker for the current release of the [etoc](https://ctan.org/pkg/etoc) LaTeX package on [CTAN](https://ctan.org),
+- provides snapshots of the current dev version of the package, allowing interested people to test it and report bugs or feature requests.
 
-It was opened to allow people to test the current code and receive comments via the issue tracker: please add `@jfbu` inside your bug report, my past experience of GitHub is that I would not be pinged otherwise.
+The repository provides only `etoc.sty`, not the full `etoc.dtx` whose latest official release is only on CTAN.  But this version ot `etoc.sty` may contain deliberately comments which ultimately will be moved to the released `dtx` file.
 
-The repository provides only `etoc.sty`, not the full `etoc.dtx` whose latest official release is only on CTAN.  But this version ot `etoc.sty` may contain deliberately comments which ultimately will be only in the `dtx` file.
+## git tags
 
-The first commit in this repo with etoc.sty contains version 1.2d of 2023/10/29 which contains no tagging related code yet.  By doing
+### [1.2d-2023/10/29]
 
-```
-git diff 1.2d-2023/10/29.. etoc.sty
-```
+- latest CTAN release at time of writing (2024/01/05).
 
-you can see the on-going changes (some such as naming some internal macros with `fallbacklines` rather than `defaultlines` and providing `\etocfallbacklines` as an alias to `\etocdefaultlines`are unrelated).
+### [2024/01/02]
 
-## Tagging
+- initial tagging support.
 
-Please refer to the [latex3/tagging-project](https://github.com/latex3/tagging-project) for background information.
+### [2024/01/03]
 
-Here is a description from upstream dev `etoc.dtx` of what is hoped for at this stage:
+- refactor tagging support, fix #1, #2, #3.
+
+- `\etocsetlinestyle` and `\etocfallbacklines` as respective aliases to `\etocsetstyle` and `\etocdefaultlines`.
+
+## PDF Tagging
+
+Refer to the this PDF document (by Frank Mittelbach and Chris Rowley): [*LaTeX Tagged PDF—A blueprint for a large project*](https://www.latex-project.org/publications/2020-FMi-TUB-tb129mitt-tagpdf.pdf) for background information, and to the [latex3/tagging-project](https://github.com/latex3/tagging-project) and [latex3/tagpdf](https://github.com/latex3/tagpdf) repositories to current status of this upstream LaTeX project.
+
+Here is a description from dev `etoc.dtx` of what is hoped for at this stage regarding this topic (this will be kept updated with `etoc.sty` pushes to this repo):
 
 ```latex
 \section{Tagging}
