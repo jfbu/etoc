@@ -31,7 +31,7 @@ These diffs are with respect to the latest previous tag in this repo:
 
 ## PDF Tagging
 
-Refer to the this PDF document (by Frank Mittelbach and Chris Rowley): [*LaTeX Tagged PDF—A blueprint for a large project*](https://www.latex-project.org/publications/2020-FMi-TUB-tb129mitt-tagpdf.pdf) for background information, and to the [latex3/tagging-project](https://github.com/latex3/tagging-project) and [latex3/tagpdf](https://github.com/latex3/tagpdf) repositories to current status of this upstream LaTeX project.
+Refer to the this PDF document (by Frank Mittelbach and Chris Rowley): [*LaTeX Tagged PDF—A blueprint for a large project*](https://www.latex-project.org/publications/2020-FMi-TUB-tb129mitt-tagpdf.pdf) for background information, and to the [latex3/tagging-project](https://github.com/latex3/tagging-project) and [latex3/tagpdf](https://github.com/latex3/tagpdf) repositories for current status of this upstream LaTeX project.
 
 Here is a description from dev `etoc.dtx` of what is hoped for at this stage regarding this topic (this will be kept updated with `etoc.sty` pushes to this repo):
 
