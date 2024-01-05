@@ -20,7 +20,7 @@ These diffs are with respect to the latest previous tag in this repo:
 
 ### [2024-01-03]
 
-- refactor tagging support, fix #1, #2, #3.
+- refactor tagging support, fix jfbu/etoc#1, jfbu/etoc#2, jfbu/etoc#3.
 
 - `\etocsetlinestyle` and `\etocfallbacklines` as respective aliases to `\etocsetstyle` and `\etocdefaultlines`.
 
