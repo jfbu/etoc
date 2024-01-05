@@ -1578,6 +1578,10 @@
 \fi
 %% the start of a minipage which will hold a multicols if nbofcolumns>1
         \begin{minipage}{\hsize}%
+\ifEtoc@tagactive
+\AssignSocketPlug{tagsupport/minipage/before}{tag/dflt}%
+\AssignSocketPlug{tagsupport/minipage/after}{tag/dflt}%
+\fi
         \etocframedmphook
         \ifnum #1>\@ne
           \expandafter\@firstoftwo
@@ -1597,7 +1601,15 @@
   {% start of \etocsettocstyle second argument
         \ifnum #1>\@ne\expandafter\@firstofone\else \expandafter\@gobble \fi
         {\end{multicols}\unskip }%
+\ifEtoc@tagactive
+\AssignSocketPlug{tagsupport/minipage/before}{noop}%
+\AssignSocketPlug{tagsupport/minipage/after}{noop}%
+\fi
         \end{minipage}% started in the \hbox
+\ifEtoc@tagactive
+\AssignSocketPlug{tagsupport/minipage/before}{tag/dflt}%
+\AssignSocketPlug{tagsupport/minipage/after}{tag/dflt}%
+\fi
       \egroup %  end of \hbox wrapper around minipage (inside \vbox)
       \vskip\etocinnerbottomsep
     \egroup % end of \vbox which included the TOC contents
