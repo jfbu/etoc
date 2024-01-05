@@ -10,15 +10,15 @@ The repository provides only `etoc.sty`, not the full `etoc.dtx` whose latest of
 
 ## git tags
 
-### [1.2d-2023/10/29]
+### [1.2d-2023-10-29]
 
 - latest CTAN release at time of writing (2024/01/05).
 
-### [2024/01/02]
+### [2024-01-02]
 
 - initial tagging support.
 
-### [2024/01/03]
+### [2024-01-03]
 
 - refactor tagging support, fix #1, #2, #3.
 
