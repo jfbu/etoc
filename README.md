@@ -8,21 +8,24 @@ This repository:
 
 The repository provides only `etoc.sty`, not the full `etoc.dtx` whose latest official release is only on CTAN.  But this version ot `etoc.sty` may contain deliberately comments which ultimately will be moved to the released `dtx` file.
 
-## git tags
+## Diffs
 
-### [1.2d-2023-10-29]
+[This diff](https://github.com/jfbu/etoc/compare/1.2d-2023-10-29...HEAD) compares current HEAD with latest CTAN release.
 
-- latest CTAN release at time of writing (2024/01/05).
+These diffs are with respect to the latest previous tag in this repo:
 
-### [2024-01-02]
-
-- initial tagging support.
+### [Untagged]
 
 ### [2024-01-03]
 
 - refactor tagging support, fix #1, #2, #3.
 
 - `\etocsetlinestyle` and `\etocfallbacklines` as respective aliases to `\etocsetstyle` and `\etocdefaultlines`.
+
+### [2024-01-02]
+
+- initial tagging support.
+
 
 ## PDF Tagging
 
@@ -123,3 +126,7 @@ arguments of \csb{etocsetstyle}.
 %     and version 1.3 or later is part of all distributions of
 %     LaTeX version 2005/12/01 or later.
 </pre>
+
+[Untagged]: https://github.com/jfbu/etoc/compare/2024-01-03...HEAD
+[2024-01-03]: https://github.com/jfbu/etoc/compare/2024-01-02...2024-01-03
+[2024-01-02]: https://github.com/jfbu/etoc/compare/1.2d-2023-10-29...2024-01-02
