@@ -18,8 +18,6 @@ These diffs are with respect to the latest previous tag in this repo:
 
 ### [dev HEAD]
 
-### [2024-01-05]
-
 - fix jfbu/etoc#4 thanks to @u-fischer's advice at latex3/tagging-project#54.  No more warnings at this stage!
 
 - use `\Etoc@tagleaders` to mark as artifacts the dots in fall-back TOC line styles, in imitation of upstream `\@dottedtocline`.
@@ -138,7 +136,6 @@ arguments of \csb{etocsetstyle}.
 %     LaTeX version 2005/12/01 or later.
 </pre>
 
-[dev HEAD]: https://github.com/jfbu/etoc/compare/2024-01-05...HEAD
-[2024-01-05]: https://github.com/jfbu/etoc/compare/2024-01-03...2024-01-05
+[dev HEAD]: https://github.com/jfbu/etoc/compare/2024-01-03...HEAD
 [2024-01-03]: https://github.com/jfbu/etoc/compare/2024-01-02...2024-01-03
 [2024-01-02]: https://github.com/jfbu/etoc/compare/1.2d-2023-10-29...2024-01-02
