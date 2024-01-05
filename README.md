@@ -14,7 +14,7 @@ The repository provides only `etoc.sty`, not the full `etoc.dtx` whose latest of
 
 These diffs are with respect to the latest previous tag in this repo:
 
-### [Untagged]
+### [dev HEAD]
 
 ### [2024-01-03]
 
@@ -127,6 +127,6 @@ arguments of \csb{etocsetstyle}.
 %     LaTeX version 2005/12/01 or later.
 </pre>
 
-[Untagged]: https://github.com/jfbu/etoc/compare/2024-01-03...HEAD
+[dev HEAD]: https://github.com/jfbu/etoc/compare/2024-01-03...HEAD
 [2024-01-03]: https://github.com/jfbu/etoc/compare/2024-01-02...2024-01-03
 [2024-01-02]: https://github.com/jfbu/etoc/compare/1.2d-2023-10-29...2024-01-02
