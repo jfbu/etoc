@@ -18,6 +18,13 @@ These diffs are with respect to the latest previous tag in this repo:
 
 ### [dev HEAD]
 
+- use `\Etoc@tagleaders` to mark as artifacts the dots in fall-back TOC line styles, in imitation of upstream `\@dottedtocline`.
+
+- very tentative `\Etoc@tagrule` added to the "framed" style (yet to be tested, as jfbu/etoc#4 has to be resolved first, see latex3/tagging-project#54).
+
+- Rework indentation which has been catastrophic for ages in `\etocframedstyle` source code.
+
+
 ### [2024-01-03]
 
 - refactor tagging support, fix jfbu/etoc#1, jfbu/etoc#2, jfbu/etoc#3.
@@ -67,8 +74,7 @@ Current status (as of 1.2e-dev 2024/01/03):
   only \toc and \localtoc should produce tagged TOCs as done by kernel code,
 \item a document loading \etoc and using its default (better called
   ``fallback'') line styles should not raise \ctanpkg{tagpdf} warnings (after
-  final compilation) and the TOCs will have some tagging.  But the dotted
-  lines are not marked yet as artefacts.
+  final compilation) and the TOCs will have some tagging.
 \item hopefully, a document using \csb{etocsetstyle} to define custom line
   styles and using \csb{etocname}, \csb{etocnumber} and \csb{etocpage} should
   behave about correctly, this has not been really tested, it was tested only

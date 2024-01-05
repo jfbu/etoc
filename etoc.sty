@@ -27,7 +27,7 @@
 %% Copyright (C) 2012-2024 Jean-Francois B.
 %%                         jfbu on GitHub
 \NeedsTeXFormat{LaTeX2e}[2003/12/01]
-\ProvidesPackage{etoc}[2024/01/03 v1.2e-dev Completely customisable TOCs (JFB)]
+\ProvidesPackage{etoc}[2024/01/03 (dev) v1.2e Completely customisable TOCs (JFB)]
 \newif\ifEtoc@oldLaTeX
 \@ifl@t@r\fmtversion{2020/10/01}
   {}
@@ -152,6 +152,25 @@
                 \tag_mc_end:
                 \tag_struct_end:
                 }%
+%% we don't need here to check the tagginginline Boolean whose only role
+%% is to influence \etocname, \etocnumber, \etocpage for the case they
+%% would be used inside some \@dottedtocline or \l@section etc...
+\def\Etoc@tagleaders #1{%
+  \ifEtoc@tagging
+    \tag_mc_begin:n{artifact}\tag_stop:n{leaders}%
+%% why the \nobreak in original latex-lab? the other things may
+%% add breakpoints?
+    \nobreak#1\nobreak
+    \tag_start:n{leaders}\tag_mc_end:
+  \else #1\fi
+}%
+%% at this stage I don't know yet if this works in vmode
+%% should there be some \nobreak then here?
+\def\Etoc@tagrule #1{%
+   \ifEtoc@tagging
+      \tag_mc_begin:n{artifact}\tag_stop:n{rule}#1\tag_start:n{rule}\tag_mc_end:
+   \else #1\fi
+}%
 \ExplSyntaxOff
 \AtBeginDocument{%
   \ifEtoc@tagactive
@@ -1361,13 +1380,13 @@
    \advance\dimen\z@\wd\tw@
    \ifdim\dimen\z@ < \linewidth
        \vbox{\etocname~%
-             \leaders\box\z@\hfil\box\tw@
+             \Etoc@tagleaders{\leaders\box\z@\hfil}\box\tw@
              \baselineskip\etocbaselinespreadone\baselineskip
              \par}%
    \else
        \vbox{\etocname~%
-             \leaders\copy\z@\hfil\break
-             \hbox{}\leaders\box\z@\hfil\box\tw@
+             \Etoc@tagleaders{\leaders\copy\z@\hfil}\break
+             \hbox{}\Etoc@tagleaders{\leaders\box\z@\hfil}\box\tw@
              \baselineskip\etocbaselinespreadone\baselineskip
              \par}%
    \fi
@@ -1395,13 +1414,13 @@
    \advance\dimen\z@\wd\tw@
    \ifdim\dimen\z@ < \linewidth
        \vbox{\etocname~%
-             \leaders\box\z@\hfil\box\tw@
+             \Etoc@tagleaders{\leaders\box\z@\hfil}\box\tw@
              \baselineskip\etocbaselinespreadtwo\baselineskip
              \par}%
    \else
        \vbox{\etocname~%
-             \leaders\copy\z@\hfil\break
-             \hbox{}\leaders\box\z@\hfil\box\tw@
+             \Etoc@tagleaders{\leaders\copy\z@\hfil}\break
+             \hbox{}\Etoc@tagleaders{\leaders\box\z@\hfil}\box\tw@
              \baselineskip\etocbaselinespreadtwo\baselineskip
              \par}%
    \fi
@@ -1486,9 +1505,9 @@
 \def\etoc@ruledheading #1{%
    \hb@xt@\linewidth{\color@begingroup
           \hss #1\hss\hskip-\linewidth
-          \etoctoprulecolorcmd\leaders\etoctoprule\hss
+          \etoctoprulecolorcmd\Etoc@tagleaders{\leaders\etoctoprule}\hss
           \phantom{#1}%
-          \leaders\etoctoprule\hss\color@endgroup}%
+          \Etoc@tagleaders{\leaders\etoctoprule\hss}\color@endgroup}%
           \nointerlineskip\nobreak\vskip\etocinnertopsep}
 \newcommand*\etocruledstyle[2][\etocdefaultnbcol]{%
 \etocsettocstyle
@@ -1518,85 +1537,111 @@
 \newcommand*\etocframedstyle[2][\etocdefaultnbcol]{%
 \etocsettocstyle{%
     \addvspace{\etocabovetocskip}%
-    \sbox\z@{#2}%
+    \sbox\z@{#2}% title (horizontal material)
     \dimen\z@\dp\z@
     \ifdim\wd\z@<\linewidth \dp\z@\z@ \else \dimen\z@\z@ \fi
-    \setbox\etoc@framed@titlebox=\hb@xt@\linewidth{\color@begingroup
+%% attention should I use kernel \sbox which has an \endgraf added
+    \setbox\etoc@framed@titlebox=\hb@xt@\linewidth{%
+        \color@begingroup
         \hss
         \ifx\etocbkgcolorcmd\Etoc@relax
         \else
             \sbox\tw@{\color{white}%
-            \vrule\@width\wd\z@\@height\ht\z@\@depth\dimen\z@}%
+                      \vrule\@width\wd\z@\@height\ht\z@\@depth\dimen\z@}%
             \ifdim\wd\z@<\linewidth \dp\tw@\z@\fi
-            \box\tw@
+            \Etoc@tagrule{\box\tw@}%
             \hskip-\wd\z@
         \fi
-        \copy\z@
+        \copy\z@% the title
         \hss
         \hskip-\linewidth
-        \etoctoprulecolorcmd\leaders\etoctoprule\hss
+        \etoctoprulecolorcmd\Etoc@tagleaders{\leaders\etoctoprule\hss}%
         \hskip\wd\z@
-        \etoctoprulecolorcmd\leaders\etoctoprule\hss\color@endgroup}%
+        \etoctoprulecolorcmd\Etoc@tagleaders{\leaders\etoctoprule\hss}%
+        \color@endgroup
+    }% \etoc@framed@titlebox
     \setbox\z@\hbox{\etocleftrule\etocrightrule}%
     \dimen\tw@\linewidth\advance\dimen\tw@-\wd\z@
         \advance\dimen\tw@-\etocinnerleftsep
         \advance\dimen\tw@-\etocinnerrightsep
-    \setbox\etoc@framed@contentsbox=\vbox\bgroup
-        \hsize\dimen\tw@
-        \kern\dimen\z@
-        \vskip\etocinnertopsep
-        \hbox\bgroup
+    \setbox\etoc@framed@contentsbox=%
+    \vbox\bgroup % this is in "before"
+      \hsize\dimen\tw@
+      \kern\dimen\z@
+      \vskip\etocinnertopsep
+      \hbox\bgroup
+%% the start of a minipage which will hold a multicols if nbofcolumns>1
         \begin{minipage}{\hsize}%
         \etocframedmphook
-    \ifnum #1>\@ne
+        \ifnum #1>\@ne
           \expandafter\@firstoftwo
-    \else \expandafter\@secondoftwo
-    \fi
+       \else
+          \expandafter\@secondoftwo
+       \fi
         {\multicolpretolerance\etocmulticolpretolerance
-        \multicoltolerance\etocmulticoltolerance
-        \setlength{\columnsep}{\etoccolumnsep}%
-        \setlength{\multicolsep}{\etocmulticolsep}%
-        \begin{multicols}{#1}}
+         \multicoltolerance\etocmulticoltolerance
+         \setlength{\columnsep}{\etoccolumnsep}%
+         \setlength{\multicolsep}{\etocmulticolsep}%
+         \begin{multicols}{#1}%
+        }
         {\pretolerance\etocmulticolpretolerance
-         \tolerance\etocmulticoltolerance}}
-    {\ifnum #1>\@ne\expandafter\@firstofone
-         \else \expandafter\@gobble
-     \fi
-      {\end{multicols}\unskip }%
-    \end{minipage}%
-    \egroup
-    \vskip\etocinnerbottomsep
-    \egroup
-    \vbox{\hsize\linewidth
+         \tolerance\etocmulticoltolerance
+        }%
+  }% end of \etocsettocstyle first argument
+  {% start of \etocsettocstyle second argument
+        \ifnum #1>\@ne\expandafter\@firstofone\else \expandafter\@gobble \fi
+        {\end{multicols}\unskip }%
+        \end{minipage}% started in the \hbox
+      \egroup %  end of \hbox wrapper around minipage (inside \vbox)
+      \vskip\etocinnerbottomsep
+    \egroup % end of \vbox which included the TOC contents
+    \vbox{%
+        \hsize\linewidth
         \ifx\etocbkgcolorcmd\Etoc@relax
         \else
             \kern\ht\etoc@framed@titlebox
             \kern\dp\etoc@framed@titlebox
-            \hb@xt@\linewidth{\color@begingroup
-            \etocleftrulecolorcmd\etocleftrule
-            \etocbkgcolorcmd
-            \leaders\vrule
+            \hb@xt@\linewidth{%
+              \color@begingroup
+              \etocleftrulecolorcmd
+              \Etoc@tagrule{\etocleftrule}%
+              \etocbkgcolorcmd
+              \Etoc@tagleaders{\leaders\vrule
                    \@height\ht\etoc@framed@contentsbox
                    \@depth\dp\etoc@framed@contentsbox
-            \hss
-            \etocrightrulecolorcmd\etocrightrule
-            \color@endgroup}\nointerlineskip
+              \hss}%
+              \etocrightrulecolorcmd
+              \Etoc@tagrule{\etocrightrule}%
+              \color@endgroup
+            }%
+            \nointerlineskip
             \vskip-\dp\etoc@framed@contentsbox
             \vskip-\ht\etoc@framed@contentsbox
             \vskip-\dp\etoc@framed@titlebox
             \vskip-\ht\etoc@framed@titlebox
         \fi
-    \box\etoc@framed@titlebox\nointerlineskip
-    \hb@xt@\linewidth{\color@begingroup
-    {\etocleftrulecolorcmd\etocleftrule}%
-    \hss\box\etoc@framed@contentsbox\hss
-    \etocrightrulecolorcmd\etocrightrule\color@endgroup}
-    \nointerlineskip
-    \vskip\ht\etoc@framed@contentsbox
-    \vskip\dp\etoc@framed@contentsbox
-    \hb@xt@\linewidth{\color@begingroup\etocbottomrulecolorcmd
-          \leaders\etocbottomrule\hss\color@endgroup}}
-    \addvspace{\etocbelowtocskip}}}
+        \box\etoc@framed@titlebox
+        \nointerlineskip
+        \hb@xt@\linewidth{%
+          \color@begingroup
+          {\etocleftrulecolorcmd\Etoc@tagrule{\etocleftrule}}%
+          \hss\box\etoc@framed@contentsbox\hss
+          \etocrightrulecolorcmd\Etoc@tagrule{\etocrightrule}%
+          \color@endgroup
+        }%
+        \nointerlineskip
+        \vskip\ht\etoc@framed@contentsbox
+        \vskip\dp\etoc@framed@contentsbox
+        \hb@xt@\linewidth{%
+          \color@begingroup
+          \etocbottomrulecolorcmd
+          \Etoc@tagleaders{\leaders\etocbottomrule\hss}%
+          \color@endgroup
+        }%
+    }% end of \vbox in after part!
+    \addvspace{\etocbelowtocskip}%
+  }% end of \etocsettocstyle second argument
+}% end of \etocframedstyle definition
 \newcommand\etoc@multicoltoc[2][\etocdefaultnbcol]{%
     \etocmulticolstyle[#1]{#2}%
     \tableofcontents}
