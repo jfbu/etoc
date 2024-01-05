@@ -27,7 +27,7 @@
 %% Copyright (C) 2012-2024 Jean-Francois B.
 %%                         jfbu on GitHub
 \NeedsTeXFormat{LaTeX2e}[2003/12/01]
-\ProvidesPackage{etoc}[2024/01/03 (dev) v1.2e Completely customisable TOCs (JFB)]
+\ProvidesPackage{etoc}[2024/01/05 v1.2e (dev) Completely customisable TOCs (JFB)]
 \newif\ifEtoc@oldLaTeX
 \@ifl@t@r\fmtversion{2020/10/01}
   {}
@@ -1570,6 +1570,12 @@
       \kern\dimen\z@
       \vskip\etocinnertopsep
       \hbox\bgroup
+%% as per Ulrike's advice, https://github.com/latex3/tagging-project/issues/54
+%% I guess here I do have to use the Etoc@tagactive not Etoc@tagging (rethink later)
+\ifEtoc@tagactive
+\AssignSocketPlug{tagsupport/minipage/before}{noop}%
+\AssignSocketPlug{tagsupport/minipage/after}{noop}%
+\fi
 %% the start of a minipage which will hold a multicols if nbofcolumns>1
         \begin{minipage}{\hsize}%
         \etocframedmphook

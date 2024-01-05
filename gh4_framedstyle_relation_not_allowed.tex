@@ -19,15 +19,27 @@
 
 \localtableofcontents
 
+% Test A
+% test of framed style, some user level parameters should be adjusted
+% for better rendering in two columns, but this is not our concern for now
 
-\etoctaggingoff
 \etocframedstyle{\contentsname}
+%\etocfallbacklines
+
+% I also tasted the multicolstyle (but this one does not use minipage)
+
+% as per etoc.pdf example but this gives CATASTROPHIC results if using the
+% book class default toc line styles, I will have to update doc
+% so using our homemade toc lines:
+% \etocfallbacklines
+% \etocmulticolstyle{\noindent\bfseries\Large
+%                    \leaders\hrule height1pt\hfill
+%                    \MakeUppercase{\contentsname}}
 
 \chapter{Test chapter one}
 
 \localtableofcontents
 
-\etoctaggingon
 \section{Section one one}
 
 \localtableofcontents
