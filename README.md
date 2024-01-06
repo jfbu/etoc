@@ -18,6 +18,8 @@ These diffs are with respect to the latest previous tag in this repo:
 
 ### [dev HEAD]
 
+- fix jfbu/etoc#5 via a general deactivation of the minipage tagging sockets for the duration of the TOC contents.
+
 - fix jfbu/etoc#4 thanks to @u-fischer's advice at latex3/tagging-project#54.  No more warnings at this stage!
 
 - use `\Etoc@tagleaders` to mark as artifacts the dots in fall-back TOC line styles, in imitation of upstream `\@dottedtocline`.
