@@ -145,17 +145,22 @@
                                            \etoctaggingon}}{}%
   }%
 \fi
+%% This version is for all of <prefix><contents> a priori marked as artifact
+%% and \etocname, \etocnumber, \etocpage will be the only non-artifact chunks
+%% As a corollary there be will \Etoc@tagleaders=\@firstofone next
+%% See the comments in \Etoc@lxyz
 \def\Etoc@tagthis #1{%
-                \tag_struct_begin:n{tag=Reference}%
+                \tag_mc_end_push:
                 \tag_mc_begin:n{tag=Reference}%
                 #1%
                 \tag_mc_end:
-                \tag_struct_end:
+                \tag_mc_begin_pop:n{artifact}%
                 }%
 %% we don't need here to check the tagginginline Boolean whose only role
 %% is to influence \etocname, \etocnumber, \etocpage for the case they
 %% would be used inside some \@dottedtocline or \l@section etc...
 %% the argument #1 must contain \leaders followed by glue
+%% ** this is obsolete see next below**
 \def\Etoc@tagleaders #1{%
   \ifEtoc@tagging
     \tag_mc_begin:n{artifact}\tag_stop:n{leaders}%
@@ -168,6 +173,9 @@
     \tag_start:n{leaders}\tag_mc_end:
   \else #1\fi
 }%
+%% As everything is marked as artifact let's make \Etoc@tagleaders
+%% do nothing
+\let\Etoc@tagleaders\@firstofone
 %% TODO: this \Etoc@tagrule may not make ANY sense.  This was added only
 %% to update the "framed style".  We are not in TOC structure but around
 %% it.  The copied over \@starttoc config points are executed inside the
@@ -400,12 +408,37 @@
     \ifEtoc@skipprefix \Etoc@global\def\Etoc@prefix{\@empty}\fi
     \global\Etoc@skipprefixfalse
     \ifEtoc@tagging
+%% TODO : this ties the hierarchy of levels to the one expected
+%% by the kernel code which is probably good.  Once I will have
+%% understood better though the tagging business perhaps I should
+%% drop this entirely and update the PDF structure tree directly
+%% from \Etoc@doendsandbegins, or rather incorporate into the
+%% begins and ends the needed thing.  At this stage indeed it
+%% appears impossible to expect using etoc powerful list of
+%% abilities, all using only the single .toc file will possibly
+%% work with upstream kernel code which only knows about standard
+%% things.
       \@contentsline@cfgpoint@before{#1}{#2}{#3}{#4}%
     \fi
     \gdef\@contentsline@destination{#4}%
     \Etoc@lxyz{#2}{#3}{#4}%
+%% In order to fix the etoc/jfbu#6 issue regarding \emph which
+%% can not appear as a child of TOCI, I will tag *everything*
+%% as artifact, *except* for the sole \etocname, \etocnumber,
+%% \etocpage which will introduce their own marked content,
+%% interrupting and reactivating the artifact.
+%%
+%% See above \Etoc@tagthis
+    \ifEtoc@tagginginline
+      \tag_struct_begin:n{tag=Reference}%
+      \tag_mc_begin:n{artifact}%
+    \fi
     \Etoc@prefix
     \Etoc@contents
+    \ifEtoc@tagginginline
+      \tag_mc_end:
+      \tag_struct_end:
+    \fi
     \ifEtoc@tagging
       \@contentsline@cfgpoint@after{#1}{#2}{#3}{#4}%
     \fi
@@ -415,9 +448,9 @@
     \Etoc@global\def\etocthename{#1}%
     \futurelet\Etoc@getnb@token\Etoc@@getnb #1\hspace\etoc@
     \ifEtoc@tagginginline
-      \Etoc@global\let\etoctagthis\Etoc@tagthis
+      \Etoc@global\let\Etoc@@tagthis\Etoc@tagthis
     \else
-      \Etoc@global\let\etoctagthis\@firstofone
+      \Etoc@global\let\Etoc@@tagthis\@firstofone
     \fi
     \ifEtoc@hyperref
       \ifEtoc@tagging
@@ -426,7 +459,7 @@
         \Etoc@global\def\etocthetaggedlink##1{\hyperlink{#3}{##1}}%
       \fi
     \else
-      \Etoc@global\let\etocthetaggedlink\etoctagthis
+      \Etoc@global\let\etocthetaggedlink\Etoc@@tagthis
     \fi
     \Etoc@global\let\etocthelink\etocthetaggedlink
     \def\Etoc@tmp##1##2{\Etoc@global\expandafter\def\expandafter##2\expandafter{%
@@ -452,6 +485,9 @@
 %% under \etoctagginginlineoff regime for "another compatibility mode" methods
 %% which use \l@section of \@dottedtocline, we must not add hyperlinking
 %% ourselves. cf gh-#3
+%% TODO: this should be simplfied it ends up embedded in the \Etoc@tagthis
+%% perhaps I need to to insist so much on recycling same code as above for
+%% name and page and redefine \Etoc@tmp
          \expandafter\Etoc@tmp\expandafter{\expanded{%
             \noexpand\tag_mc_end:
             \noexpand\tag_struct_begin:n{tag=Lbl}%
@@ -467,7 +503,7 @@
         \Etoc@global\let\etocthelinkednumber\@empty
       \fi
     \def\Etoc@tmp##1##2{\Etoc@global\expandafter\def\expandafter##2\expandafter{%
-                             \etoctagthis{##1}%
+                             \Etoc@@tagthis{##1}%
                              }%
     }%
     \ifEtoc@tagging
@@ -1223,7 +1259,9 @@
         \in@{.#1,}{.figure,.table,}%
         \ifin@
            \PackageWarning{etoc}
-              {You can not use \string\etocsetstyle\space with `#1'.\MessageBreak
+              {You can not use \string\etocsetlinestyle\space (or
+                its\MessageBreak
+                legacy alias \string\etocsetstyle) with `#1'.\MessageBreak
                Check the package documentation (in particular about\MessageBreak
                \string\etoclocallistoffigureshook/\string\etoclocallistoftableshook)%
                \MessageBreak on how to customize
@@ -1392,6 +1430,9 @@
      {\setbox\tw@\hbox{\etocnumber, \etocabbrevpagename\etocpage\etocnoprotrusion}}
      {\setbox\tw@\hbox{\etocabbrevpagename\etocpage\etocnoprotrusion}}%
    \advance\dimen\z@\wd\tw@
+%% UPDATE: \Etoc@tagleaders is actually \@firstofone, and will likely
+%% disappear entirely soon, as soon as the current approach in
+%% \Etoc@lxyz is validated by more testing and checks.
    \ifdim\dimen\z@ < \linewidth
        \vbox{\etocname~%
              \Etoc@tagleaders{\leaders\box\z@\hfil}\box\tw@
@@ -1562,6 +1603,8 @@
         \else
             \sbox\tw@{\color{white}%
                       \vrule\@width\wd\z@\@height\ht\z@\@depth\dimen\z@}%
+%% UPDATE: \Etoc@tagrule is actually \@firstofone, and will perhaps
+%% disappear altogether.
             \ifdim\wd\z@<\linewidth \dp\tw@\z@\fi
             \Etoc@tagrule{\box\tw@}%
             \hskip-\wd\z@
@@ -1624,8 +1667,12 @@
             \hb@xt@\linewidth{%
               \color@begingroup
               \etocleftrulecolorcmd
+%% UPDATE: \Etoc@tagrule is actually \@firstofone, and will perhaps
+%% disappear altogether.
               \Etoc@tagrule{\etocleftrule}%
               \etocbkgcolorcmd
+%% UPDATE: \Etoc@tagleaders is actually \@firstofone, and will perhaps
+%% disappear altogether.
               \Etoc@tagleaders{\leaders\vrule
                    \@height\ht\etoc@framed@contentsbox
                    \@depth\dp\etoc@framed@contentsbox

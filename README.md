@@ -18,6 +18,8 @@ These diffs are with respect to the latest previous tag in this repo:
 
 ### [dev HEAD]
 
+- fix jfbu/etoc#6.  Everything in the line style apart from name, number, page is automatically tagged as an artifact.  Which may be a bad idea but it solves the `'TOCI/' --> 'Em/pdf2'` forbidden Parent-Child relation.
+
 ### [2024-01-05]
 
 - fix jfbu/etoc#5 via a general deactivation of the minipage tagging sockets for the duration of the TOC contents.
@@ -52,7 +54,6 @@ Here is a description from dev `etoc.dtx` of what is hoped for at this stage reg
 \label{etoctaggingon}
 \label{etoctaggingoff}
 \label{etoctagginginlineoff}
-\label{etoctagthis}
 
 For some years upstream \LaTeX{} maintainers have been engaged into a
 ``\LaTeX{} Tagged PDF'' project to enable automatic tagging of PDF
@@ -76,14 +77,14 @@ Besides he is mostly ignorant attow about tagging related matters.
 \end{shaded}
 \endgroup
 
-Current status (as of 2024-01-05 1.2e dev):
+Current status (may still refer to an earlier \texttt{etoc.sty}):
 \begin{itemize}
 \item A document using only \toc and \localtoc, with \etoc left in
-  compatibility mode for line styles should be tagged as can be hoped
+  compatibility mode for line styles should be tagged as well as
   for documents not using \etoc facilities.  Indeed
   \etoc then does not at all interfere with the rendering of the
   \texttt{.toc} file data, apart from implementing the ``local toc''
-  mechanism.  Potential problems:
+  mechanism.  One should keep in mind though that:
   \begin{itemize}
   \item the tagging code from the kernel \csa{@starttoc} has been copied
     over manually by the author into \etoc source code, as it does not
@@ -92,19 +93,44 @@ Current status (as of 2024-01-05 1.2e dev):
   \item if \csb{etocsettocstyle}, or higher level interface such as
     \csb{etocframedstyle}, has made \etoc leave the compatibility mode for the
     ``global display TOC style'', it may be that the user will have to add
-    directly extra tagging code regarding the way for exemple the
+    directly extra tagging code regarding the way for example the
     ``title'' of the TOC is rendered.
   \end{itemize}
-\item The \etoc ``fallback'' line styles (see \csb{etocfallbacklines}) have
-  been updated where needed and do not cause \ctanpkg{tagpdf} warnings in our
-  brief testing; it remains to be seen if the tagging is actually correct.
+
 \item A document using \csb{etocsetlinestyle} to define custom line
   styles using \csb{etocname}, \csb{etocnumber} and \csb{etocpage}
-  should behave about correctly (as the latter have been extended to
-  insert the suitable tagging code), but additional user mark-up may be
-  needed to properly handle extra material such as dots or whatever,
-  which perhaps should be marked as artifacts.  For this user has to use
-  the \ctanpkg{tagpdf} internals.
+  should behave ``correctly''.  This has been tested with the own
+  package ``fallback line styles'' (see \csb{etocfallbacklines}) which
+  are but a special manner (actually quite poor, but that code was
+  written at a time the author barely new \LaTeX), of using
+  \csb{etocsetlinestyle}.  They needed no change.
+
+  One should keep in mind though that:
+  \begin{itemize}
+  \item ``tested'' means here that the PDF was built (via PDF\LaTeX) and
+    no warnings were reported by \ctanpkg{tagpdf}.  The author can not
+    assess in any way whether the PDF are actually valid from the point
+    of view of tagging.
+  \item \emph{Anything apart from \emph{\csb{etocname}},
+      \emph{\csb{etocnumber}} and \emph{\csb{etocpage}} from custom user
+      line styles will by default be marked as begin artifacts!}  If
+    user needs to mark something otherwise, the current marked content
+    chunk must be interrupted, the correct tagging added, and then the
+    artifact restarted. Check the source code for how this is done
+    (perhaps, probably, wrongly!) by
+    the package for \csb{etocname} et al.
+  \item the tagging code from the kernel \csa{contentsline} is recycled
+    into \etoc source code, which does not use that macro if not in
+    compatibility mode.  Each time upstream \LaTeX{} changes the way
+    these code chunks are added to \csa{contentsline}, \etoc will need
+    updating.
+  \item the way \csb{etocname}, \csb{etocnumber} and \csb{etocpage} are
+    tagged is imitated from kernel code, which currently uses the hook
+    mechanism.  The hooks themselves are not reused by \etoc.  If and
+    when the authors understand better the macros of \ctanpkg{tagpdf},
+    perhaps changes will happen, but at least here, the \ctanpkg{tagpdf}
+    API is used directly.
+  \end{itemize}
 \end{itemize}
 
 \begingroup\colorlet{shadecolor}{red!10}
@@ -162,13 +188,12 @@ any time.
 
   There is no \csa{etoctagginginlineon}, use \csb{etoctaggingon}.
 
-\item[\csb{etoctagthis}] tags its argument  with label |tag=Reference|.
 \end{description}
 
 
 WARNING: \emph{the next paragraph may now be partially obsolete due to non
   documented yet \csa{etocthetaggedname} etc..., but an interface is at
-  nay rate currently lacking to allow user
+  any rate currently lacking to allow user
   to re-insert TOC and TOCI tags.}
 
 Advanced usages of \etoc, such as those in this documentation which use \toc
@@ -177,8 +202,6 @@ or \localtoc to extract data from the \texttt{.toc} file, using
 rendered in a second stage, once the whole TOC has been parsed, via TikZ for
 example, will need to use \csb{etoctaggingoff} locally and users are currently
 on their own to add tagging manually to the TikZ (or whatever) rendering.
-Attow \csb{etoctagthis} can only be used from inside the \marg{prefix} and
-\marg{contents} arguments of \csb{etocsetstyle}.
 ```
 
 ## License
