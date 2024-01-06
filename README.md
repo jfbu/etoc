@@ -45,164 +45,26 @@ These diffs are with respect to the latest previous tag in this repo:
 
 ## PDF Tagging
 
-Refer to the this PDF document (by Frank Mittelbach and Chris Rowley): [*LaTeX Tagged PDF—A blueprint for a large project*](https://www.latex-project.org/publications/2020-FMi-TUB-tb129mitt-tagpdf.pdf) for background information, and to the [latex3/tagging-project](https://github.com/latex3/tagging-project) and [latex3/tagpdf](https://github.com/latex3/tagpdf) repositories for current status of this upstream LaTeX project.
+For background information on the current status of the upstream LaTeX project, refer to this PDF document (by Frank Mittelbach and Chris Rowley): [*LaTeX Tagged PDF—A blueprint for a large project*](https://www.latex-project.org/publications/2020-FMi-TUB-tb129mitt-tagpdf.pdf) for background information, and to the [latex3/tagging-project](https://github.com/latex3/tagging-project) and [latex3/tagpdf](https://github.com/latex3/tagpdf) repositories.
 
-Here is a description from dev `etoc.dtx` of what is hoped for at this stage regarding this topic (this will be kept updated with `etoc.sty` pushes to this repo):
+For a description extracted from dev `etoc.dtx` of what is hoped for at this stage regarding this topic, see [etoctagging.tex](/etoctagging.tex).  You can compile it to pdf using `pdflatex`.
 
-```latex
-\section{Tagging}
-\label{etoctaggingon}
-\label{etoctaggingoff}
-\label{etoctagginginlineoff}
+Here we give a more technical brief description, feedback welcome! We will try to keep this in sync with the actual code.
 
-For some years upstream \LaTeX{} maintainers have been engaged into a
-``\LaTeX{} Tagged PDF'' project to enable automatic tagging of PDF
-documents produced via \LaTeX, see the relevant entries in
-\centeredline{\url{https://latex-project.org/news/latex2e-news/ltnews.pdf}}
-and a general overview in this 2020 paper
-\centeredline{\url{https://www.latex-project.org/publications/2020-FMi-TUB-tb129mitt-tagpdf.pdf}}
-See also further relevant articles in \href{https://tug.org/tugboat}{TUGboat}.
+- `etoc` uses `\@starttoc@cfgpoint@before{toc}` and `\@starttoc@cfgpoint@after{toc}`, (*this has to be kept in sync with upstream evolving interface*)
+- for local tables of contents this is a bit subtle because the local TOC triggers from *inside* the `.toc` data (which has been saved in a `\toks`), hence the above hooks are used only at a strategic location (see jfbu/etoc#2),
+- `etoc` if left in compatibility mode simply executes the contents of the `.toc` file (thus the standard `\contentsline`) so it has nothing more to do, the tagging will be by the kernel (or class),
+- else it uses `\@contentsline@cfgpoint@before{#1}{#2}{#3}{#4}` and `\@contentsline@cfgpoint@after{#1}{#2}{#3}{#4}` in `\Etoc@etoccontentsline@`, (*this has to be kept in sync with upstream evolving interface*)
+- from this point on the tagging is done via the [tagpdf](https://github.com/latex3/tagpdf) mark-up API,
+- specifically both the `<prefix>` and `<contents>` of the line style are inside a `tag=Reference` struct; but immediately a marked content chunk is started but tagged as `artifact`,
+- then `\etocname`, `\etocnumber`, `\etoclink` each stop the `artifact` and produce a `tag=Reference` chunk.  The number inserts a sub-struct with `tag=Lbl`,
+- there is another layer to add the hyperlinks, `\etocthelinkedname`, `\etocthelinkednumber` and `\etocthelinkedpage` are defined in addition to `\etocthetaggedname`, `\etocthetaggednumber` and `\etocthetaggedpage` which contain no hyperlinks; depending on `\Hy@linktoc` numerical value, the former or the latter are mapped to (the fragile versions of the robust) `\etocname` etc...
+- it was found out necessary to disable the `minipage` kernel tagging sockets, not only for the usage of `minipage` in the `\etocframedstyle` (which is a framing around contents) but also as `minipage` can be used in the user toc line specifications and was found incompatible with the above described approach (see jfbu/etoc#4, jfbu/etoc#5), or rather with an earlier one, but it was checked to still be incompatible with the current one,
+- one reason for the choice that everything is declared `artifact` *except* for name, number, page is that some LaTeX mark-up tagging behavior (currently only `\emph` but perhaps others) was determined to be incompatible with being a direct child of `TOCI` (see jfbu/etoc#6).
 
-This means that there are ongoing kernel (and \ctanpkg{hyperref}) changes
-which have to be taken into account by \etoc to not be broken, or cause a
-broken PDF structure, once the user activates the feature, currently via usage of
-suitable \cs{DocumentMetadata} keys, cf.\@ above documentation.
+A final comment is that `etoc` is aware of, and maintains virtually a hierarchical tree of the `.toc` file (or relevant portion to local toc), which seems to be like a potential mirror of  some core low-level actions done by [tagpdf](https://github.com/latex3/tagpdf).  But `etoc` user can arbitrarily reassign levels for doing some rather devious tasks using only the `.toc` file.  As a kind of example, see `etoc`'s own `\locallistoffigures` and `\locallistoftables`.  Thinking this through will not be for the immediate future.
 
-\begingroup\colorlet{shadecolor}{red!10}
-\begin{shaded}
-The author has neither the time nor the resources nor the appropriate tools to
-do any kind of testing beyond the most basic by himself.
-
-Besides he is mostly ignorant attow about tagging related matters.
-\end{shaded}
-\endgroup
-
-Current status (may still refer to an earlier \texttt{etoc.sty}):
-\begin{itemize}
-\item A document using only \toc and \localtoc, with \etoc left in
-  compatibility mode for line styles should be tagged as well as
-  for documents not using \etoc facilities.  Indeed
-  \etoc then does not at all interfere with the rendering of the
-  \texttt{.toc} file data, apart from implementing the ``local toc''
-  mechanism.  One should keep in mind though that:
-  \begin{itemize}
-  \item the tagging code from the kernel \csa{@starttoc} has been copied
-    over manually by the author into \etoc source code, as it does not
-    execute \csa{@starttoc}.  When upstream \LaTeX{} changes, \etoc has
-    to be updated.
-  \item if \csb{etocsettocstyle}, or higher level interface such as
-    \csb{etocframedstyle}, has made \etoc leave the compatibility mode for the
-    ``global display TOC style'', it may be that the user will have to add
-    directly extra tagging code regarding the way for example the
-    ``title'' of the TOC is rendered.
-  \end{itemize}
-
-\item A document using \csb{etocsetlinestyle} to define custom line
-  styles using \csb{etocname}, \csb{etocnumber} and \csb{etocpage}
-  should behave ``correctly''.  This has been tested with the own
-  package ``fallback line styles'' (see \csb{etocfallbacklines}) which
-  are but a special manner (actually quite poor, but that code was
-  written at a time the author barely new \LaTeX), of using
-  \csb{etocsetlinestyle}.  They needed no change.
-
-  One should keep in mind though that:
-  \begin{itemize}
-  \item ``tested'' means here that the PDF was built (via PDF\LaTeX) and
-    no warnings were reported by \ctanpkg{tagpdf}.  The author can not
-    assess in any way whether the PDF are actually valid from the point
-    of view of tagging.
-  \item \emph{Anything apart from \emph{\csb{etocname}},
-      \emph{\csb{etocnumber}} and \emph{\csb{etocpage}} from custom user
-      line styles will by default be marked as being artifacts!}  If
-    user needs to mark something otherwise, the current marked content
-    chunk must be interrupted, the correct tagging added, and then the
-    artifact restarted. Check the source code for how this is done
-    (perhaps, probably, wrongly!) by
-    the package for \csb{etocname} et al.
-  \item the tagging code from the kernel \csa{contentsline} is recycled
-    into \etoc source code, which does not use that macro if not in
-    compatibility mode.  Each time upstream \LaTeX{} changes the way
-    these code chunks are added to \csa{contentsline}, \etoc will need
-    updating.
-  \item the way \csb{etocname}, \csb{etocnumber} and \csb{etocpage} are
-    tagged is imitated from kernel code, which currently uses the hook
-    mechanism.  The hooks themselves are not reused by \etoc.  If and
-    when the authors understand better the macros of \ctanpkg{tagpdf},
-    perhaps changes will happen, but at least here, the \ctanpkg{tagpdf}
-    API is used directly.
-  \end{itemize}
-\end{itemize}
-
-\begingroup\colorlet{shadecolor}{red!10}
-\begin{shaded}
-  All user interface is to be considered currently unstable and may change at
-any time.
-\end{shaded}
-\endgroup
-
-\begin{description}
-\item[\csb{etoctaggingon}] activates the tagging-related code from \etoc
-  (this is done at begin document if document has activated tagging).  This is
-  a no-op if document has not activated tagging.
-
-  \csb{etocname}, \csb{etocnumber} and \csb{etocpage} will now accomplish
-  tagging tasks, as will \csb{etoclink} and the non-robust \csb{etocthelink}.
-  But \csb{etocthename}, \csb{etocthenumber}, and \csb{etocthepage} are kept
-  as is, with no tagging.  This is especially important for \csb{etocthenumber}
-  for backwards compatibility as it may be needed in some line styles as a
-  numerical quantity.
-
-\item[\csb{etoctaggingoff}] turns off (almost) all \etoc tagging-related
-  code.
-
-  As advanced \etoc users will be aware, it is possible with it to use
-  the \toc and \localtoc commands to do things only remotely related to
-  tables of contents per se, for example one can use it to count how
-  many sections are contained in a chapter so the only result of
-  execution of these commands is to update some counter or other
-  user-defined macro to hold the result.  Use \csb{etoctaggingoff}
-  before the \toc or \localtoc command then.
-
-  Attow, this does \emph{not} deactivate turning off the \emph{minipage}
-  tagging sockets, which currently seems required to fix
-  \href{https://github.com/jfbu/etoc/issues/4}{etoc\#5}.  But in the use
-  case from previous paragraph, this is irrelevant.
-
-\item[\csb{etoctagginginlineoff}] is in case user employs
-  \csb{etocsetlinestyle} to re-employ kernel macros such as
-  |\@dottedtocline| or |\l@section|, see \autoref{sec:anothercompat}: it
-  tells \etoc to free \csb{etocname}, \csb{etocnumber} and
-  \csb{etocpage} from contributing any tagging data by themselves, as
-  this will be inserted already by the used \LaTeX{} kernel macros where
-  \csb{etocname} et al. have been reinserted.  It also turns off \etoc
-  added hyperlinking because the kernel |\@dottedtocline| or
-  |\l@section| will originate it by themselves if tagging has been
-  activated in the document.
-
-  This command (as \csb{etoctaggingoff}) is supposed to be used right
-  before \toc or \localtoc.  It may (untested) also be used from inside
-  the \marg{start} part of \csb{etocsetlinestyle} for
-  a given sectioning name, it this is the only level using the \LaTeX{}
-  kernel macros as per \autoref{sec:anothercompat}.  Then the
-  \marg{finish} part may use \csb{etoctaggingon}.
-
-  There is no \csa{etoctagginginlineon}, use \csb{etoctaggingon}.
-
-\end{description}
-
-
-WARNING: \emph{the next paragraph may now be partially obsolete due to non
-  documented yet \csa{etocthetaggedname} etc..., but an interface is at
-  any rate currently lacking to allow user
-  to re-insert TOC and TOCI tags.}
-
-Advanced usages of \etoc, such as those in this documentation which use \toc
-or \localtoc to extract data from the \texttt{.toc} file, using
-\csb{etocthename}, \csb{etocthenumber}, \csb{etocthepage}, which are then
-rendered in a second stage, once the whole TOC has been parsed, via TikZ for
-example, will need to use \csb{etoctaggingoff} locally and users are currently
-on their own to add tagging manually to the TikZ (or whatever) rendering.
-```
+At any rate, already `\etoctagging{on,off}` are provided and are indispensable for some advanced usages of `\localtableofcontents` as per the user documentation.  For this and other things see the [etoctagging.tex](/etoctagging.tex) file which is the user level companion to the more technical explications which have been given here.
 
 ## License
 

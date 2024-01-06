@@ -8,3 +8,4 @@ LISMOIAVANTTOUTPUSH
 *.fdb_latexmk
 *.pdf
 *.html
+*.out
