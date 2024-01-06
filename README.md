@@ -113,7 +113,7 @@ Current status (may still refer to an earlier \texttt{etoc.sty}):
     of view of tagging.
   \item \emph{Anything apart from \emph{\csb{etocname}},
       \emph{\csb{etocnumber}} and \emph{\csb{etocpage}} from custom user
-      line styles will by default be marked as begin artifacts!}  If
+      line styles will by default be marked as being artifacts!}  If
     user needs to mark something otherwise, the current marked content
     chunk must be interrupted, the correct tagging added, and then the
     artifact restarted. Check the source code for how this is done
