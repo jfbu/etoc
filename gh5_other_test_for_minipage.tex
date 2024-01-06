@@ -19,8 +19,8 @@
 
 \localtableofcontents
 
-% this uses a multicols 2-column environment
-\etocruledstyle{\contentsname}
+% this uses a multicols 2-column environment \etocruledstyle{\contentsname}
+\etocsettocstyle{}{}% avoid all decorations to focus on this minipage in TOC issue
 
 \etocglobaldefs
 \etocsetlinestyle{section}
@@ -52,8 +52,8 @@
 
 \section{one one}
 
-\etocfallbacklines
-\localtableofcontents
+%\etocfallbacklines
+%\localtableofcontents
 
 \subsection{one one one}
 
@@ -69,7 +69,7 @@ text
 
 \section{one two}
 
-\localtableofcontents
+%\localtableofcontents
 
 \subsection{one two one}
 
