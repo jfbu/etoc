@@ -1,0 +1,23 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+\documentclass{book}
+\usepackage{etoc}
+
+\begin{document}
+
+\tableofcontents
+
+\part{ONE}
+
+\chapter{one}
+
+\etocsetstyle{section}{}{\etocname{} \emph{page} \etocpage\par}{}{}
+\localtableofcontents
+
+\section{Section one one}
+
+\end{document}
