@@ -65,64 +65,118 @@ which have to be taken into account by \etoc to not be broken, or cause a
 broken PDF structure, once the user activates the feature, currently via usage of
 suitable \cs{DocumentMetadata} keys, cf.\@ above documentation.
 
-As advanced \etoc users will be aware, it is possible with it to use the \toc
-and \localtoc commands to do things only remotely related to tables of
-contents per se, for example one can use it to count how many sections are
-contained in a chapter so the only result of execution of these commands is to
-update some counter or other user-defined macro to hold the result.
-
-Current status (as of 1.2e-dev 2024/01/03):
-\begin{itemize}
-\item a document loading \etoc and leaving it in compatibility mode, using
-  only \toc and \localtoc should produce tagged TOCs as done by kernel code,
-\item a document loading \etoc and using its default (better called
-  ``fallback'') line styles should not raise \ctanpkg{tagpdf} warnings (after
-  final compilation) and the TOCs will have some tagging.
-\item hopefully, a document using \csb{etocsetstyle} to define custom line
-  styles and using \csb{etocname}, \csb{etocnumber} and \csb{etocpage} should
-  behave about correctly, this has not been really tested, it was tested only
-  via looking what happens with the package fallback line styles.  Thus the
-  same remark applies about all material in the line styles which should be
-  especially marked will not be so. 
-\end{itemize}
-
-One can turn tagging on or off via \csb{etoctaggingon} and
-\csb{etoctaggingoff}.  Of course the former will have any effect only if the
-document has activated tagging (currently via \csa{DocumentMetadata}, see
-above documentation).  There is also a special purpose
-\csb{etoctagginginlineoff} for those rather special uses of \csb{etocsetstyle}
-which re-employ the kernel macros such as |\@dottedtocline| or |\l@section|,
-see \autoref{sec:anothercompat}.  This tells \etoc to free \csb{etocname},
-\csb{etocnumber} and \csb{etocpage} from contributing any tagging data by
-themselves, as it will be inserted by the \LaTeX{} kernel macros and nested
-marked chunks must be avoided (it also turns off \etoc added hyperlinking
-because the kernel |\@dottedtocline| or |\l@section| will originate it by
-themselves if tagging has been activated in the document).
-
-These commands can not be used from inside the \marg{prefix} and \marg{contents}
-arguments of \csb{etocsetstyle}.
-
-Commands \csb{etocname}, \csb{etocnumber} and \csb{etocpage} will now
-accomplish tagging tasks, as will \csb{etoclink} and the non-robust
-\csb{etocthelink}.  But \csb{etocthename}, \csb{etocthenumber}, and
-\csb{etocthepage} are kept as with no tagging.  This is especially important
-for \csb{etocthenumber} for backwards compatibility as it may be needed in
-some line styles as a numerical quantity (which it is not always, that depends
-on the various \csa{thesection} etc.... macros).  A (fragile attow) command
-\csb{etoctagthis} is a no-op if tagging is not activated, else it tags its
-argument with label |tag=Reference|.
-
+\begingroup\colorlet{shadecolor}{red!10}
+\begin{shaded}
 The author has neither the time nor the resources nor the appropriate tools to
 do any kind of testing beyond the most basic by himself.
 
-Examples such as those in this documentation which construct first some data
-via specific line styles using \csb{etocthename}, \csb{etocthenumber},
-\csb{etocthepage}, which are then rendered in a second stage, once the whole
-TOC has been parsed, via TikZ for example, will need to use
-\csb{etoctaggingoff} locally and users are currently on their own to add
-tagging manually to the TikZ (or whatever) rendering.  Attow \csb{etoctagthis}
-can only be used from inside the \marg{prefix} and \marg{contents}
-arguments of \csb{etocsetstyle}.
+Besides he is mostly ignorant attow about tagging related matters.
+\end{shaded}
+\endgroup
+
+Current status (as of 2024-01-05 1.2e dev):
+\begin{itemize}
+\item A document using only \toc and \localtoc, with \etoc left in
+  compatibility mode for line styles should be tagged as can be hoped
+  for documents not using \etoc facilities.  Indeed
+  \etoc then does not at all interfere with the rendering of the
+  \texttt{.toc} file data, apart from implementing the ``local toc''
+  mechanism.  Potential problems:
+  \begin{itemize}
+  \item the tagging code from the kernel \csa{@starttoc} has been copied
+    over manually by the author into \etoc source code, as it does not
+    execute \csa{@starttoc}.  When upstream \LaTeX{} changes, \etoc has
+    to be updated.
+  \item if \csb{etocsettocstyle}, or higher level interface such as
+    \csb{etocframedstyle}, has made \etoc leave the compatibility mode for the
+    ``global display TOC style'', it may be that the user will have to add
+    directly extra tagging code regarding the way for exemple the
+    ``title'' of the TOC is rendered.
+  \end{itemize}
+\item The \etoc ``fallback'' line styles (see \csb{etocfallbacklines}) have
+  been updated where needed and do not cause \ctanpkg{tagpdf} warnings in our
+  brief testing; it remains to be seen if the tagging is actually correct.
+\item A document using \csb{etocsetlinestyle} to define custom line
+  styles using \csb{etocname}, \csb{etocnumber} and \csb{etocpage}
+  should behave about correctly (as the latter have been extended to
+  insert the suitable tagging code), but additional user mark-up may be
+  needed to properly handle extra material such as dots or whatever,
+  which perhaps should be marked as artifacts.  For this user has to use
+  the \ctanpkg{tagpdf} internals.
+\end{itemize}
+
+\begingroup\colorlet{shadecolor}{red!10}
+\begin{shaded}
+  All user interface is to be considered currently unstable and may change at
+any time.
+\end{shaded}
+\endgroup
+
+\begin{description}
+\item[\csb{etoctaggingon}] activates the tagging-related code from \etoc
+  (this is done at begin document if document has activated tagging).  This is
+  a no-op if document has not activated tagging.
+
+  \csb{etocname}, \csb{etocnumber} and \csb{etocpage} will now accomplish
+  tagging tasks, as will \csb{etoclink} and the non-robust \csb{etocthelink}.
+  But \csb{etocthename}, \csb{etocthenumber}, and \csb{etocthepage} are kept
+  as is, with no tagging.  This is especially important for \csb{etocthenumber}
+  for backwards compatibility as it may be needed in some line styles as a
+  numerical quantity.
+
+\item[\csb{etoctaggingoff}] turns off (almost) all \etoc tagging-related
+  code.
+
+  As advanced \etoc users will be aware, it is possible with it to use
+  the \toc and \localtoc commands to do things only remotely related to
+  tables of contents per se, for example one can use it to count how
+  many sections are contained in a chapter so the only result of
+  execution of these commands is to update some counter or other
+  user-defined macro to hold the result.  Use \csb{etoctaggingoff}
+  before the \toc or \localtoc command then.
+
+  Attow, this does \emph{not} deactivate turning off the \emph{minipage}
+  tagging sockets, which currently seems required to fix
+  \href{https://github.com/jfbu/etoc/issues/4}{etoc\#5}.  But in the use
+  case from previous paragraph, this is irrelevant.
+
+\item[\csb{etoctagginginlineoff}] is in case user employs
+  \csb{etocsetlinestyle} to re-employ kernel macros such as
+  |\@dottedtocline| or |\l@section|, see \autoref{sec:anothercompat}: it
+  tells \etoc to free \csb{etocname}, \csb{etocnumber} and
+  \csb{etocpage} from contributing any tagging data by themselves, as
+  this will be inserted already by the used \LaTeX{} kernel macros where
+  \csb{etocname} et al. have been reinserted.  It also turns off \etoc
+  added hyperlinking because the kernel |\@dottedtocline| or
+  |\l@section| will originate it by themselves if tagging has been
+  activated in the document.
+
+  This command (as \csb{etoctaggingoff}) is supposed to be used right
+  before \toc or \localtoc.  It may (untested) also be used from inside
+  the \marg{start} part of \csb{etocsetlinestyle} for
+  a given sectioning name, it this is the only level using the \LaTeX{}
+  kernel macros as per \autoref{sec:anothercompat}.  Then the
+  \marg{finish} part may use \csb{etoctaggingon}.
+
+  There is no \csa{etoctagginginlineon}, use \csb{etoctaggingon}.
+
+\item[\csb{etoctagthis}] tags its argument  with label |tag=Reference|.
+\end{description}
+
+
+WARNING: \emph{the next paragraph may now be partially obsolete due to non
+  documented yet \csa{etocthetaggedname} etc..., but an interface is at
+  nay rate currently lacking to allow user
+  to re-insert TOC and TOCI tags.}
+
+Advanced usages of \etoc, such as those in this documentation which use \toc
+or \localtoc to extract data from the \texttt{.toc} file, using
+\csb{etocthename}, \csb{etocthenumber}, \csb{etocthepage}, which are then
+rendered in a second stage, once the whole TOC has been parsed, via TikZ for
+example, will need to use \csb{etoctaggingoff} locally and users are currently
+on their own to add tagging manually to the TikZ (or whatever) rendering.
+Attow \csb{etoctagthis} can only be used from inside the \marg{prefix} and
+\marg{contents} arguments of \csb{etocsetstyle}.
 ```
 
 ## License
