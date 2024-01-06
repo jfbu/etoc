@@ -1169,6 +1169,12 @@
     \Etoc@tocdepthset
     \ifEtoc@parskip\parskip\z@skip\fi
     \Etoc@aftertitlehook
+%% seems we need to deactivate minipage tagging (github issues jfbu/etoc#5,
+%% which is related to jfbu/etoc#4)
+\ifEtoc@tagactive
+\AssignSocketPlug{tagsupport/minipage/before}{noop}%
+\AssignSocketPlug{tagsupport/minipage/after}{noop}%
+\fi
     \gdef\etoclocaltop{-\thr@@}%
     \Etoc@toctoc
     \etocaftercontentshook
@@ -1578,13 +1584,7 @@
 \AssignSocketPlug{tagsupport/minipage/after}{noop}%
 \fi
 %% the start of a minipage which will hold a multicols if nbofcolumns>1
-%% Let's reactivate the minipage tagging sockets inside (unknown at this
-%% stage if good or bad idea)
         \begin{minipage}{\hsize}%
-\ifEtoc@tagactive
-\AssignSocketPlug{tagsupport/minipage/before}{tag/dflt}%
-\AssignSocketPlug{tagsupport/minipage/after}{tag/dflt}%
-\fi
         \etocframedmphook
         \ifnum #1>\@ne
           \expandafter\@firstoftwo
@@ -1604,12 +1604,6 @@
   {% start of \etocsettocstyle second argument
         \ifnum #1>\@ne\expandafter\@firstofone\else \expandafter\@gobble \fi
         {\end{multicols}\unskip }%
-%% We deactivate for the closing.  Assignments being local
-%% we do not need anything after that.
-\ifEtoc@tagactive
-\AssignSocketPlug{tagsupport/minipage/before}{noop}%
-\AssignSocketPlug{tagsupport/minipage/after}{noop}%
-\fi
         \end{minipage}% started in the \hbox
       \egroup %  end of \hbox wrapper around minipage (inside \vbox)
       \vskip\etocinnerbottomsep
