@@ -142,7 +142,7 @@ Current status (may still refer to an earlier \texttt{etoc.sty}):
   \item the way \csb{etocname}, \csb{etocnumber} and \csb{etocpage} are
     tagged is imitated from kernel code, which currently uses the hook
     mechanism.  The hooks themselves are not reused by \etoc.  If and
-    when the authors understand better the macros of \ctanpkg{tagpdf},
+    when the author understand better the macros of \ctanpkg{tagpdf},
     perhaps changes will happen, but at least here, the \ctanpkg{tagpdf}
     API is used directly.
   \end{itemize}
@@ -185,13 +185,13 @@ any time.
 
 \item[\csb{etoctagginginlineoff}] is in case user employs
   \csb{etocsetlinestyle} to re-employ kernel macros such as
-  |\@dottedtocline| or |\l@section|, see \autoref{sec:anothercompat}: it
+  \csa{@dottedtocline} or \csa{l@section}, see \autoref{sec:anothercompat}: it
   tells \etoc to free \csb{etocname}, \csb{etocnumber} and
   \csb{etocpage} from contributing any tagging data by themselves, as
   this will be inserted already by the used \LaTeX{} kernel macros where
   \csb{etocname} et al. have been reinserted.  It also turns off \etoc
-  added hyperlinking because the kernel |\@dottedtocline| or
-  |\l@section| will originate it by themselves if tagging has been
+  added hyperlinking because the kernel \csa{@dottedtocline} or
+  \csa{l@section} will originate it by themselves if tagging has been
   activated in the document.
 
   This command (as \csb{etoctaggingoff}) is supposed to be used right
