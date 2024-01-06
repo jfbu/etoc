@@ -18,6 +18,8 @@ These diffs are with respect to the latest previous tag in this repo:
 
 ### [dev HEAD]
 
+### [2024-01-05]
+
 - fix jfbu/etoc#5 via a general deactivation of the minipage tagging sockets for the duration of the TOC contents.
 
 - fix jfbu/etoc#4 thanks to @u-fischer's advice at latex3/tagging-project#54.  No more warnings at this stage!
@@ -192,6 +194,7 @@ Attow \csb{etoctagthis} can only be used from inside the \marg{prefix} and
 %     LaTeX version 2005/12/01 or later.
 </pre>
 
-[dev HEAD]: https://github.com/jfbu/etoc/compare/2024-01-03...HEAD
+[dev HEAD]: https://github.com/jfbu/etoc/compare/2024-01-05...HEAD
+[2024-01-05]: https://github.com/jfbu/etoc/compare/2024-01-03...2024-01-05
 [2024-01-03]: https://github.com/jfbu/etoc/compare/2024-01-02...2024-01-03
 [2024-01-02]: https://github.com/jfbu/etoc/compare/1.2d-2023-10-29...2024-01-02
