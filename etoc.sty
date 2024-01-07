@@ -165,17 +165,6 @@
 %% As everything is marked as artifact let's make \Etoc@tagleaders
 %% do nothing
 \let\Etoc@tagleaders\@firstofone
-%% TODO: this \Etoc@tagrule may not make ANY sense.  This was added only
-%% to update the "framed style".  We are not in TOC structure but around
-%% it.  The copied over \@starttoc config points are executed inside the
-%% TOC this is outside it.
-\def\Etoc@tagrule #1{%
-   \ifEtoc@tagging
-      \tag_mc_begin:n{artifact}\tag_stop:n{rule}#1\tag_start:n{rule}\tag_mc_end:
-   \else #1\fi
-}%
-%% Update: let's make \Etoc@tagrule do nothing for time being
-\let\Etoc@tagrule\@firstofone
 \ExplSyntaxOff
 \AtBeginDocument{%
   \ifEtoc@tagactive
@@ -1588,10 +1577,8 @@
         \else
             \sbox\tw@{\color{white}%
                       \vrule\@width\wd\z@\@height\ht\z@\@depth\dimen\z@}%
-%% UPDATE: \Etoc@tagrule is actually \@firstofone, and will perhaps
-%% disappear altogether.
             \ifdim\wd\z@<\linewidth \dp\tw@\z@\fi
-            \Etoc@tagrule{\box\tw@}%
+            \box\tw@
             \hskip-\wd\z@
         \fi
         \copy\z@% the title
@@ -1652,9 +1639,7 @@
             \hb@xt@\linewidth{%
               \color@begingroup
               \etocleftrulecolorcmd
-%% UPDATE: \Etoc@tagrule is actually \@firstofone, and will perhaps
-%% disappear altogether.
-              \Etoc@tagrule{\etocleftrule}%
+              \etocleftrule
               \etocbkgcolorcmd
 %% UPDATE: \Etoc@tagleaders is actually \@firstofone, and will perhaps
 %% disappear altogether.
@@ -1663,7 +1648,7 @@
                    \@depth\dp\etoc@framed@contentsbox
               \hss}%
               \etocrightrulecolorcmd
-              \Etoc@tagrule{\etocrightrule}%
+              \etocrightrule
               \color@endgroup
             }%
             \nointerlineskip
@@ -1676,9 +1661,9 @@
         \nointerlineskip
         \hb@xt@\linewidth{%
           \color@begingroup
-          {\etocleftrulecolorcmd\Etoc@tagrule{\etocleftrule}}%
+          {\etocleftrulecolorcmd\etocleftrule}%
           \hss\box\etoc@framed@contentsbox\hss
-          \etocrightrulecolorcmd\Etoc@tagrule{\etocrightrule}%
+          \etocrightrulecolorcmd\etocrightrule
           \color@endgroup
         }%
         \nointerlineskip
