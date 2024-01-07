@@ -22,7 +22,7 @@ See the [Change log](/ChangeLog.md) for more fine-grained tag-to-tag diffs.
 - [etoctagging.tex](/etoctagging.tex): this file contains the user level description extracted from dev `etoc.dtx`.  You can compile it to pdf using `pdflatex`.
 - [etoctagging.md](/etoctagging.md): this file contains more technical notes, they are complementary to the user manual.
 
-For background information on the upstream LaTeX project, refer to this PDF document (by Frank Mittelbach and Chris Rowley): [*LaTeX Tagged PDF—A blueprint for a large project*](https://www.latex-project.org/publications/2020-FMi-TUB-tb129mitt-tagpdf.pdf) for background information, and to the [latex3/tagging-project](https://github.com/latex3/tagging-project) and [latex3/tagpdf](https://github.com/latex3/tagpdf) repositories.
+For background information on the upstream LaTeX project, refer to this PDF document (by Frank Mittelbach and Chris Rowley): [*LaTeX Tagged PDF—A blueprint for a large project*](https://www.latex-project.org/publications/2020-FMi-TUB-tb129mitt-tagpdf.pdf), and to the [latex3/tagging-project](https://github.com/latex3/tagging-project) and [latex3/tagpdf](https://github.com/latex3/tagpdf) repositories.
 
 ## License
 
