@@ -9,6 +9,9 @@
 \usepackage{etoc}
 %\etocchecksemptiness
 
+\ExplSyntaxOn
+ \msg_redirect_module:nnn { tag } { warning } { error }
+\ExplSyntaxOff
 \begin{document}
 
 \tableofcontents

@@ -11,6 +11,9 @@
 % \etocarticlestyle
 % \etocsettocstyle{\section*{\contentsname}}{}
 % \def\localtableofcontents{\begingroup\section*{\contentsname}\endgroup}
+\ExplSyntaxOn
+ \msg_redirect_module:nnn { tag } { warning } { error }
+\ExplSyntaxOff
 \begin{document}
 % \etoctaggingoff
 
