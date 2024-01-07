@@ -15,6 +15,8 @@ The repository provides only `etoc.sty`, not the full `etoc.dtx` whose latest of
 
 See the [Change log](/ChangeLog.md) for more fine-grained tag-to-tag diffs.
 
+I will try to avoid force-pushing in future, but during the first few days of this repo, this happened frequently.
+
 ## PDF Tagging
 
 `etoc` development is currently mostly about adding tentative experimental support for tagging, using the related upstream kernel code in [latex-lab](https://github.com/latex3/latex2e/tree/develop/required/latex-lab) as model and starting point.
