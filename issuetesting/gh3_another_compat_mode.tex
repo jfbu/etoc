@@ -18,7 +18,7 @@
 \newcommand{\MyLocalTOC}[1][section]{%
   \begingroup
   \etocsetstyle{chapter}{}{}
-    {\l@chapter{\numberline{\etocnumber}\etocname}{\etocpage}}{}%
+    {\l@chapter{\numberline{\etocnumber}\etocname}{\etoclink{\etocpage}}}{}%
   \etocsetstyle{section}{}{}
     {\l@section{\numberline{\etocnumber}\etocname}{\etocpage}}{}%
   \etocsetstyle{subsection}{}{}
