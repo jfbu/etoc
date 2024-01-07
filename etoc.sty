@@ -145,26 +145,6 @@
                                            \etoctaggingon}}{}%
   }%
 \fi
-%% we don't need here to check the tagginginline Boolean whose only role
-%% is to influence \etocname, \etocnumber, \etocpage for the case they
-%% would be used inside some \@dottedtocline or \l@section etc...
-%% the argument #1 must contain \leaders followed by glue
-%% ** this is obsolete see next below**
-\def\Etoc@tagleaders #1{%
-  \ifEtoc@tagging
-    \tag_mc_begin:n{artifact}\tag_stop:n{leaders}%
-%% why the \nobreak in original latex-lab? the other things may add
-%% breakpoints? or rather the \nobreak are from the \@dottedtocline
-%% legacy code.  I copied them a bit rashly here.  I should check if the
-%% \nobreak cause my own leaders to behave differently from original
-%% code.  TODO: probably REMOVE the \nobreak
-    \nobreak#1\nobreak
-    \tag_start:n{leaders}\tag_mc_end:
-  \else #1\fi
-}%
-%% As everything is marked as artifact let's make \Etoc@tagleaders
-%% do nothing
-\let\Etoc@tagleaders\@firstofone
 \ExplSyntaxOff
 \AtBeginDocument{%
   \ifEtoc@tagactive
@@ -423,8 +403,6 @@
 }
 %% This version is for all of <prefix><contents> a priori marked as artifact
 %% and \etocname, \etocnumber, \etocpage will be the only non-artifact chunks
-%% As a corollary there be will \Etoc@tagleaders=\@firstofone next
-%% See the comments in \Etoc@lxyz
 %% protected? robust?
 \long\def\etoctagref#1{%
                 \tag_mc_end_push:
@@ -1404,18 +1382,15 @@
      {\setbox\tw@\hbox{\etocnumber, \etocabbrevpagename\etocpage\etocnoprotrusion}}
      {\setbox\tw@\hbox{\etocabbrevpagename\etocpage\etocnoprotrusion}}%
    \advance\dimen\z@\wd\tw@
-%% UPDATE: \Etoc@tagleaders is actually \@firstofone, and will likely
-%% disappear entirely soon, as soon as the current approach in
-%% \Etoc@lxyz is validated by more testing and checks.
    \ifdim\dimen\z@ < \linewidth
        \vbox{\etocname~%
-             \Etoc@tagleaders{\leaders\box\z@\hfil}\box\tw@
+             \leaders\box\z@\hfil\box\tw@
              \baselineskip\etocbaselinespreadone\baselineskip
              \par}%
    \else
        \vbox{\etocname~%
-             \Etoc@tagleaders{\leaders\copy\z@\hfil}\break
-             \hbox{}\Etoc@tagleaders{\leaders\box\z@\hfil}\box\tw@
+             \leaders\copy\z@\hfil\break
+             \hbox{}\leaders\box\z@\hfil\box\tw@
              \baselineskip\etocbaselinespreadone\baselineskip
              \par}%
    \fi
@@ -1443,13 +1418,13 @@
    \advance\dimen\z@\wd\tw@
    \ifdim\dimen\z@ < \linewidth
        \vbox{\etocname~%
-             \Etoc@tagleaders{\leaders\box\z@\hfil}\box\tw@
+             \leaders\box\z@\hfil\box\tw@
              \baselineskip\etocbaselinespreadtwo\baselineskip
              \par}%
    \else
        \vbox{\etocname~%
-             \Etoc@tagleaders{\leaders\copy\z@\hfil}\break
-             \hbox{}\Etoc@tagleaders{\leaders\box\z@\hfil}\box\tw@
+             \leaders\copy\z@\hfil\break
+             \hbox{}\leaders\box\z@\hfil\box\tw@
              \baselineskip\etocbaselinespreadtwo\baselineskip
              \par}%
    \fi
@@ -1534,9 +1509,9 @@
 \def\etoc@ruledheading #1{%
    \hb@xt@\linewidth{\color@begingroup
           \hss #1\hss\hskip-\linewidth
-          \etoctoprulecolorcmd\Etoc@tagleaders{\leaders\etoctoprule\hss}%
+          \etoctoprulecolorcmd\leaders\etoctoprule\hss
           \phantom{#1}%
-          \Etoc@tagleaders{\leaders\etoctoprule\hss}\color@endgroup}%
+          \leaders\etoctoprule\hss\color@endgroup}%
           \nointerlineskip\nobreak\vskip\etocinnertopsep}
 \newcommand*\etocruledstyle[2][\etocdefaultnbcol]{%
 \etocsettocstyle
@@ -1584,9 +1559,9 @@
         \copy\z@% the title
         \hss
         \hskip-\linewidth
-        \etoctoprulecolorcmd\Etoc@tagleaders{\leaders\etoctoprule\hss}%
+        \etoctoprulecolorcmd\leaders\etoctoprule\hss
         \hskip\wd\z@
-        \etoctoprulecolorcmd\Etoc@tagleaders{\leaders\etoctoprule\hss}%
+        \etoctoprulecolorcmd\leaders\etoctoprule\hss
         \color@endgroup
     }% \etoc@framed@titlebox
     \setbox\z@\hbox{\etocleftrule\etocrightrule}%
@@ -1641,12 +1616,10 @@
               \etocleftrulecolorcmd
               \etocleftrule
               \etocbkgcolorcmd
-%% UPDATE: \Etoc@tagleaders is actually \@firstofone, and will perhaps
-%% disappear altogether.
-              \Etoc@tagleaders{\leaders\vrule
+              \leaders\vrule
                    \@height\ht\etoc@framed@contentsbox
                    \@depth\dp\etoc@framed@contentsbox
-              \hss}%
+              \hss
               \etocrightrulecolorcmd
               \etocrightrule
               \color@endgroup
@@ -1672,7 +1645,7 @@
         \hb@xt@\linewidth{%
           \color@begingroup
           \etocbottomrulecolorcmd
-          \Etoc@tagleaders{\leaders\etocbottomrule\hss}%
+          \leaders\etocbottomrule\hss
           \color@endgroup
         }%
     }% end of \vbox in after part!
