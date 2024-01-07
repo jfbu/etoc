@@ -145,17 +145,6 @@
                                            \etoctaggingon}}{}%
   }%
 \fi
-%% This version is for all of <prefix><contents> a priori marked as artifact
-%% and \etocname, \etocnumber, \etocpage will be the only non-artifact chunks
-%% As a corollary there be will \Etoc@tagleaders=\@firstofone next
-%% See the comments in \Etoc@lxyz
-\def\Etoc@tagthis #1{%
-                \tag_mc_end_push:
-                \tag_mc_begin:n{tag=Reference}%
-                #1%
-                \tag_mc_end:
-                \tag_mc_begin_pop:n{artifact}%
-                }%
 %% we don't need here to check the tagginginline Boolean whose only role
 %% is to influence \etocname, \etocnumber, \etocpage for the case they
 %% would be used inside some \@dottedtocline or \l@section etc...
@@ -443,108 +432,104 @@
       \@contentsline@cfgpoint@after{#1}{#2}{#3}{#4}%
     \fi
 }
+%% This version is for all of <prefix><contents> a priori marked as artifact
+%% and \etocname, \etocnumber, \etocpage will be the only non-artifact chunks
+%% As a corollary there be will \Etoc@tagleaders=\@firstofone next
+%% See the comments in \Etoc@lxyz
+%% protected? robust?
+\long\def\etoctagref#1{%
+                \tag_mc_end_push:
+                \tag_mc_begin:n{tag=Reference}%
+                #1%
+                \tag_mc_end:
+                \tag_mc_begin_pop:n{}%
+                }%
+\long\def\etoctaglbl #1{%
+                \tag_mc_end_push:
+                \tag_struct_begin:n{tag=Lbl}%
+                \tag_mc_begin:n{tag=Lbl}%
+                #1%
+                \tag_mc_end:
+                \tag_struct_end:
+                \tag_mc_begin_pop:n{}%
+                }%
 \def\Etoc@lxyz #1#2#3{%
     \Etoc@global\def\etocthepage{#2}%
     \Etoc@global\def\etocthename{#1}%
     \futurelet\Etoc@getnb@token\Etoc@@getnb #1\hspace\etoc@
-    \ifEtoc@tagginginline
-      \Etoc@global\let\Etoc@@tagthis\Etoc@tagthis
-    \else
-      \Etoc@global\let\Etoc@@tagthis\@firstofone
-    \fi
     \ifEtoc@hyperref
+%% "tagged" here in case of hyperref means "tagged but not linked"
+      \Etoc@global\let\etocthetaggedname  \etocthename
+      \Etoc@global\let\etocthetaggedpage  \etocthepage
+      \Etoc@global\let\etocthetaggednumber\etocthenumber
+%% \etocthetaggedlink is not public for time being
+%% let's define it now and modify below if tagging is active
+      \Etoc@global\def\etocthetaggedlink##1{\hyperlink{#3}{##1}}%
+      \def\Etoc@tmp##1##2{\Etoc@global\def##2{\hyperlink{#3}{##1}}}%
+      \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthelinkedname
+      \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthelinkedpage
+      \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthelinkednumber
       \ifEtoc@tagging
-        \Etoc@global\def\etocthetaggedlink##1{\Etoc@tagthis{\hyperlink{#3}{##1}}}%
-      \else
-        \Etoc@global\def\etocthetaggedlink##1{\hyperlink{#3}{##1}}%
+        \ifEtoc@tagginginline
+          \Etoc@global\def\etocthetaggedlink##1{\etoctagref{\hyperlink{#3}{##1}}}%
+          \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagref{\hyperlink{#3}{##1}}}}%
+          \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthelinkedname
+          \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthelinkedpage
+          \def\Etoc@tmp##1##2{\Etoc@global\def##2{%
+                                  \etoctagref{\hyperlink{#3}{\etoctaglbl{##1}}}%
+                                }%
+                             }%
+          \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthelinkednumber
+          \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagref{##1}}}%
+          \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthelinkedname
+          \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthetaggedpage
+          \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagref{\etoctaglbl{##1}}}}%
+          \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthetaggednumber
+        \else
+%% if inline tagging is turned off, we must let the "thelinked" macros hold
+%% no hyperlinks, contrarily to what their names indicate
+          \Etoc@global\let\etocthelinkedname  \etocthename
+          \Etoc@global\let\etocthelinkedpage  \etocthepage
+          \Etoc@global\let\etocthelinkednumber\etocthenumber
+%% Memo: \etocthetaggedlink in that context does add an hyperlink.  Use case
+%% could be "Another compatibility mode" context with \l@chapter like this:
+%% l@chapter{\numberline{\etocnumber}\etocname}{\etoclink{\etocpage}}
+%% so chapter page numbers get hyperlinked but not section page numbers.
+        \fi
       \fi
     \else
-      \Etoc@global\let\etocthetaggedlink\Etoc@@tagthis
-    \fi
-    \Etoc@global\let\etocthelink\etocthetaggedlink
-    \def\Etoc@tmp##1##2{\Etoc@global\expandafter\def\expandafter##2\expandafter{%
-                             \etocthelink{##1}%
-                             }%
-    }%
-%% under \etoctagginginlineoff regime for "another compatibility mode" methods
-%% which use \l@section of \@dottedtocline, we must not add hyperlinking
-%% ourselves. cf gh-#3
-    \ifEtoc@tagging
-      \unless\ifEtoc@tagginginline
-         \def\Etoc@tmp##1##2{\Etoc@global\def##2{##1}}%
-      \fi
-    \fi
-      \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthelinkedname
-      \ifx\etocthepage\@empty
-        \Etoc@global\let\etocthelinkedpage\@empty
-      \else
-        \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthelinkedpage
-      \fi
-      \ifEtoc@numbered
+      \Etoc@global\let\etocthetaggedlink\@firstofone
+      \let\etocthelinkedname  \etocthename
+      \let\etocthelinkedpage  \etocthepage
+      \let\etocthelinkednumber\etocthenumber
+      \ifEtoc@tagging
         \ifEtoc@tagginginline
-%% under \etoctagginginlineoff regime for "another compatibility mode" methods
-%% which use \l@section of \@dottedtocline, we must not add hyperlinking
-%% ourselves. cf gh-#3
-%% TODO: this should be simplfied it ends up embedded in the \Etoc@tagthis
-%% perhaps I need to to insist so much on recycling same code as above for
-%% name and page and redefine \Etoc@tmp
-         \expandafter\Etoc@tmp\expandafter{\expanded{%
-            \noexpand\tag_mc_end:
-            \noexpand\tag_struct_begin:n{tag=Lbl}%
-            \noexpand\tag_mc_begin:n{tag=Lbl}%
-            \unexpanded\expandafter{\etocthenumber}%
-            \noexpand\tag_mc_end:
-            \noexpand\tag_struct_end:
-            \noexpand\tag_mc_begin:n{tag=Reference}}}\etocthelinkednumber
-        \else
+          \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagref{##1}}}%
+          \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthelinkedname
+          \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthelinkedpage
+          \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagref{\etoctaglbl{##1}}}}%
           \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthelinkednumber
         \fi
-      \else
-        \Etoc@global\let\etocthelinkednumber\@empty
       \fi
-    \def\Etoc@tmp##1##2{\Etoc@global\expandafter\def\expandafter##2\expandafter{%
-                             \Etoc@@tagthis{##1}%
-                             }%
-    }%
-    \ifEtoc@tagging
-%% under \etoctagginginlineoff regime for "another compatibility mode" methods
-%% which use \l@section of \@dottedtocline, we must not add any tagging
-%% ourselves. cf gh-#3.
-      \unless\ifEtoc@tagginginline
-         \def\Etoc@tmp##1##2{\Etoc@global\def##2{##1}}%
-      \fi
-    \fi
-    \ifEtoc@hyperref
-%% "tagged" here in case of hyperref means here "tagged but not linked"
-      \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthetaggedname
-      \ifx\etocthepage\@empty
-        \Etoc@global\let\etocthetaggedpage\@empty
-      \else
-        \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthetaggedpage
-      \fi
-      \ifEtoc@numbered
-        \ifEtoc@tagginginline
-%% under \etoctagginginlineoff regime for "another compatibility mode" methods
-%% which use \l@section of \@dottedtocline, we must not add any tagging
-%% ourselves. cf gh-#3.
-          \expandafter\Etoc@tmp\expandafter{\expanded{%
-            \noexpand\tag_mc_end:
-            \noexpand\tag_struct_begin:n{tag=Lbl}%
-            \noexpand\tag_mc_begin:n{tag=Lbl}%
-            \unexpanded\expandafter{\etocthenumber}%
-            \noexpand\tag_mc_end:
-            \noexpand\tag_struct_end:
-            \noexpand\tag_mc_begin:n{tag=Reference}}}\etocthetaggednumber
-        \else
-          \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthetaggednumber
-        \fi
-      \else
-        \Etoc@global\let\etocthetaggednumber\@empty
-      \fi
-    \else
       \Etoc@global\let\etocthetaggedname  \etocthelinkedname
       \Etoc@global\let\etocthetaggednumber\etocthelinkednumber
       \Etoc@global\let\etocthetaggedpage  \etocthelinkedpage
+    \fi
+%% MEMO: if tagging is on but inline tagging is off, this \etocthelink does
+%% actually insert an hyperlink.
+%% TODO: check if the refactoring did not modify in what cases exactly
+%% are the page or number macros let to \@empty
+    \Etoc@global\let\etocthelink\etocthetaggedlink
+    \ifx\etocthepage\@empty
+        \Etoc@global\let\etocthelinkedpage\@empty
+        \Etoc@global\let\etocthetaggedpage\@empty
+    \fi
+    \ifEtoc@numbered\else
+%% TODO: It is possible that I added this \let\etocthenumber\@empty now and it
+%% is in fact superfluous
+        \let\etocthenumber\@empty
+        \let\etocthelinkednumber\@empty
+        \let\etocthetaggednumber\@empty
     \fi
     \Etoc@global\expandafter\let\csname etoclink~\endcsname  \etocthelink
     \Etoc@global\expandafter\let\csname etocname~\endcsname  \etocthetaggedname
