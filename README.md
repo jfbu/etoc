@@ -12,6 +12,8 @@ The repository provides only `etoc.sty`, not the full `etoc.dtx` whose latest of
 
 [This diff](https://github.com/jfbu/etoc/compare/1.2d-2023-10-29...HEAD) compares current HEAD with latest CTAN release.
 
+See the [Change log](/ChangeLog.md) for more fine-grained tag-to-tag diffs.
+
 ## PDF Tagging
 
 For background information on the current status of the upstream LaTeX project, refer to this PDF document (by Frank Mittelbach and Chris Rowley): [*LaTeX Tagged PDF—A blueprint for a large project*](https://www.latex-project.org/publications/2020-FMi-TUB-tb129mitt-tagpdf.pdf) for background information, and to the [latex3/tagging-project](https://github.com/latex3/tagging-project) and [latex3/tagpdf](https://github.com/latex3/tagpdf) repositories.
