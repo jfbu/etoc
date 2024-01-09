@@ -19,7 +19,9 @@ else
     rm -f *.{aux,toc,log,div,lof,lot,out,ps,fls,fdb_latexmk}
 fi
 
-for file in *tex
+# execute tex only on commited files, allowing new ones to
+# reside in directory while they are being manually tested
+for file in $(git ls-files | grep tex)
 do
     $latex $file
     if [ $? -eq 0 ]
