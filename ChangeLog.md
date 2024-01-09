@@ -8,6 +8,8 @@ These headings map to the diffs between successive tags.
 
 ## [dev HEAD]
 
+- fix jfbu/etoc#8.  `\locallistoffigures` and `\locallistoftables` raised lots of warnings but this is only because the fix to jfbu/etoc#2 forgot to handle them at the same time.  Only remain now warnings due to upstrem latex3/tagging-project#55.
+- fix jfbu/etoc#7.  Our redefinition of `\addcontentsline` must keep its original signature so that the [hyperref](https://github.com/latex3/hyperref) "before" hook can be inserted, when as currently via [tagpdf](https://github.com/latex3/tagpdf) this is done by kernel via a generic cmd hook.
 - [testing] add a bash script for automated testing using existing test files; the latter got modified so that all [tagpdf](https://github.com/latex3/tagpdf) warnings are made into errors aborting the job, and the bash script can be made if `LATEX` environment variable is suitably set to use `latexmk -pdf` for example, so that one checks no warnings are issued on first as well as next compilations.  Using the script with any argument tells it to clean all auxiliary files first.
 - strip from code all `\Etoc@tagrule` and `\Etoc@tagleaders` which had been tentatively added, then made no-op's.
 - refactor core `\Etoc@lxyz` in part to avoid sub-optimal `\etocthelinkednumber` containing (begin|end) or (end|begin) with nothing in-between; also for more straightforward coding logic and improved readability of the nested conditionals.
