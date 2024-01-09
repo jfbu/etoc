@@ -233,10 +233,26 @@
         \etocifunknownlevelTF{#1}{\Etoc@newlevel{#1}}{}%
         \expandafter\let\csname Etoc@#1@@\expandafter\endcsname
                         \csname Etoc@\Etoc@tmp @@\endcsname
+%% TODO: review next code/comment in tagpdf context
+%% So we create |@<levelname>| as aliases to |<levelname>|.  This is really
+%% needed only for the level names actually involved by ``to toc'' thing, but
+%% let's do it systematically to avoid implementation complications.
         \expandafter\edef\csname Etoc@@#1@@\endcsname
                          {\expandafter\noexpand\csname Etoc@#1@@\endcsname}%
+%% TODO: review next code/comment in tagpdf context
+%% As ``to toc'' will use some \csa{addcontentsline}, we must make
+%% \ctanpkg{hyperref} happy and also define the suitable |toclevel@| prefixed
+%% extra macros.
         \expandafter\edef\csname toclevel@@#1\endcsname
                          {\expandafter\noexpand\csname toclevel@#1\endcsname}%
+%% TODO: review next code/comment in tagpdf context
+%% But we don't set \ctanpkg{hyperref}'s \csa{toclevel@\string#1} to be
+%% numerically \csa{Etoc@tmp}, with some hesitation.  The level defined by
+%% \csbc{etocsetlevel} should only be for interpretation by \etoc for the
+%% contents of the |.toc| file.  If it also influences how \ctanpkg{hyperref}
+%% hooks into \csa{section} and like commands influence the PDF bookmarks,
+%% unexpected results could follow.  It is up to user to set-up by themself
+%% possibly needed extra \ctanpkg{hyperref} configuration in this regard.
       \fi
    \else
       \PackageWarning{etoc}
@@ -2155,6 +2171,7 @@
       \ifdefined\protected@file@percent\protected@file@percent\fi
     }%
 }
+%% TODO: review next code/comment in tagpdf context
 \def\Etoc@addcontentsline@ #1#2#3{%
     \@namedef{toclevel@#1}{#3}\addcontentsline {toc}{#1}{#2}%
 }
