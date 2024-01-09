@@ -1,0 +1,17 @@
+% -*- mode:latex -*-
+
+\expandafter\documentclass\expandafter{\testclass}
+\expandafter\usepackage\expandafter[\testoptions]{etoc}
+
+\ifusetocbibind\usepackage{tocbibind}\relax\fi
+\ifchecksemptiness\etocchecksemptiness\fi
+\ifetoclocaltocstyle\etocetoclocaltocstyle\fi
+\ifclasstocstyle\etocclasstocstyle\fi
+\ifstandardlines\etocstandardlines\fi
+\iffallbacklines\etocfallbacklines\fi
+
+\csname testpreambleextras\endcsname
+
+\usepackage{hyperref}
+
+\endinput

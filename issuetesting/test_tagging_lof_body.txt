@@ -1,0 +1,161 @@
+% -*- mode:latex -*-
+\begin{document}
+
+\makeatletter
+\ifdefined\c@chapter
+  \def\secorchap{\chapter}
+  \def\suborsec{\section}
+  \def\subsuborsub{\subsection}
+\else
+  \def\secorchap{\section}
+  \def\suborsec{\subsection}
+  \def\subsuborsub{\subsubsection}
+\fi
+\makeatother
+
+\csname testbodyextras\endcsname
+
+\tableofcontents*
+
+\listoffigures
+
+\listoftables
+
+\secorchap{foo}
+
+\localtableofcontents
+
+%\tracingmacros1
+\locallistoffigures
+\tracingmacros0
+
+\etocifwasempty{NO FIGURES\par}{PAS VIDE\par}
+
+\locallistoftables
+\localtableofcontents*
+
+\tracingmacros0
+
+\suborsec{subfoo1}
+
+
+%\tracingmacros1
+\locallistoffigures
+%\tracingmacros0
+
+\begin{figure}[htbp]
+  \centering
+  figure coucou
+% non captioned figures do not make it to the lof file
+  \caption{figure1}
+\end{figure}
+
+\begin{table}[htbp]
+  \centering
+  table coucou
+  \caption{table1}
+\end{table}
+
+\suborsec{subfoo2}
+
+\begin{figure}[htbp]
+  \centering
+  coucou
+  \caption{figure2}
+\end{figure}
+
+\begin{table}[htbp]
+  \centering
+  coucou
+  \caption{table2}
+\end{table}
+
+\secorchap{bar}
+
+\localtableofcontents
+\locallistoffigures
+\locallistoftables*
+
+%\etocstandarddisplaystyle
+
+%\locallistoftables
+
+%\locallistoffigures
+
+\suborsec{foo3}
+
+%\locallistoftables
+
+%\etocstandarddisplaystyle
+
+\subsuborsub{sub foo3}
+
+\locallistoffigures
+
+\begin{figure}[htbp]
+  \centering
+  coucou
+  \caption{sub figure}
+\end{figure}
+
+\secorchap{bar2}
+
+%\tracingmacros1
+\localtableofcontents
+\locallistoftables*
+\locallistoffigures*
+%\tracingmacros0
+
+\suborsec{foo4}
+
+\suborsec{foo5}
+
+\begin{table}[htbp]
+  \centering
+  coucou
+  \caption{table3}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  coucou
+  \caption{table4}
+\end{table}
+
+\secorchap{bar3}
+
+\localtableofcontents*
+\locallistoffigures*
+\locallistoftables*
+
+\suborsec{foo6}
+
+
+\begin{figure}[htbp]
+  \centering
+  coucou
+  \caption{figure3}
+\end{figure}
+
+
+\suborsec{foo7}
+\begin{figure}[htbp]
+  \centering
+  coucou
+  \caption{figure4}
+\end{figure}
+
+\begin{table}[htbp]
+  \centering
+  coucou
+  \caption{table5}
+\end{table}
+
+\begin{figure}[htbp]
+  \centering
+  coucou
+  \caption{figure5}
+\end{figure}
+
+\end{document}
+\endinput
