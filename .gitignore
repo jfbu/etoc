@@ -4,6 +4,8 @@ LISMOIAVANTTOUTPUSH
 *.dvi
 *.log
 *.toc
+*.lof
+*.lot
 *.fls
 *.fdb_latexmk
 *.pdf
