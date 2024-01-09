@@ -16,7 +16,7 @@ if [ $# -eq 0 ]
 then
     :
 else
-    rm -f *.{aux,toc,log,div,out,ps,fls,fdb_latexmk}
+    rm -f *.{aux,toc,log,div,lof,lot,out,ps,fls,fdb_latexmk}
 fi
 
 for file in *tex
@@ -41,7 +41,7 @@ if [ $# -eq 0 ]
 then
     :
 else
-    echo "N.B.: aux, toc, fls, fdb_latexmk, log tous supprimés avant compilation"
+    echo "N.B.: auxiliary files have all been removed before compilation"
 fi
 
 if [ $status -eq 0 ]
