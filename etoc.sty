@@ -768,9 +768,22 @@
 \let\etoclocaltableofcontentshook\@empty
 \if1\ifEtoc@lof0\fi\ifEtoc@lot0\fi1%
 \else
+%% This fixes jfbu/etoc#7
+%% Formerly we did \def\addcontentsline{\Etoc@hackedaddcontentsline} but this
+%% change of signature of \addcontentsline breaks the hyperref way to alter
+%% \addcontentsline (but currently only if tagpdf related code is loaded), as
+%% it uses then generic cmd hooks with arguments to add its code.  Let's not
+%% complicate things, so we unconditionally use the proper signature.  This
+%% should work independently of whether hyperref adds its hook before or
+%% after this is executed but actually the kernel applies the cmd hooks
+%% it seems always both after package ABD code and also after preamble user
+%% ABD code.  So the hyperref cmd/addcontentsline/before will end up inserted
+%% before the \Etoc@hackedcontentsline token.  It does not matter actually
+%% before the only code of our hack is to filter #1 and take appropriate
+%% additional action which does not interfere with hyperref hook.
 \AtBeginDocument{%
   \let\Etoc@originaladdcontentsline\addcontentsline
-  \def\addcontentsline{\Etoc@hackedaddcontentsline}%
+  \def\addcontentsline#1#2#3{\Etoc@hackedaddcontentsline{#1}{#2}{#3}}%
 }%
 \fi
 \ifEtoc@lof
