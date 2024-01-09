@@ -4,6 +4,7 @@ We will try to keep these items in sync with the actual code, but they may be la
 
 - `etoc` uses `\@starttoc@cfgpoint@before{toc}` and `\@starttoc@cfgpoint@after{toc}`, (*this has to be kept in sync with upstream evolving interface*)
 - for local tables of contents the local TOC triggers from *inside* the `.toc` data (which has been saved in a `\toks`), so the above hooks are not used unconditionally, but strategically located (see jfbu/etoc#2),
+- also local lists of figures and tables need to do that nicely (jfbu/etoc#8: all warnings-as-arrors from `pdflatex test_tagging_lof_alltotoc.tex` are gone, only remain the upstream latex3/tagging-project#55 issue),
 - `etoc` if left in compatibility mode simply executes the contents of the `.toc` file (with its `\contentsline` entries which have been updated by kernel to do tagging) so it has nothing more to do,
 - else it uses `\@contentsline@cfgpoint@before{#1}{#2}{#3}{#4}` and `\@contentsline@cfgpoint@after{#1}{#2}{#3}{#4}` in `\Etoc@etoccontentsline@`, (*this has to be kept in sync with upstream evolving interface*)
 - from this point on the tagging is done via the [tagpdf](https://github.com/latex3/tagpdf) mark-up API,
