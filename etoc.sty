@@ -369,6 +369,29 @@
   \Etoc@next{#1}%
 }
 \ExplSyntaxOn
+%% This version is for all of <prefix><contents> a priori marked as artifact
+%% and \csbc{etocname}, \csbc{etocnumber}, \csbc{etocpage} will be the only
+%% non-artifact chunks.
+%%
+%% These \csa{long}'s look silly.
+\long\protected\def\etoctagReference#1{%
+                \tag_mc_end_push:
+                \tag_mc_begin:n{tag=Reference}%
+                #1%
+                \tag_mc_end:
+                \tag_mc_begin_pop:n{}%
+                }%
+\long\protected\def\etoctagLbl #1{%
+                \tag_mc_end_push:
+                \tag_struct_begin:n{tag=Lbl}%
+                \tag_mc_begin:n{tag=Lbl}%
+                #1%
+                \tag_mc_end:
+                \tag_struct_end:
+                \tag_mc_begin_pop:n{}%
+                }%
+\let\etocthetocitembegintag\@empty
+\let\etocthetocitemendtag\@empty
 \def\Etoc@etoccontentsline@ #1#2#3#4{%
     \Etoc@doendsandbegin
 %% Experimental tagging support at \etocrelease{1.2e}.  We need to manually
@@ -381,31 +404,71 @@
          \csname Etoc@contents@\the\numexpr\Etoc@level\endcsname }%
     \ifEtoc@skipprefix \Etoc@global\def\Etoc@prefix{\@empty}\fi
     \global\Etoc@skipprefixfalse
+    \gdef\@contentsline@destination{#4}%
+    \Etoc@lxyz{#2}{#3}{#4}%
+    \ifEtoc@tagactive
+%% For sophisticated two stages process, we have already at our
+%% disposal \csbc{etocthelink}, but user will need the naked
+%% destination to rebuild a tagging structure.  Should I do
+%% things such as
+%%     \centeredline{|\global\let\etocthedest\@contentsline@destination|}
+%%     \centeredline{|\Etoc@global\def\etocthelevelname{#1}|}
+%% ??
+%%
+%% Attention that it would be wrong to make the next definitions only if
+%% \csbc{ifEtoc@tagging} was true, because in fact this is supposed to
+%% be done under \csbc{etoctaggingoff} regime for sophisticated 2-stage
+%% constructs such as those of the manual for TOCs as mind maps.
+%% MEMO: of course these definitions must be made here before expansion
+%% of user defined prefix and contents!
+%%
+%% Let's avoid submitting \csbc{etocthename} to a full \csa{edef} here.
+%% ATTENTION: usage of tagpdf internal command is not best practice.
+      \Etoc@global\edef\etocthetocitembegintag{%
+        \__tag_toc_contentsline_begin:nnn
+            {#1}{\unexpanded\expandafter{\etocthename}}{#4}%
+        \tag_struct_begin:n{tag=Reference}%
+        \tag_mc_begin:n{artifact=layout}%
+      }%
+%% Kernel code has no \csa{tag_if_active:T} in \csa{@contentsline@cfgpoint@after}
+%% expansion.  \csa{edef} to expand |#1| to be symmetrical to start, but
+%% anyhow a priori, |#1| is always a priori simply a string.
+      \Etoc@global\edef\etocthetocitemendtag{%
+        \tag_mc_end:
+        \tag_struct_end:
+        \__tag_toc_contentsline_end:n {#1}%
+      }%
+    \fi
     \ifEtoc@tagging
-%% TODO : this ties the hierarchy of levels to the one expected
+%% TODO: this ties the hierarchy of levels to the one expected
 %% by the kernel code which is probably good.  Once I will have
 %% understood better though the tagging business perhaps I should
 %% drop this entirely and update the PDF structure tree directly
-%% from \Etoc@doendsandbegins, or rather incorporate into the
+%% from \csbc{Etoc@doendsandbegins}, or rather incorporate into the
 %% begins and ends the needed thing.  At this stage indeed it
 %% appears impossible to expect using etoc powerful list of
 %% abilities, all using only the single .toc file will possibly
 %% work with upstream kernel code which only knows about standard
 %% things.
-      \@contentsline@cfgpoint@before{#1}{#2}{#3}{#4}%
-    \fi
-    \gdef\@contentsline@destination{#4}%
-    \Etoc@lxyz{#2}{#3}{#4}%
-%% In order to fix the etoc/jfbu#6 issue regarding \emph which
-%% can not appear as a child of TOCI, I will tag *everything*
-%% as artifact, *except* for the sole \etocname, \etocnumber,
-%% \etocpage which will introduce their own marked content,
-%% interrupting and reactivating the artifact.
 %%
-%% See above \Etoc@tagthis
+%% TODO: perhaps use own code; the kernel code tries to separate name from
+%% number, but this works only if \csa{numberline}, not if for example,
+%% \csa{chapterline} is used.  Having now moved this after \csbc{Etoc@lxyz},
+%% at this stage we are in possession of \csbc{etocthename}. (I think
+%% the \csa{text_purify:n} from kernel code expands its argument)
+%%
+%% MEMO: can not use here \csbc{etocthetocitemendtag} which does not
+%% query \csbc{ifEtoc@tagginginline}.
+      \@contentsline@cfgpoint@before{#1}{\etocthename}{#3}{#4}%
+    \fi
+%% In order to fix the |etoc/jfbu#6| issue regarding \csa{emph} which
+%% can not appear as a child of TOCI, I will tag *everything*
+%% as artifact, *except* for the sole \csbc{etocname}, \csbc{etocnumber},
+%% \csbc{etocpage} which will introduce their own marked content,
+%% interrupting and reactivating the artifact.
     \ifEtoc@tagginginline
       \tag_struct_begin:n{tag=Reference}%
-      \tag_mc_begin:n{artifact}%
+      \tag_mc_begin:n{artifact=layout}%
     \fi
     \Etoc@prefix
     \Etoc@contents
@@ -413,29 +476,25 @@
       \tag_mc_end:
       \tag_struct_end:
     \fi
+%% MEMO: Attention that groups may be closed in the certain rare cases
+%% by the user code from prefix and contents: \csbc{etocthetocitemendtag}
+%% is not global, but done with \csbc{Etoc@global}.  But more
+%% importantly it does not check the \csbc{ifEtoc@tagginginline} status.
+%%
+%% MEMO: only |#1| is actually needed by kernel code below at this
+%% stage.  No need to worry about using \csbc{etocthename} which may
+%% actually have the same (a priori rare) problem with an unbalanced
+%% group closing in user prefix plus contents code.
     \ifEtoc@tagging
       \@contentsline@cfgpoint@after{#1}{#2}{#3}{#4}%
     \fi
 }
-%% This version is for all of <prefix><contents> a priori marked as artifact
-%% and \etocname, \etocnumber, \etocpage will be the only non-artifact chunks
-%% protected? robust?
-\long\def\etoctagref#1{%
-                \tag_mc_end_push:
-                \tag_mc_begin:n{tag=Reference}%
-                #1%
-                \tag_mc_end:
-                \tag_mc_begin_pop:n{}%
-                }%
-\long\def\etoctaglbl #1{%
-                \tag_mc_end_push:
-                \tag_struct_begin:n{tag=Lbl}%
-                \tag_mc_begin:n{tag=Lbl}%
-                #1%
-                \tag_mc_end:
-                \tag_struct_end:
-                \tag_mc_begin_pop:n{}%
-                }%
+%% \etocrelease{1.2e} defines \csbc{etochyperlink} as a \csa{protected} wrapper
+%% to \csa{hyperlink} and uses it in the \csbc{etocthelinkedname} et al.  This
+%% allows easier constructs of 2-stages TOC where first pass will use
+%% \csa{edef} to prepare some structure.
+%% does \long make any sense here?
+\long\protected\def\etochyperlink{\hyperlink}%
 \def\Etoc@lxyz #1#2#3{%
     \Etoc@global\def\etocthepage{#2}%
     \Etoc@global\def\etocthename{#1}%
@@ -447,26 +506,30 @@
       \Etoc@global\let\etocthetaggednumber\etocthenumber
 %% \etocthetaggedlink is not public for time being
 %% let's define it now and modify below if tagging is active
-      \Etoc@global\def\etocthetaggedlink##1{\hyperlink{#3}{##1}}%
-      \def\Etoc@tmp##1##2{\Etoc@global\def##2{\hyperlink{#3}{##1}}}%
+      \Etoc@global\def\etocthetaggedlink##1{\etochyperlink{#3}{##1}}%
+      \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etochyperlink{#3}{##1}}}%
       \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthelinkedname
       \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthelinkedpage
       \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthelinkednumber
       \ifEtoc@tagging
         \ifEtoc@tagginginline
-          \Etoc@global\def\etocthetaggedlink##1{\etoctagref{\hyperlink{#3}{##1}}}%
-          \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagref{\hyperlink{#3}{##1}}}}%
+          \Etoc@global\def\etocthetaggedlink##1{\etoctagReference{\etochyperlink{#3}{##1}}}%
+          \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagReference{\etochyperlink{#3}{##1}}}}%
           \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthelinkedname
           \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthelinkedpage
+%% Should I really use a Reference tag on top of the Lbl?
+%% Should the Lbl not be rather on top of \csa{hyperlink}? I remember more or
+%% less that the current nesting is inspired from what latex-lab does and the way
+%% the hyperref hooks are inserted.
           \def\Etoc@tmp##1##2{\Etoc@global\def##2{%
-                                  \etoctagref{\hyperlink{#3}{\etoctaglbl{##1}}}%
+                                  \etoctagReference{\etochyperlink{#3}{\etoctagLbl{##1}}}%
                                 }%
                              }%
           \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthelinkednumber
-          \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagref{##1}}}%
+          \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagReference{##1}}}%
           \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthetaggedname
           \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthetaggedpage
-          \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagref{\etoctaglbl{##1}}}}%
+          \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagReference{\etoctagLbl{##1}}}}%
           \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthetaggednumber
         \else
 %% if inline tagging is turned off, we must let the "thelinked" macros hold
@@ -474,9 +537,9 @@
           \Etoc@global\let\etocthelinkedname  \etocthename
           \Etoc@global\let\etocthelinkedpage  \etocthepage
           \Etoc@global\let\etocthelinkednumber\etocthenumber
-%% Memo: \etocthetaggedlink in that context does add an hyperlink.  Use case
-%% could be "Another compatibility mode" context with \l@chapter like this:
-%% l@chapter{\numberline{\etocnumber}\etocname}{\etoclink{\etocpage}}
+%% Memo: \csbc{etocthetaggedlink} in that context does add an hyperlink.  Use case
+%% could be "Another compatibility mode" context with \csa{l@chapter} like this:
+%% \centeredline{|\l@chapter{\numberline{\etocnumber}\etocname}{\etoclink{\etocpage}}|}
 %% so chapter page numbers get hyperlinked but not section page numbers.
         \fi
       \fi
@@ -487,10 +550,10 @@
       \let\etocthelinkednumber\etocthenumber
       \ifEtoc@tagging
         \ifEtoc@tagginginline
-          \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagref{##1}}}%
+          \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagReference{##1}}}%
           \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthelinkedname
           \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthelinkedpage
-          \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagref{\etoctaglbl{##1}}}}%
+          \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagReference{\etoctagLbl{##1}}}}%
           \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthelinkednumber
         \fi
       \fi
@@ -501,14 +564,14 @@
 %% MEMO: if tagging is on but inline tagging is off, this \etocthelink does
 %% actually insert an hyperlink.
 %% TODO: check if the refactoring did not modify in what cases exactly
-%% are the page or number macros let to \@empty
+%% are the page or number macros let to \csa{@empty}
     \Etoc@global\let\etocthelink\etocthetaggedlink
     \ifx\etocthepage\@empty
         \Etoc@global\let\etocthelinkedpage\@empty
         \Etoc@global\let\etocthetaggedpage\@empty
     \fi
     \ifEtoc@numbered\else
-%% TODO: It is possible that I added this \let\etocthenumber\@empty now and it
+%% TODO: It is possible that I added this |\let\etocthenumber\@empty| now and it
 %% is in fact superfluous
         \let\etocthenumber\@empty
         \let\etocthelinkednumber\@empty
@@ -643,16 +706,25 @@
 %% ``/before`` addition must not happen before the TOC title is typeset (as
 %% e.g. it may use a \csa{chapter*} command in a \csa{part} for |book|
 %% document class).
+%%
+%% User level interface for two-stages TOCs where etoc is used only in first
+%% step to construct for example a TikZ mindmap which is executed later.
+%% Hesitation whether this should check \csbc{ifEtoc@tagging} status.
+%% Or \csbc{ifEtoc@tagactive}.  Hesitation whether it is really useful
+%% to have it take an argument, e.g. \csa{etoctagstartTOCcontentsoftype}
+%% but then I am tied with upstream handling of nature of argument.
+%%
+%% Not used in own package code, only user interface.
+\def\etoctagstartTOCcontents{\@starttoc@cfgpoint@before{toc}}
+\def\etoctagfinishTOCcontents{\@starttoc@cfgpoint@after{toc}}
 \def\Etoc@toctoc{%
   \gdef\Etoc@stackofends{{-3}{}}%
   \global\let\Etoc@level\Etoc@minf
   \global\let\Etoc@virtualtop\Etoc@minf
-  \unless\ifEtoc@localtoc % si local toc voir dans \Etoc@@startlocaltoc
-    \ifEtoc@tagging
-    %%\ifEtoc@tagactive % do I need this here
-    \@starttoc@cfgpoint@before{toc}%
-    %%\fi
-  \fi\fi
+%% for local toc gets done in \csbc{Etoc@@startlocaltoc}/\csbc{Etoc@@startlocallistof}
+  \ifEtoc@tagging
+    \unless\ifEtoc@localtoc\@starttoc@cfgpoint@before{toc}\fi
+  \fi
   \the\Etoc@toctoks
   \ifEtoc@notactive
   \else
@@ -662,10 +734,14 @@
   \ifEtoc@tagging
     \ifEtoc@localtoc
       \unless\ifEtoc@notactive
-        \@starttoc@cfgpoint@after{toc}%
+%% the argument is currently ignored. If it stops being so by
+%% \csa{@starttoc@cfgpoint@after} at some stage, i will have to make it either
+%% localtoc, locallof, or locallot (or whatever has been used with
+%% \csa{@starttoc@cfgpoint@before} or successor.
+        \@starttoc@cfgpoint@after{localtoc}%
       \fi
     \else
-        \@starttoc@cfgpoint@after{toc}%
+      \@starttoc@cfgpoint@after{toc}%
     \fi
   \fi
 }
@@ -692,18 +768,14 @@
 %% dtx comment deliberately left in sty
 %% \etocrelease{1.2e} locates this here and not before \csbc{Etoc@toctoc} else
 %% \csbc{etocetoclocaltocmaketitle} could have kicked in and typeset a chapter
-%% title creating a Parent-Child tagging problem. jfbu/etoc#2
+%% title creating a Parent-Child tagging problem. |jfbu/etoc#2|
 %%
 %% Could this originate a problem perhaps if the toc file contents generate
 %% a |\begingroup/\endgroup| so that the group will be closed before the
 %% |\@starttoc@cfgpoint@after{toc}| (located in \csbc{Etoc@toctoc}) is done?
 %%
 %% The same addition is made to \csbc{Etoc@@startlocallistof}.
-          \ifEtoc@tagging
-          %%\ifEtoc@tagactive % do I need this here
-            \@starttoc@cfgpoint@before{toc}%
-          %%\fi
-          \fi
+          \ifEtoc@tagging\@starttoc@cfgpoint@before{localtoc}\fi
        \fi
     \fi
 }
@@ -770,17 +842,19 @@
 \let\etoclocaltableofcontentshook\@empty
 \if1\ifEtoc@lof0\fi\ifEtoc@lot0\fi1%
 \else
-%% This fixes jfbu/etoc#7
-%% Formerly we did \def\addcontentsline{\Etoc@hackedaddcontentsline} but this
-%% change of signature of \addcontentsline breaks the hyperref way to alter
-%% \addcontentsline (but currently only if tagpdf related code is loaded), as
+%% This fixes |jfbu/etoc#7|
+%% Formerly we did
+%% \centeredline{|\def\addcontentsline{\Etoc@hackedaddcontentsline}|
+%% but this
+%% change of signature of \csa{addcontentsline} breaks the hyperref way to alter
+%% \csa{addcontentsline} (but currently only if tagpdf related code is loaded), as
 %% it uses then generic cmd hooks with arguments to add its code.  Let's not
 %% complicate things, so we unconditionally use the proper signature.  This
 %% should work independently of whether hyperref adds its hook before or
 %% after this is executed but actually the kernel applies the cmd hooks
 %% it seems always both after package ABD code and also after preamble user
 %% ABD code.  So the hyperref cmd/addcontentsline/before will end up inserted
-%% before the \Etoc@hackedcontentsline token.  It does not matter actually
+%% before the \csbc{Etoc@hackedcontentsline} token.  It does not matter actually
 %% before the only code of our hack is to filter #1 and take appropriate
 %% additional action which does not interfere with hyperref hook.
 \AtBeginDocument{%
@@ -839,22 +913,41 @@
     \Etoc@originaladdcontentsline{#1}{#2}{#3}%
   }
 \fi
+%% #1 is |figure| or |table|
+%%
+%% TODO: decide if it should be rather `lof' or `lot' rather.  But then some
+%% auxiliaries must be renamed.  For example \csbc{etoclocallistoffigureshook}
+%% but unfortunately it is already documented; I am sure noone on Earth has
+%% read the docs and those few who did do not use it anyhow.
 \def\Etoc@@startlocallistof#1#2#3{%
     \ifEtoc@localtoc
        \ifnum #2=#3\relax
           \global\let\etoclocaltop\Etoc@virtualtop
           \global\Etoc@notactivefalse
+%% MEMO: this has been configured in \csbc{locallistoffigures} or
+%% \csbc{locallistoftables} to trigger \csbc{Etoc@@startlocallistof@setlevels}
+%% with |figure| or |table| as argument as it must match the actual first
+%% argument of \csa{contentsline} in the |.toc| file.  But I see here that the
+%% |#1| here is not tied by that.
           \Etoc@@startlocaltochook
+%% TODO: decide if this next one should be before or after the maketitle It
+%% looks odd before, as the maketitle here is executed only in a specific
+%% case, which however is the default package configuration to detect
+%% appropriate level automatically.  If after I could use it to insert the
+%% tagging thing.  Maybe I need a private one, in addition.
           \csname etoclocallistof#1shook\endcsname
           \ifEtoc@etocstyle
               \csname etocetoclistof#1smaketitle\endcsname
           \fi
-%% Same tagging related (jfbu/etoc#2) addition as in \csbc{Etoc@@startlocaltoc}
-          \ifEtoc@tagging
-          %%\ifEtoc@tagactive % do I need this here
-            \@starttoc@cfgpoint@before{toc}%
-          %%\fi
-          \fi
+%% |jfbu/etoc#8|
+%% Same tagging related addition as in \csbc{Etoc@@startlocaltoc}, The macro
+%% uses \csbc{ifEtoc@tagging}.  Can the argument which ends up being passed
+%% to the kernel code (at this stage) have a space? like `local lof'?
+%% Anyway as #1 is currently figure or table, and localfigure/localtable do
+%% not make much sense, let's simply use `localtoc' here.  And I have
+%% to decide how to make the finish macro inherit the argument; which however
+%% attow is disposed of by the \csa{@starttoc@cfgpoint@after} to which it maps.
+          \ifEtoc@tagging\@starttoc@cfgpoint@before{localtoc}\fi
        \fi
     \fi
 }
@@ -1201,8 +1294,8 @@
     \Etoc@tocdepthset
     \ifEtoc@parskip\parskip\z@skip\fi
     \Etoc@aftertitlehook
-%% seems we need to deactivate minipage tagging (github issues jfbu/etoc#5,
-%% which is related to jfbu/etoc#4)
+%% seems we need to deactivate minipage tagging (github issues |jfbu/etoc#5|,
+%% which is related to |jfbu/etoc#4|)
 \ifEtoc@tagactive
 \AssignSocketPlug{tagsupport/minipage/before}{noop}%
 \AssignSocketPlug{tagsupport/minipage/after}{noop}%
@@ -1611,8 +1704,8 @@
       \kern\dimen\z@
       \vskip\etocinnertopsep
       \hbox\bgroup
-%% as per Ulrike's advice, https://github.com/latex3/tagging-project/issues/54
-%% I guess here I do have to use the Etoc@tagactive not Etoc@tagging (rethink later)
+%% as per Ulrike's advice,
+%% \centeredline{\url{https://github.com/latex3/tagging-project/issues/54}}
 \ifEtoc@tagactive
 \AssignSocketPlug{tagsupport/minipage/before}{noop}%
 \AssignSocketPlug{tagsupport/minipage/after}{noop}%

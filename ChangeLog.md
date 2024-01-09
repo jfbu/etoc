@@ -8,6 +8,16 @@ These headings map to the diffs between successive tags.
 
 ## [dev HEAD]
 
+- add user interface for achieving tagging in sophisticated 2-steps TOCs, where the first step done under `\etoctaggingoff` regime will construct some token list which is then used in the second, non-etoc, step, and thus the prepared tokens need to contain explicit manual tagging:
+  - `\etoctagstartTOCcontents`
+  - `\etocthetocitembegintag`, to be expanded (once or `\edef`) inside a user etoc line style, only makes sense there
+  - `\etoctagReference` is designed to be used in-between the `tocitem{begin,end}tag`'s
+  - `\etoctagLbl` is designed to be used in-between the `tocitem{begin,end}tag`'s
+  - `\etocthetocitemendtag`, to be expanded (once or `\edef`) inside a user etoc line style, only makes sense there
+  - `\etoctagfinishTOCcontents`
+
+  Those macros will work independently of the `\etoctaggingon/\etoctaggingoff` flag when they get expanded, because the latter only say whether the `\tableofcontents`, `\localtableofcontents` should automatically insert tagging, and the above macros will do their real job only later, outside of `etoc` TOCs.  The first step which uses an etoc TOC typesets nothing and *must* be done with `\etoctaggingoff`.  See the [TOC as a molecule](/issuetesting/test_tagging_toc_as_molecule.tex) demo file.
+- add `\etochyperlink` as `\protected` wrapper of `\hyperlink` and use it in `\etocthelinkedname` et al., which facilitates their use in `\edef` for sophisticated 2-steps TOCs such as those using TikZ trees in the user manual.
 - fix jfbu/etoc#8.  `\locallistoffigures` and `\locallistoftables` raised lots of warnings but this is only because the fix to jfbu/etoc#2 forgot to handle them at the same time.  Only remain now warnings due to upstrem latex3/tagging-project#55.
 - fix jfbu/etoc#7.  Our redefinition of `\addcontentsline` must keep its original signature so that the [hyperref](https://github.com/latex3/hyperref) "before" hook can be inserted, when as currently via [tagpdf](https://github.com/latex3/tagpdf) this is done by kernel via a generic cmd hook.
 - [testing] add a bash script for automated testing using existing test files; the latter got modified so that all [tagpdf](https://github.com/latex3/tagpdf) warnings are made into errors aborting the job, and the bash script can be made if `LATEX` environment variable is suitably set to use `latexmk -pdf` for example, so that one checks no warnings are issued on first as well as next compilations.  Using the script with any argument tells it to clean all auxiliary files first.
