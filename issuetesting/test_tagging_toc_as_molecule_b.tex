@@ -9,6 +9,7 @@
 %% is enough to interrupt temporarily the "artifact=layout" MC I am a bit
 %% worried though in ngpdf.com about the boxes shown in the two panels view.
 
+% This is a variation on the test_tagging_toc_as_molecule.tex
 \DocumentMetadata{
  uncompress,
  pdfversion=1.7,
@@ -26,7 +27,7 @@
 \usepackage{hyperref}
 \usepackage{etoc}
 \usepackage{centeredline}
-
+\usepackage{ragged2e}
 \begin{document}
 
 %% Adapted from file `etocsnippet-17.tex' of etoc.pdf 1.2d 2023/10/29
@@ -72,16 +73,32 @@
 % processing of the toc line by the user defined etoc style.
 \newcommand*{\preparetreenodeastaggedtocitem}{%
 %% watch out the \edef! It is crucial to not make a \def here!
+%%
+%% MEMO: **really** I should use \protected@edef rather than the \noexpand's,
+%% but I need to make @ a letter then...
+%%
+%% MEMO: I tried to use the TikZ keys [align=center, text width=2cm] but then
+%% tagpdf complains Parent-Child 'Document/' --> 'TOCI/pdf'
+%%
+%% MEMO: I tried using a \parbox but it creates seemingly a MC.
+%% so using \vbox...
+%%
+%% MEMO: I was originally using \etoctagReference but as the argument
+%% always is hyperlinked it has seemingly no impact on the final tree
+%% I see in the ngpdf.com editor
   \edef\treenode{node {\etocthetocitembegintag
-%% from PDF reference 1.7 it seems I could use Lbl directly under TOCI
-%% let's anyhow wrap the whole thing in \etoctagReference
-%% It seems if I omit the \etoctagReference the whole tree structure is the
-%% same, but a priori my expectation is then that the parentheses are
-%% handled as artifact.
-%% But whether or not I use \etoctagReference here ngpdf.com in its html
-%% view shows the parentheses.
-                       \etoctagReference{\etocthelinkedname
-                                         (\etoctagLbl{\etocthelinkednumber})}%
+%%                             do not forget vvvvvvvvv this here and elsewhere
+                       \vbox{\hsize 2.5cm\relax\noexpand\Centering
+                         \noexpand\textbf{\etocthelinkedname}
+%% Anything not inside \etoctagReference or \etoctagLbl is automatically
+%% tagged as artifact
+%% Using here Lbl directly under TOCI, not nested in \etoctagReference
+%% but it maybe it would be better to nest
+                         (\noexpand\textit{\etoctagLbl{\etocthelinkednumber}})
+%% \etocthelinkedpage carries hyperlink even if hyperref is left to its
+%% default to not link the page number
+                         on page \etocthelinkedpage
+                       }%
                        \etocthetocitemendtag}}%
 }
 
@@ -104,6 +121,14 @@
 % Finally here we have the core code to create and finish the \treetok
 % we need a global in the "after" code because there will be a grouping
 % created always by \tableofcontents
+%%
+%% MEMO: I tried using here  \node [align=center, text width=2cm]
+%% but \tagstop was too late from inside the node
+%% and moving it outside the node made TikZ "give up on the path"
+%%
+%% MEMO: I also tried things with opening a TOCI struct but never
+%% could make it work seems I am lacking stuff from latex-lab such as
+%% \seq_gpush:Nx \g_@@_toc_stack_seq {{TOCI}\use:c{toclevel@#1}} ???
 \etocsettocstyle
   {\treetok{\node {\tagstop %% TODO: THINK OF A BETTER WAY TO HANDLE THIS
                    \parbox{2cm}{\raggedright THE eTOC AS A TIKZ MOLECULE}%
@@ -132,8 +157,8 @@
    \hypersetup{hidelinks}%
    \begin{tikzpicture}
               [grow cyclic,
-               level 1/.style={level distance=4cm,sibling angle=72},
-               level 2/.style={level distance=2cm,sibling angle=60},
+               level 1/.style={level distance=5cm,sibling angle=72},
+               level 2/.style={level distance=3cm,sibling angle=60},
                every node/.style={ball color=red!70,circle,text=white},
                edge from parent path={[dashed,very thick,color=cyan]
                            (\tikzparentnode) --(\tikzchildnode)}]
@@ -160,9 +185,13 @@ Texte
 
 Texte
 
+\clearpage
+
 \subsection{One two}
 
 Texte
+
+\clearpage
 
 \subsection{One three}
 
@@ -172,17 +201,20 @@ Texte
 
 Texte
 
+\clearpage
 
 \section{Two}
 
 \subsection{Two one}
 
 Texte
+\clearpage
 
 \subsection{Two two}
 
 Texte
 
+\clearpage
 
 \section{Three}
 
@@ -194,6 +226,7 @@ Texte
 
 Texte
 
+\clearpage
 \subsection{Three three}
 
 Texte
