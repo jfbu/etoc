@@ -1,0 +1,188 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+\ExplSyntaxOn
+ \msg_redirect_module:nnn { tag } { warning } { error }
+\ExplSyntaxOff
+\documentclass{article}
+%\usepackage{tagpdf-debug}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+\usepackage{hyperref}
+\usepackage{etoc}
+\usepackage{centeredline}
+
+\begin{document}
+
+%% adpated from file `etocsnippet-17.tex' of etoc.pdf 1.2d 2023/10/29
+%% but for section>subsection rathern than subsection>subsubsection
+%% besides with etoc dev branch, we can use \etocthelinkedname etc..
+%% inside an \edef (meaning, the \hyperlink there-in is now \protected,
+%% it coule be other other things in the "name" do not like \edef
+
+\newtoks\treetok % put this (uncommented) preferably in the preamble
+\newtoks\sectiontok
+\newtoks\subsectiontok
+
+%% auxiliaries
+% expands 2nd argument (macro) and appends it to 1st argument (toks)
+% used below only once in \etocsettocstyle
+\newcommand*\appendtotok[2]{% #1=toks variable, #2=macro, expands once #2
+  #1\expandafter\expandafter\expandafter
+    {\expandafter\the\expandafter #1#2}}
+
+% appends 2nd argument contents (toks) as child of first argument (toks)
+% used in the \etocsetlinestyle configurations
+\newcommand*{\appendchildtree}[2]{% token list t1 becomes: t1 child {t2}
+   \edef\tmp{\the#1 child {\the#2}}%
+   #1\expandafter{\tmp}%
+}
+
+\newcommand*{\treenode}{}% only to make sure our \edef's do not overwrite
+                         % an existing command
+
+
+%% core handling of the toc line data
+
+%% this macro is responsible also for injecting the tagging, it uses for this
+%% conveniences from etoc but user is free to use directly tagpdf interface
+%% (make sure to have checked etoc source code first to understand what is
+%% happening here).
+
+% This one sets the node, it is the core macro inserting the tagging code as
+% well; some expansion is mandatorty because \etocthetocitembegintag and
+% \etocthetocitemendtag contain information such as whether in section or
+% subsection which are known only at the time of the expansion of the toc line
+% styles defined.
+\newcommand*{\preparetreenodeastaggedtocitem}{%
+%% watch out the \edef! It is crucial to not make a \def here!
+  \edef\treenode{node {\etocthetocitembegintag
+%% from PDF reference 1.7 it seems I could use Lbl directly under TOCI
+%% let's anyhow wrap the whole thing in \etoctagReference
+                       \etoctagReference{\etocthelinkedname
+                                         (\etoctagLbl{\etocthelinkednumber})}%
+                       \etocthetocitemendtag}}%
+}
+
+% The main objective of these somewhat subtle constructs is to build up
+% the expected by TikZ input tree in its syntax
+\etocsetlinestyle{section}
+  {\etocskipfirstprefix}
+  {\appendchildtree\treetok\sectiontok}
+  {\preparetreenodeastaggedtocitem
+   \sectiontok\expandafter{\treenode}}
+  {\appendchildtree\treetok\sectiontok}
+
+\etocsetlinestyle{subsection}
+  {\etocskipfirstprefix}
+  {\appendchildtree\sectiontok\subsectiontok}
+  {\preparetreenodeastaggedtocitem
+   \subsectiontok\expandafter{\treenode}}
+  {\appendchildtree\sectiontok\subsectiontok}
+
+% Finally here we have the core code to create and finish the \treetok
+% we need a global in the "after" code because there will be a grouping
+% created always by \tableofcontents
+\etocsettocstyle
+  {\treetok{\node {\tagstop %% TODO: THINK OF A BETTER WAY TO HANDLE THIS
+                   \parbox{2cm}{\raggedright THE eTOC AS A TIKZ MOLECULE}%
+                   \tagstart
+                   }%
+           }%
+  }
+  {\global\appendtotok\treetok{ ;}}%
+  
+
+\centeredline{% from package centeredline 
+% btw, the \centeredline creates a scope limiting group
+   \etocsetnexttocdepth{subsection}%
+% tell etoc not add a \par
+   \etocinline
+% we turn the etoc tagging related actions off because the toc lines
+% at this stage are only executed to accumulate tokens inside de \toks
+   \etoctaggingoff  %% <<<< very important!
+% this only parses the .toc file data to prepare suitably tokens
+% to feed to TikZ in a second step
+   \tableofcontents
+%% it is not needed to do \etoctaggingon afterwards, see comment below.
+%
+% The \treetok will now contain all the tagging code ready to be
+% executed, see the core \preparetreenodeastocitem macro above.
+%
+% We now need to turn it back on because (attow) \etoctagstartTOCcontents
+% and \etoctagfinishTOCcontents do nothing if etoc tagging is off
+% (this is WIP, may change)
+   \hypersetup{hidelinks}%
+   \begin{tikzpicture}
+              [grow cyclic,
+               level 1/.style={level distance=4cm,sibling angle=72},
+               level 2/.style={level distance=2cm,sibling angle=60},
+               every node/.style={ball color=red!70,circle,text=white},
+               edge from parent path={[dashed,very thick,color=cyan]
+                           (\tikzparentnode) --(\tikzchildnode)}]
+% This imitates the kernel tagging additions to the \@starttoc
+% command; no argument, uses `toc' for the title key of the TOC structure
+% MEMO: this is immune to \etoctaggingoff, as are \etoctagReference,
+% \etoctagLbl, \etocthetocitembegintag, and \etocthetocitemendtag
+% because \etoctaggingon/\etoctaggingoff is only related to the
+% *automatic* tagging done by etoc.  Here we are using user-added
+% manual tagging, using etoc helpers.
+\etoctagstartTOCcontents
+   \the\treetok
+\etoctagfinishTOCcontents
+   \end{tikzpicture}%
+}
+
+%\ShowTagging{debug/structures=2}
+
+\section{One}
+
+Texte
+
+\subsection{One one}
+
+Texte
+
+\subsection{One two}
+
+Texte
+
+\subsection{One three}
+
+Texte
+
+\subsection{One four}
+
+Texte
+
+
+\section{Two}
+
+\subsection{Two one}
+
+Texte
+
+\subsection{Two two}
+
+Texte
+
+
+\section{Three}
+
+\subsection{Three one}
+
+Texte
+
+\subsection{Three two}
+
+Texte
+
+\subsection{Three three}
+
+Texte
+
+\end{document}
