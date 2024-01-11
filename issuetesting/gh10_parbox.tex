@@ -1,0 +1,28 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+
+\documentclass{article}
+
+\usepackage{etoc}
+
+\etocsetstyle{section}
+  {}
+  {\parbox{2.5cm}{\etocname}\par}% \par pour éviter le jfbu/etoc#9
+  {}
+  {}
+
+\usepackage{hyperref}
+\ExplSyntaxOn
+ \msg_redirect_module:nnn { tag } { warning } { error }
+\ExplSyntaxOff
+\begin{document}
+
+\tableofcontents
+
+\section{foo}
+
+\end{document}
