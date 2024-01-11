@@ -4,6 +4,9 @@
  lang=en-US,
  testphase=phase-III
 }
+\ExplSyntaxOn
+ \msg_redirect_module:nnn { tag } { warning } { error }
+\ExplSyntaxOff
 \documentclass{article}
 \usepackage{etoc}
 \begin{document}
@@ -13,7 +16,7 @@
   {}
   {}% no error if a \par here
 
-%\def\etocaftercontentshook{\par}% no error is using this
+%\def\etocaftercontentshook{\par}% no error if using this
 
 \tableofcontents
 
