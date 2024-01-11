@@ -8,21 +8,55 @@
  \msg_redirect_module:nnn { tag } { warning } { error }
 \ExplSyntaxOff
 \documentclass{article}
+\usepackage[T1]{fontenc}
 \usepackage{etoc}
 \begin{document}
 \etocsetstyle{section}
-  {}
+  {(start) }
   {\etocname, }% no error if a \par here
   {}
-  {}% no error if a \par here
+  {(end) }% no error if a \par here
 
 %\def\etocaftercontentshook{\par}% no error if using this
 
-\tableofcontents
+\tableofcontents % a \par is done at the end forcefully
+
+\etocinline
+\etocsettocstyle{}{}
+
+% \bigskip
+% commented out
+% inline toc \tableofcontents is currently raising warning anyhow (see \#11).
+
+\bigskip
+
+\tableofcontents contents again got started in vmode, and etoc added
+forcefully a \verb|\par| after contents to avoid the present issue.
+
+\bigskip
+
+% stress test, to confirm root mechanism is that a \par must be done
+% at same group level where the borrowed \@starttoc kernel hooks
+% are executed (on first compilation .toc file is empty so only
+% those hooks are done by etoc and an error is raised.
+
+% to show the \par must be added by etoc after this "hook", which sadly
+% we have made public. (it is not a hook in the meaning of lthooks.pdf)
+\def\etocaftercontentshook{\par Hello}
+
+\texttt{\meaning\etocaftercontentshook}
+
+\tableofcontents contents again got started in vmode, and etoc added
+forcefully a \verb|\par| after contents (even after
+\verb|\etocaftercontentshook|) to avoid the present issue.
+
+\bigskip
 
 \section{One}
 
-Text
+Root cause seems to be that a \verb|\par| must be executed at the same
+grouping level as the \verb|\@starttoc| upstream kernel hooks, which etoc has
+borrowed.
 
 \section{Two}
 

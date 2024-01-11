@@ -99,10 +99,10 @@
 \def\etoc@{\etoc@}
 \long\def\Etoc@gobtoetoc@ #1\etoc@{}
 \newtoks\Etoc@toctoks
-\def\Etoc@par{\par}
-\def\etocinline{\def\Etoc@par{}}
-\let\etocnopar\etocinline
+%% was using a \csa{def} prior to \etocrelease{1.2e}
+\def\etocinline{\let\Etoc@par\@empty}\let\etocnopar\etocinline
 \def\etocdisplay{\def\Etoc@par{\par}}
+\etocdisplay
 \let\Etoc@global\@empty
 \def\etocglobaldefs{\let\Etoc@global\global\let\tof@global\global}
 \def\etoclocaldefs {\let\Etoc@global\@empty\let\tof@global\@empty}
@@ -1301,10 +1301,24 @@
 \AssignSocketPlug{tagsupport/minipage/after}{noop}%
 \fi
     \gdef\etoclocaltop{-\thr@@}%
+%% for \etocissue{9}
+\ifvmode\def\Etoc@par{\par}\fi
+%% the kernel \csa{@starttoc} hooks for tagging will be done from
+%% \csbc{Etoc@toctoc} expansion
     \Etoc@toctoc
     \etocaftercontentshook
+%% for \etocissue{9}
+%% The root cause must be that a \csa{par} must be issued at same
+%% group level where the kernel hooks borrowed from \csa{@starttoc}
+%% got executed.  So we must do this after the
+%% \csbc{etocaftercontentshook} (I should never have made it public).
+%% in case the later ends in paragraph mode not vertical mode.
+\ifEtoc@tagging\Etoc@par\fi
 }%
 \def\Etoc@tableofcontents@etoc@after{%
+%% TODO:
+%% this \csa{nobreakfalse} has been here for ages, probably from upstream
+%% kernel code, check its status
     \@nobreakfalse
     \Etoc@restoretocdepth
     \ifx\Etoc@global\global
