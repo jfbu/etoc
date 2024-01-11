@@ -71,11 +71,10 @@
 % \etocthetocitemendtag contain information such as whether being located in a
 % section or subsection, information which is known only at the time of the
 % processing of the toc line by the user defined etoc style.
+\makeatletter % to use \protected@edef, else make first a no @ alias
 \newcommand*{\preparetreenodeastaggedtocitem}{%
-%% watch out the \edef! It is crucial to not make a \def here!
-%%
-%% MEMO: **really** I should use \protected@edef rather than the \noexpand's,
-%% but I need to make @ a letter then...
+%% watch out the \protected@edef! it is crucial to not use \renewcommand
+%% or \def here!
 %%
 %% MEMO: I tried to use the TikZ keys [align=center, text width=2cm] but then
 %% tagpdf complains Parent-Child 'Document/' --> 'TOCI/pdf'
@@ -86,21 +85,24 @@
 %% MEMO: I was originally using \etoctagReference but as the argument
 %% always is hyperlinked it has seemingly no impact on the final tree
 %% I see in the ngpdf.com editor
-  \edef\treenode{node {\etocthetocitembegintag
-%%                             do not forget vvvvvvvvv this here and elsewhere
-                       \vbox{\hsize 2.5cm\relax\noexpand\Centering
-                         \noexpand\textbf{\etocthelinkedname}
+  \protected@edef\treenode{node {\etocthetocitembegintag
+                                 \vbox{\hsize 2.5cm\relax
+                                   \Centering
+                                   \textbf{\etocthelinkedname}
 %% Anything not inside \etoctagReference or \etoctagLbl is automatically
 %% tagged as artifact
 %% Using here Lbl directly under TOCI, not nested in \etoctagReference
 %% but it maybe it would be better to nest
-                         (\noexpand\textit{\etoctagLbl{\etocthelinkednumber}})
+                                   (\textit{\etoctagLbl{\etocthelinkednumber}})
 %% \etocthelinkedpage carries hyperlink even if hyperref is left to its
 %% default to not link the page number
-                         on page \etocthelinkedpage
-                       }%
-                       \etocthetocitemendtag}}%
+                                   on page \etocthelinkedpage
+                                 }%
+                                 \etocthetocitemendtag
+                               }%
+                          }% end of \treenode definition
 }
+\makeatother
 
 % The main objective of these somewhat subtle constructs is to build up
 % the expected by TikZ input tree in its syntax

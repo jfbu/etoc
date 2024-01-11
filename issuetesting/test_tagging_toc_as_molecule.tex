@@ -70,9 +70,12 @@
 % \etocthetocitemendtag contain information such as whether being located in a
 % section or subsection, information which is known only at the time of the
 % processing of the toc line by the user defined etoc style.
+\makeatletter
 \newcommand*{\preparetreenodeastaggedtocitem}{%
-%% watch out the \edef! It is crucial to not make a \def here!
-  \edef\treenode{node {\etocthetocitembegintag
+%% watch out the \protected@edef! it is crucial to not use \renewcommand
+%% or \def here! In this example \edef would be ok, but as soon as more
+%% LaTeX mark-up is added such as \textbf, one needs \protected@edef
+  \protected@edef\treenode{node {\etocthetocitembegintag
 %% from PDF reference 1.7 it seems I could use Lbl directly under TOCI
 %% let's anyhow wrap the whole thing in \etoctagReference
 %% It seems if I omit the \etoctagReference the whole tree structure is the
@@ -84,7 +87,7 @@
                                          (\etoctagLbl{\etocthelinkednumber})}%
                        \etocthetocitemendtag}}%
 }
-
+\makeatother
 % The main objective of these somewhat subtle constructs is to build up
 % the expected by TikZ input tree in its syntax
 \etocsetlinestyle{section}
