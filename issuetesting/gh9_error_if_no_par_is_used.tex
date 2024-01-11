@@ -1,0 +1,28 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+\documentclass{article}
+\usepackage{etoc}
+\begin{document}
+\etocsetstyle{section}
+  {}
+  {\etocname, }% no error if a \par here
+  {}
+  {}% no error if a \par here
+
+%\def\etocaftercontentshook{\par}% no error is using this
+
+\tableofcontents
+
+\section{One}
+
+Text
+
+\section{Two}
+
+Text
+
+\end{document}
