@@ -768,7 +768,7 @@
 %% dtx comment deliberately left in sty
 %% \etocrelease{1.2e} locates this here and not before \csbc{Etoc@toctoc} else
 %% \csbc{etocetoclocaltocmaketitle} could have kicked in and typeset a chapter
-%% title creating a Parent-Child tagging problem. |jfbu/etoc#2|
+%% title creating a Parent-Child tagging problem. \etocissue{2}
 %%
 %% Could this originate a problem perhaps if the toc file contents generate
 %% a |\begingroup/\endgroup| so that the group will be closed before the
@@ -842,7 +842,7 @@
 \let\etoclocaltableofcontentshook\@empty
 \if1\ifEtoc@lof0\fi\ifEtoc@lot0\fi1%
 \else
-%% This fixes |jfbu/etoc#7|
+%% This fixes \etocissue{7}
 %% Formerly we did
 %% \centeredline{|\def\addcontentsline{\Etoc@hackedaddcontentsline}|
 %% but this
@@ -939,7 +939,7 @@
           \ifEtoc@etocstyle
               \csname etocetoclistof#1smaketitle\endcsname
           \fi
-%% |jfbu/etoc#8|
+%% \etocissue{8}
 %% Same tagging related addition as in \csbc{Etoc@@startlocaltoc}, The macro
 %% uses \csbc{ifEtoc@tagging}.  Can the argument which ends up being passed
 %% to the kernel code (at this stage) have a space? like `local lof'?
@@ -1294,8 +1294,8 @@
     \Etoc@tocdepthset
     \ifEtoc@parskip\parskip\z@skip\fi
     \Etoc@aftertitlehook
-%% seems we need to deactivate minipage tagging (github issues |jfbu/etoc#5|,
-%% which is related to |jfbu/etoc#4|)
+%% seems we need to deactivate minipage tagging (github issues \etocissue{5},
+%% which is related to \etocissue{4})
 \ifEtoc@tagactive
 \AssignSocketPlug{tagsupport/minipage/before}{noop}%
 \AssignSocketPlug{tagsupport/minipage/after}{noop}%
