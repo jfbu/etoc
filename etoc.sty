@@ -736,18 +736,20 @@
 %% should I worry about an |\if@endpe\@doendpe\fi|?
 %% This all looks very fragile and crude... but does work in the initial
 %% test files!
-  \ifhmode
-    \tagmcend
-    \tagstructend %% hopefully <text> and we are now in <text-unit>
-                  %% which is role-mapped to <Part>
-    \def\Etoc@tagging@starttoc@after{%% will be executed after the TOC contents hence
-                  %% after the borrowed from kernel \@starttoc "after" hook
+  %% Testing for \hmode is no good if in a tikz picture for example
+  \ifhmode %% WIP! This is probably not the good test!
+    \tagmcifinTF{%
+      \tagmcend
+      \tagstructend % is there a push for struct?
+      \def\Etoc@tagging@starttoc@after{%
         \ifhmode
           \tagstructbegin{tag=text}%
           \tagmcbegin{tag=P}%
         \fi
         \tagpdfparaOn
-    }%
+      }%
+      }% true branch
+     {\let\Etoc@tagging@starttoc@after\@empty}%
   \fi
 }% \Etoc@tagging@starttoc@before
 %% This is for \etocissue{9}, \etocissue{11}. \etocissue{12} and
@@ -777,16 +779,19 @@
   \AssignSocketPlug{tagsupport/minipage/after}{noop}%
   \AssignSocketPlug{tagsupport/parbox/before}{noop}%
   \AssignSocketPlug{tagsupport/parbox/after}{noop}%
+  %% Testing for \hmode is no good if in a tikz picture for example
   \ifhmode %% WIP! This is probably not the good test!
-    \tagmcend
-    \tagstructend %% hopefully <text> and we are now in <text-unit>
-                  %% which is role-mapped to <Part>
-    \def\Etoc@tagging@starttoc@after{%
+    \tagmcifinTF{%
+      \tagmcend
+      \tagstructend % is there a push for struct?
+      \def\Etoc@tagging@starttoc@after{%
         \ifhmode
           \tagstructbegin{tag=text}%
           \tagmcbegin{tag=P}%
         \fi
-    }%
+      }%
+      }% true branch
+     {\let\Etoc@tagging@starttoc@after\@empty}%
   \else
 %% unnecessary, normally...
     \let\Etoc@tagging@starttoc@after\@empty
