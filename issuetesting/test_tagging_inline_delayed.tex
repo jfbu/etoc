@@ -1,0 +1,113 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+\documentclass{article}
+
+\usepackage{hyperref}
+\usepackage{etoc}
+
+\ExplSyntaxOn
+ \msg_redirect_module:nnn { tag } { warning } { error }
+\ExplSyntaxOff
+
+\begin{document}
+
+\def\foo{}
+\makeatletter
+\let\protectededef\protected@edef
+\let\protectedxdef\protected@xdef
+% by the way fortunately \par is now a \protected macro
+% but will it always be in all circumstances?
+\makeatother
+
+\etocsetlinestyle{section}
+   {\etocskipfirstprefix}
+   {\protectedxdef\foo{\foo; }}
+   {\protectedxdef\foo{\foo
+                       \etocthetocitembegintag
+                       \etoctagReference{\etocthelinkedname}%
+                       \etocthetocitemendtag}%
+    }
+   {}
+
+\etocsetlinestyle{subsection}
+   {\protectedxdef\foo{\foo\space(}\etocskipfirstprefix}
+   {\protectedxdef\foo{\foo, }}
+   {\protectedxdef\foo{\foo
+                       \etocthetocitembegintag
+                       \etoctagReference{\etocthelinkedname}%
+                       \etocthetocitemendtag}%
+    }
+   {\protectedxdef\foo{\foo)}}
+
+% IT IS VERY IMPORTANT THAT etoc TAGGING IS OFF for the \tableofcontents We
+% can turn it off from the ``before'' TOC part.  For executing the constructed
+% \foo later, the etoc tagging status is indifferent.
+\etocsettocstyle
+   {\etoctaggingoff
+    \gdef\foo{\etoctagstartTOCcontents}}
+   {\protectedxdef\foo{\foo\etoctagfinishTOCcontents}}
+
+\tableofcontents
+
+%\show\foo
+
+This is the inline (delayed, only to make things complicated, here it is
+completely not necessary but allows to stress test
+\verb|\etoctagstartTOCcontents| and \verb|\etoctagfinishTOCcontents|)%
+\foo
+table of contents which as we can see introduced no space whatsoever.
+We checked in the editor of \texttt{ngpdf.com} and it seems things are ok
+here.
+
+\section{One}
+
+Texte
+
+\subsection{One one}
+
+Texte
+
+\subsection{One two}
+
+Texte
+
+\subsection{One three}
+
+Texte
+
+\subsection{One four}
+
+Texte
+
+
+\section{Two}
+
+\subsection{Two one}
+
+Texte
+
+\subsection{Two two}
+
+Texte
+
+
+\section{Three}
+
+
+\subsection{Three one}
+
+Texte
+
+\subsection{Three two}
+
+Texte
+
+\subsection{Three three}
+
+Texte
+
+\end{document}

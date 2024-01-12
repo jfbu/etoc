@@ -424,6 +424,9 @@
 %%
 %% Let's avoid submitting \csbc{etocthename} to a full \csa{edef} here.
 %% ATTENTION: usage of tagpdf internal command is not best practice.
+%% ATTENTION: this means that this macro will have the same frailty
+%% against \csa{edef} as \csa{etocthename} and one should use
+%% \csa{protected@edef} when using it, or a single expansion.
       \Etoc@global\edef\etocthetocitembegintag{%
         \__tag_toc_contentsline_begin:nnn
             {#1}{\unexpanded\expandafter{\etocthename}}{#4}%
@@ -761,17 +764,40 @@
 %% \csbc{Etoc@tagging@starttoc@before}
 %% and \csbc{Etoc@tagging@starttoc@after}%
 %%
-%% TODO: should I open and close a group therein
-\def\etoctagstartTOCcontents{%
-  \ifEtoc@tagactive %% WIP!
-    \AssignSocketPlug{tagsupport/minipage/before}{noop}%
-    \AssignSocketPlug{tagsupport/minipage/after}{noop}%
-    \AssignSocketPlug{tagsupport/parbox/before}{noop}%
-    \AssignSocketPlug{tagsupport/parbox/after}{noop}%
+%% TODO: should I open and close a group therein? I decide yes for time being
+%% so maybe I don't have to worry here too much about the para-tagging bool
+%% status.  Besides this allows me to stop worrying about the minipage and
+%% parbox tagging sockets.
+%%
+%% TODO: should this be conditional on \csbc{ifEtoc@tagactive}? probably not,
+%% as for example \csbc{etoctagReference} isn't.
+\protected\def\etoctagstartTOCcontents{%
+  \begingroup
+  \AssignSocketPlug{tagsupport/minipage/before}{noop}%
+  \AssignSocketPlug{tagsupport/minipage/after}{noop}%
+  \AssignSocketPlug{tagsupport/parbox/before}{noop}%
+  \AssignSocketPlug{tagsupport/parbox/after}{noop}%
+  \ifhmode %% WIP! This is probably not the good test!
+    \tagmcend
+    \tagstructend %% hopefully <text> and we are now in <text-unit>
+                  %% which is role-mapped to <Part>
+    \def\Etoc@tagging@starttoc@after{%
+        \ifhmode
+          \tagstructbegin{tag=text}%
+          \tagmcbegin{tag=P}%
+        \fi
+    }%
+  \else
+%% unnecessary, normally...
+    \let\Etoc@tagging@starttoc@after\@empty
   \fi
   \@starttoc@cfgpoint@before{toc}%
 }
-\def\etoctagfinishTOCcontents{\@starttoc@cfgpoint@after{toc}}
+\protected\def\etoctagfinishTOCcontents{%
+  \@starttoc@cfgpoint@after{toc}%
+  \Etoc@tagging@starttoc@after
+  \endgroup
+}
 \def\Etoc@toctoc{%
   \gdef\Etoc@stackofends{{-3}{}}%
   \global\let\Etoc@level\Etoc@minf
