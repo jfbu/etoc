@@ -1,0 +1,34 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+\ExplSyntaxOn
+ \msg_redirect_module:nnn { tag } { warning } { error }
+\ExplSyntaxOff
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{etoc}
+\begin{document}
+% See also #9
+%
+\ExplSyntaxOn
+\etocsettocstyle{}{\meaning\l__tag_para_bool{}\par
+                   \meaning\l__tag_para_bool{}}
+
+% this one is executed AFTER etoc has closed scope limiting
+% group
+\def\etocaftertochook{\meaning\l__tag_para_bool{}\par}
+\ExplSyntaxOff
+\tableofcontents
+
+\section{One}
+
+Text
+
+\section{Two}
+
+Text
+
+\end{document}
