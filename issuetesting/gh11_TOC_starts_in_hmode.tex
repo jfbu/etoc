@@ -4,17 +4,17 @@
  lang=en-US,
  testphase=phase-III
 }
-% \ExplSyntaxOn
-%  \msg_redirect_module:nnn { tag } { warning } { error }
-% \ExplSyntaxOff
+\ExplSyntaxOn
+ \msg_redirect_module:nnn { tag } { warning } { error }
+\ExplSyntaxOff
 \documentclass{article}
 \usepackage{etoc}
 \begin{document}
 \etocsetstyle{section}
-  {(start) }
+  {beforestart }
   {\etocname, }%
   {}
-  {(end) }%
+  {nospace}%
 
 % The TOC contents with default TOC title starts in vmode.
 % With empty TOC title it will depend if \tableofcontents
@@ -25,9 +25,9 @@
 
 \etocsettocstyle{}{} % no title
 
-This is an inline TOC
+This is an inline TOC nospace%
 \tableofcontents
-and the end of the paragraph.
+afterend and the end of the paragraph.
 
 \section{One}
 

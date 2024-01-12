@@ -24,14 +24,29 @@
 \etocinline
 \etocsettocstyle{}{}
 
-% \bigskip
-% commented out
-% inline toc \tableofcontents is currently raising warning anyhow (see \#11).
+\bigskip
+inline toc \tableofcontents with text directly after it.
 
 \bigskip
 
-\tableofcontents contents again got started in vmode, and etoc added
-forcefully a \verb|\par| after contents to avoid the present issue.
+inline toc with no text directly after it \tableofcontents
+
+\bigskip
+
+\tableofcontents is an inline toc whose contents again got started in vmode,
+and etoc added forcefully a \verb|\par| after contents to avoid the present
+issue, so at this stage we can not have a TOC start a paragraph but not end it
+but (as per the two examples above) we can have an inline TOC start inside a
+paragraph and not end it itself (the second was ended by an empty line in
+source).
+
+\bigskip
+
+\leavevmode
+\tableofcontents is an inline toc at start of a paragraph, which had
+to be started by user mark-up \verb|\leavevmode| so as to tell etoc that
+the TOC should not end its contents with a \verb|\par|.
+
 
 \bigskip
 
@@ -44,7 +59,7 @@ forcefully a \verb|\par| after contents to avoid the present issue.
 % we have made public. (it is not a hook in the meaning of lthooks.pdf)
 \def\etocaftercontentshook{\par Hello}
 
-\texttt{\meaning\etocaftercontentshook}
+\texttt{meaning of \string\etocaftercontentshook is \meaning\etocaftercontentshook}
 
 \tableofcontents contents again got started in vmode, and etoc added
 forcefully a \verb|\par| after contents (even after

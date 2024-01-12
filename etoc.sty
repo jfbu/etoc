@@ -1301,19 +1301,53 @@
 \AssignSocketPlug{tagsupport/minipage/after}{noop}%
 \fi
     \gdef\etoclocaltop{-\thr@@}%
-%% for \etocissue{9}
-\ifvmode\def\Etoc@par{\par}\fi
-%% the kernel \csa{@starttoc} hooks for tagging will be done from
-%% \csbc{Etoc@toctoc} expansion
-    \Etoc@toctoc
-    \etocaftercontentshook
+\ifEtoc@tagging
 %% for \etocissue{9}
 %% The root cause must be that a \csa{par} must be issued at same
 %% group level where the kernel hooks borrowed from \csa{@starttoc}
 %% got executed.  So we must do this after the
 %% \csbc{etocaftercontentshook} (I should never have made it public).
 %% in case the later ends in paragraph mode not vertical mode.
-\ifEtoc@tagging\Etoc@par\fi
+%% For why \csbc{etocaftercontentshook} is here see below.
+  \ifvmode
+    \def\Etoc@par{\etocaftercontentshook\par}%
+  \fi
+%% for \etocissue{11}
+%% but this must be inserted before the (documented, and even used in some
+%% user manual examples) \csbc{etocaftercontentshook}.  Which is contrary
+%% to the \csa{par} addition for \etocissue{9} which must be inserted
+%% *after* to allow the \csbc{etocaftercontentshook} to end in horizontal
+%% mode (which is thus problematic if the contents were started in vertical
+%% mode).
+%%
+%% TODO:
+%% this will require **much more** research, for starters it should probably
+%% query rather whether a |<text>| tagging struct is currently open, besides
+%% should I do |\if@endpe\@doendpe\fi|?
+%% This all looks very fragile and crude... but does work in the initial
+%% test files!
+  \ifhmode
+    \tagmcend
+    \tagstructend %% hopefully <text> and we are now in <text-unit>
+                  %% which is role-mapped to <Part>
+    \def\Etoc@par{%% will be executed after the TOC contents hence
+                  %% after the borrowed \@starttoc "after" hook
+       \ifhmode
+         \tagstructbegin{tag=text}%
+         \tagmcbegin{tag=P}%
+       \fi
+         \etocaftercontentshook
+       }%
+  \fi
+\fi
+%% the kernel \csa{@starttoc} hooks for tagging will be done from
+%% \csbc{Etoc@toctoc} expansion
+    \Etoc@toctoc
+\ifEtoc@tagging %% for \etocissue{9} and \etocissue{11}
+    \Etoc@par
+\else %% use \expandafter?
+    \etocaftercontentshook
+\fi
 }%
 \def\Etoc@tableofcontents@etoc@after{%
 %% TODO:
