@@ -79,14 +79,11 @@
 %% MEMO: I tried to use the TikZ keys [align=center, text width=2cm] but then
 %% tagpdf complains Parent-Child 'Document/' --> 'TOCI/pdf'
 %%
-%% MEMO: I tried using a \parbox but it creates seemingly a MC.
-%% so using \vbox...
-%%
 %% MEMO: I was originally using \etoctagReference but as the argument
 %% always is hyperlinked it has seemingly no impact on the final tree
 %% I see in the ngpdf.com editor
   \protected@edef\treenode{node {\etocthetocitembegintag
-                                 \vbox{\hsize 2.5cm\relax
+                                 \parbox{2.5cm}{%
                                    \Centering
                                    \textbf{\etocthelinkedname}
 %% Anything not inside \etoctagReference or \etoctagLbl is automatically
@@ -97,9 +94,9 @@
 %% \etocthelinkedpage carries hyperlink even if hyperref is left to its
 %% default to not link the page number
                                    on page \etocthelinkedpage
-                                 }%
+                                 }% parbox
                                  \etocthetocitemendtag
-                               }%
+                               }% end of node
                           }% end of \treenode definition
 }
 \makeatother

@@ -760,7 +760,17 @@
 %% TODO: this HAS to be updated in relation to
 %% \csbc{Etoc@tagging@starttoc@before}
 %% and \csbc{Etoc@tagging@starttoc@after}%
-\def\etoctagstartTOCcontents{\@starttoc@cfgpoint@before{toc}}
+%%
+%% TODO: should I open and close a group therein
+\def\etoctagstartTOCcontents{%
+  \ifEtoc@tagactive %% WIP!
+    \AssignSocketPlug{tagsupport/minipage/before}{noop}%
+    \AssignSocketPlug{tagsupport/minipage/after}{noop}%
+    \AssignSocketPlug{tagsupport/parbox/before}{noop}%
+    \AssignSocketPlug{tagsupport/parbox/after}{noop}%
+  \fi
+  \@starttoc@cfgpoint@before{toc}%
+}
 \def\etoctagfinishTOCcontents{\@starttoc@cfgpoint@after{toc}}
 \def\Etoc@toctoc{%
   \gdef\Etoc@stackofends{{-3}{}}%
@@ -1352,6 +1362,9 @@
 \ifEtoc@tagactive
 \AssignSocketPlug{tagsupport/minipage/before}{noop}%
 \AssignSocketPlug{tagsupport/minipage/after}{noop}%
+%% let's also deactivate parbox tagging hooks (\etocissue{10})
+%% it is expected that this and the above may come back
+%% to hit us at some point...
 \AssignSocketPlug{tagsupport/parbox/before}{noop}%
 \AssignSocketPlug{tagsupport/parbox/after}{noop}%
 \fi

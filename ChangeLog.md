@@ -8,8 +8,9 @@ These headings map to the diffs between successive tags.
 
 ## [dev HEAD]
 
+- fix jfbu/etoc#10, via applying to `\parbox` the same treatment as for `minipage` (jfbu/etoc#5).
 - fix jfbu/etoc#9, jfbu/etoc#12, jfbu/etoc#13 which all had to do with the fact that the borrowed `\@starttoc` tagging hooks turn para-tagging off, but do not reenact it in the "after" part.
-- fix jfbu/etoc#11, thanks to [help from @u-fischer](https://github.com/jfbu/etoc/issues/11#issuecomment-1888089994)
+- fix jfbu/etoc#11, thanks to [help from @u-fischer](https://github.com/jfbu/etoc/issues/11#issuecomment-1888089994).
 - add user interface for achieving tagging in sophisticated 2-steps TOCs, where the first step done under `\etoctaggingoff` regime will construct some token list which is then used in the second, non-etoc, step, and thus the prepared tokens need to contain explicit manual tagging:
   - `\etoctagstartTOCcontents`
   - `\etocthetocitembegintag`, to be expanded (once or `\edef`) inside a user etoc line style, only makes sense there
