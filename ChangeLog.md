@@ -8,6 +8,8 @@ These headings map to the diffs between successive tags.
 
 ## [dev HEAD]
 
+## [2024-01-12]
+
 - fix jfbu/etoc#10, via applying to `\parbox` the same treatment as for `minipage` (jfbu/etoc#5).
 - fix jfbu/etoc#9, jfbu/etoc#12, jfbu/etoc#13 which all had to do with the fact that the borrowed `\@starttoc` tagging hooks turn para-tagging off, but do not reenact it in the "after" part.
 - fix jfbu/etoc#11, thanks to [help from @u-fischer](https://github.com/jfbu/etoc/issues/11#issuecomment-1888089994).
@@ -46,7 +48,8 @@ These headings map to the diffs between successive tags.
 - initial tagging support.
 
 
-[dev HEAD]: https://github.com/jfbu/etoc/compare/2024-01-05...HEAD
+[dev HEAD]: https://github.com/jfbu/etoc/compare/2024-01-12...HEAD
+[2024-01-12]: https://github.com/jfbu/etoc/compare/2024-01-05...2024-01-12
 [2024-01-05]: https://github.com/jfbu/etoc/compare/2024-01-03...2024-01-05
 [2024-01-03]: https://github.com/jfbu/etoc/compare/2024-01-02...2024-01-03
 [2024-01-02]: https://github.com/jfbu/etoc/compare/1.2d-2023-10-29...2024-01-02
