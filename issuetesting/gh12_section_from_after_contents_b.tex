@@ -1,0 +1,32 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+\ExplSyntaxOn
+ \msg_redirect_module:nnn { tag } { warning } { error }
+\ExplSyntaxOff
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{etoc}
+\begin{document}
+
+\etocchecksemptiness
+
+\def\etocaftercontentshook{\section{Hello}}
+
+\etocsettocstyle{}{}
+\tableofcontents
+
+\section{One}
+
+\texttt{meaning of \string\etocaftercontentshook is \meaning\etocaftercontentshook}
+
+Text
+
+\section{Two}
+
+Text
+
+\end{document}
