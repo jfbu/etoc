@@ -1,0 +1,76 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+\ExplSyntaxOn
+ \msg_redirect_module:nnn { tag } { warning } { error }
+\ExplSyntaxOff
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{etoc}
+\begin{document}
+\etocsetstyle{section}
+  {(start) \etocskipfirstprefix}
+  {, }
+  {\etocname}
+  {(end) }%
+
+\etocsetstyle{subsection}
+  { [\etocskipfirstprefix}
+  {, }
+  {\etocname}
+  {]}%
+
+\tableofcontents
+
+\etocinline
+\etocsettocstyle{}{}
+
+
+\section{One}
+
+inline toc \localtableofcontents with text directly after it.
+
+\medskip
+
+\localtableofcontents is a localtoc with inline line styles, which however got
+started in vmode; when the contents start in vmode, etoc adds a \verb|\par|
+after contents to avoid the present issue. (TODO: try to lift that)
+
+\subsection{One one}
+
+\subsection{One two}
+
+\subsection{One three}
+
+
+\section{Two}
+
+inline toc with no text directly after it \localtableofcontents
+
+\medskip
+
+\leavevmode
+\localtableofcontents is an inline local toc at very start of a paragraph, which got
+prefixed by user mark-up \verb|\leavevmode| so this way etoc did not end its
+contents with a \verb|\par|.
+
+\medskip
+
+\def\etocaftercontentshook{These }
+
+\texttt{meaning of \string\etocaftercontentshook is \meaning\etocaftercontentshook}
+
+\localtableofcontents contents again got started in vmode, and etoc added
+forcefully a \verb|\par| after contents (but \emph{before}
+\verb|\etocaftercontentshook|) to avoid the present issue.
+
+\subsection{Two one}
+
+\subsection{Two two}
+
+\subsection{Two three}
+
+\end{document}

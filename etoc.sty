@@ -707,14 +707,59 @@
 %% e.g. it may use a \csa{chapter*} command in a \csa{part} for |book|
 %% document class).
 %%
+%% \etoc allows inline TOCs where \toc is encountered midway in a paragraph.
+%% As |<TOC>| can not be a child of |<P>| this would be rather problematic
+%% were it not the kernel upstream introduction of |<text-unit>| and |<text>|
+%% structure and we can try to inscribe ourselves into this flow,
+%% cf.: \centeredline{%
+%% \url{https://github.com/jfbu/etoc/issues/11#issuecomment-1888089994}}
+%% relative to \etocissue{11}.  Our code will require \emph{much} better
+%% knowledge of the complete upstream code.
+%%
+%% The kernel \csa{@starttoc} ``before'' hook turns para-tagging off and
+%% counts on the \csa{endgroup} at end of \csa{@starttoc} to re-enact it.
+%% As \etoc allows inline TOCs and furthermore our \csa{endgroup} gets
+%% executed only \emph{after} the second argument of \csbc{etocsettocstyle}
+%% has been executed, and this argument may contain paragraphs, we need to
+%% take some actions, relative to \etocissue{9}, \etocissue{12} and
+%% \etocissue{13}.  We also need to be careful that with local TOCs,
+%% our copies of the \csa{@starttoc} hooks are executed only if the local
+%% TOC actually will be active.
+\def\Etoc@tagging@starttoc@before{%
+  \ifvmode
+    \def\Etoc@tagging@starttoc@after{\par\tagpdfparaOn}%
+  \fi
+%% for \etocissue{11}
+%% should I worry about an |\if@endpe\@doendpe\fi|?
+%% This all looks very fragile and crude... but does work in the initial
+%% test files!
+  \ifhmode
+    \tagmcend
+    \tagstructend %% hopefully <text> and we are now in <text-unit>
+                  %% which is role-mapped to <Part>
+    \def\Etoc@tagging@starttoc@after{%% will be executed after the TOC contents hence
+                  %% after the borrowed from kernel \@starttoc "after" hook
+        \ifhmode
+          \tagstructbegin{tag=text}%
+          \tagmcbegin{tag=P}%
+        \fi
+        \tagpdfparaOn
+    }%
+  \fi
+}% \Etoc@tagging@starttoc@before
+%% This is for \etocissue{9}, \etocissue{11}. \etocissue{12} and
+%% \etocissue{13}.  Defined to be empty as fall-back in case the ``before''
+%% did nothing.
+\let\Etoc@tagging@starttoc@after\@empty
 %% User level interface for two-stages TOCs where etoc is used only in first
 %% step to construct for example a TikZ mindmap which is executed later.
 %% Hesitation whether this should check \csbc{ifEtoc@tagging} status.
 %% Or \csbc{ifEtoc@tagactive}.  Hesitation whether it is really useful
 %% to have it take an argument, e.g. \csa{etoctagstartTOCcontentsoftype}
 %% but then I am tied with upstream handling of nature of argument.
-%%
-%% Not used in own package code, only user interface.
+%% TODO: this HAS to be updated in relation to
+%% \csbc{Etoc@tagging@starttoc@before}
+%% and \csbc{Etoc@tagging@starttoc@after}%
 \def\etoctagstartTOCcontents{\@starttoc@cfgpoint@before{toc}}
 \def\etoctagfinishTOCcontents{\@starttoc@cfgpoint@after{toc}}
 \def\Etoc@toctoc{%
@@ -723,7 +768,10 @@
   \global\let\Etoc@virtualtop\Etoc@minf
 %% for local toc gets done in \csbc{Etoc@@startlocaltoc}/\csbc{Etoc@@startlocallistof}
   \ifEtoc@tagging
-    \unless\ifEtoc@localtoc\@starttoc@cfgpoint@before{toc}\fi
+    \unless\ifEtoc@localtoc
+      \Etoc@tagging@starttoc@before
+      \@starttoc@cfgpoint@before{toc}%
+    \fi
   \fi
   \the\Etoc@toctoks
   \ifEtoc@notactive
@@ -739,9 +787,11 @@
 %% localtoc, locallof, or locallot (or whatever has been used with
 %% \csa{@starttoc@cfgpoint@before} or successor.
         \@starttoc@cfgpoint@after{localtoc}%
+        \Etoc@tagging@starttoc@after
       \fi
     \else
       \@starttoc@cfgpoint@after{toc}%
+      \Etoc@tagging@starttoc@after
     \fi
   \fi
 }
@@ -775,7 +825,10 @@
 %% |\@starttoc@cfgpoint@after{toc}| (located in \csbc{Etoc@toctoc}) is done?
 %%
 %% The same addition is made to \csbc{Etoc@@startlocallistof}.
-          \ifEtoc@tagging\@starttoc@cfgpoint@before{localtoc}\fi
+          \ifEtoc@tagging
+            \Etoc@tagging@starttoc@before
+            \@starttoc@cfgpoint@before{localtoc}%
+          \fi
        \fi
     \fi
 }
@@ -1301,41 +1354,9 @@
 \AssignSocketPlug{tagsupport/minipage/after}{noop}%
 \fi
     \gdef\etoclocaltop{-\thr@@}%
-\ifEtoc@tagging
-%% for \etocissue{9}
-  \ifvmode
-    \def\Etoc@par{\par\tagpdfparaOn}%
-  \fi
-%% for \etocissue{11}
-%%
-%% TODO:
-%% this will require **much more** research, for starters it should probably
-%% query rather whether a |<text>| tagging struct is currently open, besides
-%% should I do |\if@endpe\@doendpe\fi|?
-%% This all looks very fragile and crude... but does work in the initial
-%% test files!
-  \ifhmode
-    \tagmcend
-    \tagstructend %% hopefully <text> and we are now in <text-unit>
-                  %% which is role-mapped to <Part>
-    \def\Etoc@par{%% will be executed after the TOC contents hence
-                  %% after the borrowed from kernel \@starttoc "after" hook
-        \ifhmode
-          \tagstructbegin{tag=text}%
-          \tagmcbegin{tag=P}%
-        \fi
-        \tagpdfparaOn
-    }%
-  \fi
-\fi
 %% the kernel \csa{@starttoc} hooks for tagging will be done from
 %% \csbc{Etoc@toctoc} expansion
     \Etoc@toctoc
-%% This is for \etocissue{9}, \etocissue{11}. \etocissue{12} and
-%% \etocissue{13}.
-\ifEtoc@tagging
-  \Etoc@par
-\fi
     \etocaftercontentshook
 }%
 \def\Etoc@tableofcontents@etoc@after{%

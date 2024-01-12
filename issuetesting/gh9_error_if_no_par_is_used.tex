@@ -17,7 +17,7 @@
   {}
   {(end) }%
 
-\tableofcontents % a \par is done at the end forcefully
+\tableofcontents
 
 \etocinline
 \etocsettocstyle{}{}
@@ -58,9 +58,7 @@ forcefully a \verb|\par| after contents (but \emph{before}
 
 \section{One}
 
-Root cause seems to be that a \verb|\par| must be executed at the same
-grouping level as the \verb|\@starttoc| upstream kernel hooks, which etoc has
-borrowed.
+Text
 
 \section{Two}
 
