@@ -54,6 +54,7 @@ else
     for file in $errorfiles
     do
         echo "!!!! $file"
+        tail -n 20 $(basename $file .tex).log | head -n 10 
     done
 fi
 
