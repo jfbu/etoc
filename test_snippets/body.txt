@@ -3,8 +3,8 @@
 \renewcommand\contentsname{Local contents}
 
 \chapter{Test chapter one}
-
-\localtableofcontents
+% to allow using snippet 07
+\ifdefined\MyLocalTOC\expandafter\MyLocalTOC\else\expandafter\localtableofcontents\fi
 
 \section{Section one one}
 
