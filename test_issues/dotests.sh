@@ -19,7 +19,7 @@ else
     rm -f *.{aux,toc,log,div,lof,lot,out,ps,fls,fdb_latexmk}
 fi
 
-# execute tex only on commited files, allowing new ones to
+# execute tex only on committed files, allowing new ones to
 # reside in directory while they are being manually tested
 for file in $(git ls-files | grep tex)
 do
