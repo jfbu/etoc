@@ -11,6 +11,7 @@
 \usepackage[hscale=0.66,vscale=0.75]{geometry}
 \usepackage[dvipsnames,svgnames]{xcolor}
 \usepackage[inline]{enumitem}
+\usepackage{array}
 \usepackage{longtable}
 \usepackage{hyperref}
 \hypersetup{%
