@@ -1,0 +1,11 @@
+% -*- mode: latex -*-
+\input preamble.txt
+
+
+\begin{document}
+\makeatletter\let\gobblefour\@gobblefour\makeatother
+
+\input etoc\expandafter\gobblefour\jobname.txt
+
+\input body.txt
+\end{document}

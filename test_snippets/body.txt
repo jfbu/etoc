@@ -1,0 +1,63 @@
+% -*- mode: latex -*-
+
+\renewcommand\contentsname{Local contents}
+
+\chapter{Test chapter one}
+
+\localtableofcontents
+
+\section{Section one one}
+
+\localtableofcontents
+
+Text
+
+\subsection{Subsection one one one}
+
+Text
+
+\clearpage
+
+\subsection{Subsection one one two}
+
+Text
+
+\subsection{Subsection one one three}
+
+Text
+
+\subsection{Subsection one one four}
+
+Text
+
+\section{Section one two}
+
+Text
+
+\subsection{Subsection one two one}
+
+Text
+
+\clearpage
+
+\subsection{Subsection one  two two}
+
+\chapter{Test chapter two}
+
+\section{Section two one}
+
+\localtableofcontents
+
+\subsection{Subsection two one one}
+
+\subsection{Subsection two one two}
+
+\section{Section two two}
+
+\subsection{Subsection two two one}
+
+\subsection{Subsection two  two two}
+
+\section{Section two three}
+
+\endinput
