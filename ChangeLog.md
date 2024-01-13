@@ -8,6 +8,8 @@ These headings map to the diffs between successive tags.
 
 ## [dev HEAD]
 
+- add to repo the 26 snippets from `etoc.pdf` of which 15 can be used almost directly for testing (eleven of them not being usable directly with our test template, due to various reasons such as using commands from KOMA document class).  Eight out of the fifteen raise tagging-related warnings which will for most get converted into issues here.
+
 ## [2024-01-12]
 
 - fix jfbu/etoc#10, via applying to `\parbox` the same treatment as for `minipage` (jfbu/etoc#5).
