@@ -1,4 +1,4 @@
-[1;31m!!!! PROBLÈMES AVEC 8/15 TESTS:[0m
+[1;31m!!!! PROBLÈMES AVEC 9/19 TESTS:[0m
 [1;31mtestsnippet-01.tex[0m
 
 ! Package tagpdf Error: Parent-Child 'TOC/' --> 'enumerate/user'.
@@ -65,6 +65,17 @@ Type <return> to continue.
                                                   
 l.33 \endgroup
                
+[1;31mtestsnippet-14.tex[0m
+
+! Package tagpdf Error: Parent-Child 'TOC/' --> 'Reference/pdf'.
+(tagpdf)                Relation is not allowed (struct 6, /TOC --> struct
+(tagpdf)                7) on line 25
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.25 ...ed within this document: \tableofcontents.
+                                                   
 [1;31mtestsnippet-19.tex[0m
 
 ! Package tagpdf Error: Parent-Child 'Reference/' --> 'text-unit/user'.
@@ -87,4 +98,4 @@ Type <return> to continue.
                                                   
 l.35 \end
          {center} 
-[1;31mFAIL=8, PASS=7, TOTAL=15[0m
+[1;31mFAIL=9, PASS=10, TOTAL=19[0m
