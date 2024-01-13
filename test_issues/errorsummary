@@ -1,0 +1,24 @@
+[1;31m!!!! PROBLÈMES AVEC 2/24 TESTS:[0m
+[1;31mgh8_local_lof.tex[0m
+
+
+! Package tagpdf Error: Destination  has no related structure.
+(tagpdf)                /Ref for structure 10 not updated
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.37 \end{document}
+                    
+[1;31mtest_tagging_lof_alltotoc.tex[0m
+
+
+! Package tagpdf Error: Destination figure.1 has no related structure.
+(tagpdf)                /Ref for structure 63 not updated
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.160 \end{document}
+                     
+[1;31mFAIL=2, PASS=22, TOTAL=24[0m

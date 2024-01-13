@@ -1,5 +1,7 @@
 #!/bin/bash
 
+LOG_FILE="./errorsummary"
+
 # export LATEX="latexmk -pdf" for using latexmk
 latex="${LATEX:-pdflatex} -halt-on-error --interaction=batchmode "
 
@@ -51,6 +53,10 @@ then
 else
     echo "N.B.: auxiliary files have all been removed before compilation"
 fi
+
+:> $LOG_FILE
+
+exec &> >(tee -a $LOG_FILE)
 
 if [ $status -eq 0 ]
 then

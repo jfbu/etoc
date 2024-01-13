@@ -1,0 +1,90 @@
+[1;31m!!!! PROBLÈMES AVEC 8/15 TESTS:[0m
+[1;31mtestsnippet-01.tex[0m
+
+! Package tagpdf Error: Parent-Child 'TOC/' --> 'enumerate/user'.
+(tagpdf)                Relation is not allowed (struct 13, /text-unit -->
+(tagpdf)                struct 14) on line 8
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.8 
+     
+[1;31mtestsnippet-02.tex[0m
+
+! Package tagpdf Error: Parent-Child 'StructTreeRoot/pdf' --> 'Div/pdf2'.
+(tagpdf)                Relation is not allowed (struct 0, /StructTreeRoot
+(tagpdf)                --> struct 4) on line 24
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.24 \endgroup
+               
+[1;31mtestsnippet-04.tex[0m
+
+! Package tagpdf Error: Parent-Child 'StructTreeRoot/pdf' --> 'Sect/pdf2'.
+(tagpdf)                Relation is not allowed (struct 0, /StructTreeRoot
+(tagpdf)                --> struct 4) on line 5
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.5 \chapter{Test chapter one}
+                               
+[1;31mtestsnippet-10.tex[0m
+
+! Package tagpdf Error: Parent-Child 'P/' --> 'TOC/pdf'.
+(tagpdf)                Relation is not allowed (struct 8, /text --> struct
+(tagpdf)                9) on line 35
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.35 \end
+         {figure} 
+[1;31mtestsnippet-11.tex[0m
+
+! Package tagpdf Error: Parent-Child 'Note/' --> 'TOC/pdf'.
+(tagpdf)                Relation is not allowed (struct 4, /float --> struct
+(tagpdf)                5) on line 81
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.81 \end
+         {figure} 
+[1;31mtestsnippet-12.tex[0m
+
+! Package tagpdf Error: Parent-Child 'TOC/' --> 'footnotemark/user'.
+(tagpdf)                Relation is not allowed (struct 13, /TOC --> struct
+(tagpdf)                26) on line 33
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.33 \endgroup
+               
+[1;31mtestsnippet-19.tex[0m
+
+! Package tagpdf Error: Parent-Child 'Reference/' --> 'text-unit/user'.
+(tagpdf)                Relation is not allowed (struct 10, /Reference -->
+(tagpdf)                struct 13) on line 72
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.72 \endgroup
+               
+[1;31mtestsnippet-20.tex[0m
+
+! Package tagpdf Error: Parent-Child 'Reference/' --> 'text/user'.
+(tagpdf)                Relation is not allowed (struct 12, /Reference -->
+(tagpdf)                struct 13) on line 35
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.35 \end
+         {center} 
+[1;31mFAIL=8, PASS=7, TOTAL=15[0m
