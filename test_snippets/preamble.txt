@@ -1,11 +1,13 @@
 % -*- mode: latex -*-
+\ifdefined\NOTAGGING
+\else
 \DocumentMetadata{
  uncompress,
  pdfversion=1.7,
  lang=en-US,
  testphase=phase-III
 }
-
+\fi
 \documentclass{report}
 \usepackage[T1]{fontenc}
 \usepackage[hscale=0.66,vscale=0.75]{geometry}
