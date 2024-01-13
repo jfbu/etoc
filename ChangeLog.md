@@ -8,6 +8,7 @@ These headings map to the diffs between successive tags.
 
 ## [dev HEAD]
 
+- 4 additional snippets were made to fit with template, of which 2 fail and 2 pass.
 - add to repo the 26 snippets from `etoc.pdf` of which 15 can be used almost directly for testing (eleven of them not being usable directly with our test template, due to various reasons such as using commands from KOMA document class).  Eight out of the fifteen raise tagging-related warnings which will for most get converted into issues here.
 
 ## [2024-01-12]
