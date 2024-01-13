@@ -28,7 +28,7 @@ else
     then
         echo -e "\033[1;31m"
         echo "$starline"
-        echo "**** NOT DOING ANY TAGGING! AND IGNORING LATEXMK ENV VARIABLE!"
+        echo "**** NOT DOING ANY TAGGING! AND IGNORING LATEX ENV VARIABLE!"
         echo -e "$starline\033[0m"
         latex="pdflatex -halt-on-error --interaction=batchmode \\def\\NOTAGGING{}\\input "
 	shift
