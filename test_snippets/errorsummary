@@ -1,4 +1,4 @@
-[1;31m!!!! PROBLÈMES AVEC 9/18 TESTS:[0m
+[1;31m!!!! PROBLÈMES AVEC 8/18 TESTS:[0m
 [1;31mtestsnippet-01.tex[0m
 
 ! Package tagpdf Error: Parent-Child 'TOC/' --> 'enumerate/user'.
@@ -32,17 +32,6 @@ Type <return> to continue.
                                                   
 l.5 \chapter{Test chapter one}
                                
-[1;31mtestsnippet-11.tex[0m
-
-! Package tagpdf Error: Parent-Child 'Note/' --> 'TOC/pdf'.
-(tagpdf)                Relation is not allowed (struct 4, /float --> struct
-(tagpdf)                5) on line 81
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.81 \end
-         {figure} 
 [1;31mtestsnippet-12.tex[0m
 
 ! Package tagpdf Error: Parent-Child 'TOC/' --> 'footnotemark/user'.
@@ -98,11 +87,10 @@ Type <return> to continue.
                                                   
 l.6 ...ed\MyQuasiStandardTOC\MyQuasiStandardTOC{1}
                                                   \else 
-[1;31mFAIL=9, PASS=9, TOTAL=18[0m
+[1;31mFAIL=8, PASS=10, TOTAL=18[0m
 fail: testsnippet-01.tex
 fail: testsnippet-02.tex
 fail: testsnippet-04.tex
-fail: testsnippet-11.tex
 fail: testsnippet-12.tex
 fail: testsnippet-14.tex
 fail: testsnippet-19.tex
