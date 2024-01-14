@@ -1,4 +1,4 @@
-[1;31m!!!! PROBLÈMES AVEC 10/19 TESTS:[0m
+[1;31m!!!! PROBLÈMES AVEC 9/18 TESTS:[0m
 [1;31mtestsnippet-01.tex[0m
 
 ! Package tagpdf Error: Parent-Child 'TOC/' --> 'enumerate/user'.
@@ -98,15 +98,13 @@ Type <return> to continue.
                                                   
 l.35 \end
          {center} 
-[1;31mtestsnippet-25.tex[0m
-
-! Package tagpdf Error: Parent-Child 'Reference/' --> 'Reference/pdf'.
-(tagpdf)                Relation is not allowed (struct 22, /Reference -->
-(tagpdf)                struct 23) on line 6
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.6 ...ed\MyQuasiStandardTOC\MyQuasiStandardTOC{1}
-                                                  \else 
-[1;31mFAIL=10, PASS=9, TOTAL=19[0m
+[1;31mFAIL=9, PASS=9, TOTAL=18[0m
+fail: testsnippet-01.tex
+fail: testsnippet-02.tex
+fail: testsnippet-04.tex
+fail: testsnippet-10.tex
+fail: testsnippet-11.tex
+fail: testsnippet-12.tex
+fail: testsnippet-14.tex
+fail: testsnippet-19.tex
+fail: testsnippet-20.tex
