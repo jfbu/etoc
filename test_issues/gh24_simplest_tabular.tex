@@ -1,0 +1,34 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+\documentclass{article}
+\usepackage{etoc}
+\usepackage{hyperref}
+\usepackage{array}
+
+\begin{document}
+    
+\etocglobaldefs % necessary for \etocname etc... to survive to & (or \\) closing groups
+
+\etocsetlinestyle{section}
+  {}
+  {\\\etocnumber}
+  {}
+  {}
+
+\etocsettocstyle{\begin{tabular}{c}number}{\end{tabular}}
+
+\tableofcontents
+
+\section{One}
+
+\section{Two}
+
+\section{Three}
+
+\section{Four}
+
+\end{document}
