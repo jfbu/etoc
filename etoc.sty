@@ -1775,7 +1775,20 @@
 \newcommand*\etocframedstyle[2][\etocdefaultnbcol]{%
 \etocsettocstyle{%
     \addvspace{\etocabovetocskip}%
-    \sbox\z@{#2}% title (horizontal material)
+%% same problem as fixed below with the minipage, one can
+%% not enclose not only a minipage but also a \csa{parbox}
+%% in an \csa{hbox},
+%% cf \url{https://github.com/latex3/tagging-project#54}
+%% The location of these things is provisory.
+    \sbox\z@{%
+\ifEtoc@tagactive
+\AssignSocketPlug{tagsupport/minipage/before}{noop}%
+\AssignSocketPlug{tagsupport/minipage/after}{noop}%
+\AssignSocketPlug{tagsupport/parbox/before}{noop}%
+\AssignSocketPlug{tagsupport/parbox/after}{noop}%
+%% ... others ?
+\fi
+    #2}% title (horizontal material)
     \dimen\z@\dp\z@
     \ifdim\wd\z@<\linewidth \dp\z@\z@ \else \dimen\z@\z@ \fi
 %% attention should I use kernel \sbox which has an \endgraf added
@@ -1808,7 +1821,7 @@
       \kern\dimen\z@
       \vskip\etocinnertopsep
       \hbox\bgroup
-%% as per Ulrike's advice,
+%% as per @u-fischer advice at
 %% \centeredline{\url{https://github.com/latex3/tagging-project/issues/54}}
 \ifEtoc@tagactive
 \AssignSocketPlug{tagsupport/minipage/before}{noop}%
