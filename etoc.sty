@@ -243,6 +243,8 @@
 %% As ``to toc'' will use some \csa{addcontentsline}, we must make
 %% \ctanpkg{hyperref} happy and also define the suitable |toclevel@| prefixed
 %% extra macros.
+%% ATTENTION! this means that \csa{toclevel@#1} will exist as \csa{relax} if
+%% it did not exist beforehand (and then |\toclevel@@#1->\toclevel#1|).
         \expandafter\edef\csname toclevel@@#1\endcsname
                          {\expandafter\noexpand\csname toclevel@#1\endcsname}%
 %% TODO: review next code/comment in tagpdf context
@@ -392,6 +394,8 @@
                 }%
 \let\etocthetocitembegintag\@empty
 \let\etocthetocitemendtag\@empty
+%% TODO check how this is called in LaTeX3 and use theirs
+\protected\def\etoc@namedef#1{\expandafter\def\csname#1\endcsname}%
 \def\Etoc@etoccontentsline@ #1#2#3#4{%
     \Etoc@doendsandbegin
 %% Experimental tagging support at \etocrelease{1.2e}.  We need to manually
@@ -428,6 +432,9 @@
 %% against \csa{edef} as \csa{etocthename} and one should use
 %% \csa{protected@edef} when using it, or a single expansion.
       \Etoc@global\edef\etocthetocitembegintag{%
+        \@ifundefined{toclevel@#1}%
+          {\etoc@namedef{toclevel@#1}{\the\numexpr\Etoc@level}}%
+          {}%
         \__tag_toc_contentsline_begin:nnn
             {#1}{\unexpanded\expandafter{\etocthename}}{#4}%
         \tag_struct_begin:n{tag=Reference}%
@@ -443,6 +450,13 @@
       }%
     \fi
     \ifEtoc@tagging
+%% UPDATE: latex-lab needs \csa{toclevel@#1} and sets it
+%% to 1 if it does not exist.  But then a problem arise if
+%% the actual level is 0, with a tocdepth at 0... \etocissue{22}!
+    \@ifundefined{toclevel@#1}%
+      {\etoc@namedef{toclevel@#1}{\the\numexpr\Etoc@level}}%
+      {}%
+%%
 %% TODO: this ties the hierarchy of levels to the one expected
 %% by the kernel code which is probably good.  Once I will have
 %% understood better though the tagging business perhaps I should
@@ -1780,6 +1794,7 @@
 %% in an \csa{hbox},
 %% cf \url{https://github.com/latex3/tagging-project#54}
 %% The location of these things is provisory.
+%% cf \etocissue{17}.
     \sbox\z@{%
 \ifEtoc@tagactive
 \AssignSocketPlug{tagsupport/minipage/before}{noop}%

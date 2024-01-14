@@ -1,4 +1,4 @@
-[1;31m!!!! PROBLÈMES AVEC 8/18 TESTS:[0m
+[1;31m!!!! PROBLÈMES AVEC 7/18 TESTS:[0m
 [1;31mtestsnippet-01.tex[0m
 
 ! Package tagpdf Error: Parent-Child 'TOC/' --> 'enumerate/user'.
@@ -43,17 +43,6 @@ Type <return> to continue.
                                                   
 l.33 \endgroup
                
-[1;31mtestsnippet-14.tex[0m
-
-! Package tagpdf Error: Parent-Child 'TOC/' --> 'Reference/pdf'.
-(tagpdf)                Relation is not allowed (struct 6, /TOC --> struct
-(tagpdf)                7) on line 25
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.25 ...ed within this document: \tableofcontents.
-                                                   
 [1;31mtestsnippet-19.tex[0m
 
 ! Package tagpdf Error: Parent-Child 'Reference/' --> 'text-unit/user'.
@@ -87,12 +76,11 @@ Type <return> to continue.
                                                   
 l.6 ...ed\MyQuasiStandardTOC\MyQuasiStandardTOC{1}
                                                   \else 
-[1;31mFAIL=8, PASS=10, TOTAL=18[0m
+[1;31mFAIL=7, PASS=11, TOTAL=18[0m
 fail: testsnippet-01.tex
 fail: testsnippet-02.tex
 fail: testsnippet-04.tex
 fail: testsnippet-12.tex
-fail: testsnippet-14.tex
 fail: testsnippet-19.tex
 fail: testsnippet-20.tex
 fail: testsnippet-25.tex
