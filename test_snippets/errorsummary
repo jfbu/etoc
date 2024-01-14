@@ -1,4 +1,4 @@
-[1;31m!!!! PROBLÈMES AVEC 9/18 TESTS:[0m
+[1;31m!!!! PROBLÈMES AVEC 10/18 TESTS:[0m
 [1;31mtestsnippet-01.tex[0m
 
 ! Package tagpdf Error: Parent-Child 'TOC/' --> 'enumerate/user'.
@@ -34,15 +34,15 @@ l.5 \chapter{Test chapter one}
                                
 [1;31mtestsnippet-10.tex[0m
 
-! Package tagpdf Error: Parent-Child 'P/' --> 'TOC/pdf'.
-(tagpdf)                Relation is not allowed (struct 8, /text --> struct
-(tagpdf)                9) on line 35
+! Package tagpdf Error: Parent-Child 'StructTreeRoot/pdf' --> 'Div/pdf2'.
+(tagpdf)                Relation is not allowed (struct 0, /StructTreeRoot
+(tagpdf)                --> struct 4) on line 47
 
 Type <return> to continue.
  ...                                              
                                                   
-l.35 \end
-         {figure} 
+l.47 \par
+          
 [1;31mtestsnippet-11.tex[0m
 
 ! Package tagpdf Error: Parent-Child 'Note/' --> 'TOC/pdf'.
@@ -98,7 +98,18 @@ Type <return> to continue.
                                                   
 l.35 \end
          {center} 
-[1;31mFAIL=9, PASS=9, TOTAL=18[0m
+[1;31mtestsnippet-25.tex[0m
+
+! Package tagpdf Error: Parent-Child 'Reference/' --> 'Reference/pdf'.
+(tagpdf)                Relation is not allowed (struct 22, /Reference -->
+(tagpdf)                struct 23) on line 6
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.6 ...ed\MyQuasiStandardTOC\MyQuasiStandardTOC{1}
+                                                  \else 
+[1;31mFAIL=10, PASS=8, TOTAL=18[0m
 fail: testsnippet-01.tex
 fail: testsnippet-02.tex
 fail: testsnippet-04.tex
@@ -108,3 +119,4 @@ fail: testsnippet-12.tex
 fail: testsnippet-14.tex
 fail: testsnippet-19.tex
 fail: testsnippet-20.tex
+fail: testsnippet-25.tex
