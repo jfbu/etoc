@@ -1,9 +1,13 @@
 \documentclass{article}
 \usepackage[T1]{fontenc}
 \usepackage[hscale=0.66,vscale=0.75]{geometry}
-\usepackage{txfonts}
-% Use the Bitter typeface for the romanfamily
-\usepackage[scale=0.87]{bitter}
+\usepackage[scaled=.96,helvratio=0.9270833]{newtxtext}
+\usepackage[scaled=.96,zerostyle=b,straightquotes]{newtxtt}
+\usepackage{clara}
+\makeatletter
+\def\bfseries@rm{bx}
+\def\mdseries@rm{m}
+\makeatother
 
 \AtBeginDocument{%
     \renewcommand{\familydefault}{\sfdefault}%
@@ -55,8 +59,8 @@
   {\ttfamily[}\meta{#1}{\ttfamily]}}
 \providecommand\parg[1]{%
   {\ttfamily(}\meta{#1}{\ttfamily)}}
-\nonfrenchspacing
 
+\nonfrenchspacing
 
 \begin{document}
 
@@ -191,8 +195,6 @@ any time.
   There is no \csa{etoctagginginlineon}, use \csb{etoctaggingon}.
 
 \end{description}
-
-
 
 \section{Another compatibility mode}
 \label{sec:anothercompat}
