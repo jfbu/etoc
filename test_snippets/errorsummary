@@ -14,12 +14,12 @@ l.7 ...TOC\MyLocalTOC\else\localtableofcontents\fi
 
 ! Package tagpdf Error: Parent-Child 'Reference/' --> 'text-unit/user'.
 (tagpdf)                Relation is not allowed (struct 10, /Reference -->
-(tagpdf)                struct 13) on line 72
+(tagpdf)                struct 13) on line 50
 
 Type <return> to continue.
  ...                                              
                                                   
-l.72 \endgroup
+l.50 \endgroup
                
 [1;31mtestsnippet-20.tex[0m
 
