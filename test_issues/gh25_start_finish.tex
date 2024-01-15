@@ -1,0 +1,31 @@
+\DocumentMetadata{
+ uncompress,
+ pdfversion=1.7,
+ lang=en-US,
+ testphase=phase-III
+}
+\ExplSyntaxOn
+ \msg_redirect_module:nnn { tag } { warning } { error }
+\ExplSyntaxOff
+\documentclass{article}
+\usepackage{etoc}
+
+\begin{document}
+
+\etocsetlinestyle{section}
+  {This is not in a TOCI}
+  {}
+  {}
+  {this neither thus \emph{CAUSES A PROBLEM}\par}
+
+\tableofcontents
+
+\section{One}
+
+\section{Two}
+
+\section{Three}
+
+\section{Four}
+
+\end{document}
