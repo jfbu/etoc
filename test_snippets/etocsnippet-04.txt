@@ -19,16 +19,15 @@
               {}
 \etocsetlinestyle {subsection}
               {}
-              {\leavevmode\leftskip .5cm\relax }
-              {\mdseries\normalsize\makebox[1.25cm][l]{\etocnumber}%
+              {\leavevmode\leftskip .75cm\relax }
+              {\mdseries\normalsize\makebox[1cm][l]{\etocnumber}%
                \etocname\nobreak\hfill\nobreak
                \rlap{\makebox[1cm][r]{\etocpage}}\par}
               {}
-%%%%%%%%>>>> MEMO: no subsubsection attow in body.txt <<<<
 \etocsetlinestyle {subsubsection}
               {}
-              {\leavevmode\leftskip 1.5cm\relax }
-              {\mdseries\normalsize\makebox[1.5cm][l]{\etocnumber}%
+              {\leavevmode\leftskip 1.75cm\relax }
+              {\mdseries\normalsize\makebox[1.25cm][l]{\etocnumber}%
                \etocname\nobreak\hfill\nobreak
                \rlap{\makebox[1cm][r]{\etocpage}}\par}
               {}

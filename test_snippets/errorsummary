@@ -14,7 +14,7 @@ l.7 ...TOC\MyLocalTOC\else\localtableofcontents\fi
 
 ! Package tagpdf Error: Parent-Child 'TOC/' --> 'footnotemark/user'.
 (tagpdf)                Relation is not allowed (struct 13, /TOC --> struct
-(tagpdf)                26) on line 33
+(tagpdf)                46) on line 33
 
 Type <return> to continue.
  ...                                              

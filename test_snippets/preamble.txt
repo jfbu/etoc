@@ -30,10 +30,14 @@
   %%pdfpagemode=UseOutlines,
 }
 \usepackage{etoc}
-
 %% \usepackage{centeredline}
 %% \usepackage{verb}\DeclareShortVerb\|
 \usepackage{ragged2e}
+
+%%%%%%% let tests check down to subsubsection styles
+\etocsettocdepth{subsubsection}
+%%%%%%% need to update this one to have them numbered
+\setcounter{secnumdepth}{3}
 
 \ExplSyntaxOn
  \msg_redirect_module:nnn { tag } { warning } { error }
