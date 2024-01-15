@@ -4,13 +4,18 @@
  lang=en-US,
  testphase=phase-III
 }
+% Currently commented out because the file generates an error by itself, not
+% only warnings
+% \ExplSyntaxOn
+%  \msg_redirect_module:nnn { tag } { warning } { error }
+% \ExplSyntaxOff
 \documentclass{article}
 \usepackage{etoc}
 \usepackage{hyperref}
 \usepackage{array}
 
 \begin{document}
-    
+
 \etocglobaldefs % necessary for \etocname etc... to survive to & (or \\) closing groups
 
 \etocsetlinestyle{section}
