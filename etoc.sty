@@ -1756,6 +1756,11 @@
 \def\etocrightrulecolorcmd{\relax}
 \def\etoc@ruledheading #1{%
    \hb@xt@\linewidth{\color@begingroup
+%% \etocissue{15} same root cause as \etocissue{17}
+\AssignSocketPlug{tagsupport/minipage/before}{noop}%
+\AssignSocketPlug{tagsupport/minipage/after}{noop}%
+\AssignSocketPlug{tagsupport/parbox/before}{noop}%
+\AssignSocketPlug{tagsupport/parbox/after}{noop}%
           \hss #1\hss\hskip-\linewidth
           \etoctoprulecolorcmd\leaders\etoctoprule\hss
           \phantom{#1}%
