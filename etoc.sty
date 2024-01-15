@@ -454,7 +454,7 @@
 %% to 1 if it does not exist.  But then a problem arise if
 %% the actual level is 0, with a tocdepth at 0... \etocissue{22}!
     \@ifundefined{toclevel@#1}%
-      {\etoc@namedef{toclevel@#1}{\the\numexpr\Etoc@level}}%
+      {\expandafter\edef\csname toclevel@#1\endcsname{\the\numexpr\Etoc@level}}%
       {}%
 %%
 %% TODO: this ties the hierarchy of levels to the one expected
