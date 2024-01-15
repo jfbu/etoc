@@ -29,17 +29,23 @@
     {, }
     {\etocname}
     {\/\upshape)}
+% mpfff
+\ExplSyntaxOn
+\let\aliceandbob\tag_if_active:TF
+\ExplSyntaxOff
 \etocsettocstyle{Here is the rather crazy inline table of contents, with both
   subsections and subsubsections listed in footnotes.  We had to mute the
 tagging hooks from \string\footnote, and, a bit to our surprise, this was
 enough to let warnings from latex-lab go away AND the PDF looks OK in
 \url{https://ngpdf.com} editor, Hurray!% 
 %%%%%%%%>>>> #19
+\IfDocumentMetadataTF{\aliceandbob{%
 \AssignSocketPlug{tagsupport/fnmark}{identity}%
 \AssignSocketPlug{tagsupport/fntext/begin}{noop}%
 \AssignSocketPlug{tagsupport/fntext/end}{noop}%
 \AssignSocketPlug{tagsupport/fntext/text}{identity}%
 \AssignSocketPlug{tagsupport/fntext/mark}{identity}%
+}{}}{}%
 %%%%%%%%<<<<
                 }{.\par}
 \tableofcontents \label{toc:crazyinline}
