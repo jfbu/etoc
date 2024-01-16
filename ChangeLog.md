@@ -8,6 +8,13 @@ These headings map to the diffs between successive tags.
 
 ## [dev HEAD]
 
+## [2024-01-16]
+
+- Current [errorsummary](https://github.com/jfbu/etoc/blob/7bbd267821b00d5f5e88b06e64dde2c11a363ebf/test_snippets/errorsummary): FAIL=3, PASS=15, TOTAL=18
+  * fail: testsnippet-01.tex (jfbu/etoc#14, related to and possible duplicate of jfbu/etoc#25)
+  * fail: testsnippet-19.tex (jfbu/etoc#20, related to and possible duplicate ot jfbu/etoc#24)
+  * fail: testsnippet-20.tex (jfbu/etoc#21, related to and possible duplicate of jfbu/etoc#24)
+- 2 snippets were merged so that they are at this time [18 test snippets](https://github.com/jfbu/etoc/tree/7bbd267821b00d5f5e88b06e64dde2c11a363ebf/test_snippets).
 - 4 additional snippets were made to fit with template, of which 2 fail and 2 pass.
 - add to repo the 26 snippets from `etoc.pdf` of which 15 can be used almost directly for testing (eleven of them not being usable directly with our test template, due to various reasons such as using commands from KOMA document class).  Eight out of the fifteen raise tagging-related warnings which will for most get converted into issues here.
 
@@ -51,7 +58,8 @@ These headings map to the diffs between successive tags.
 - initial tagging support.
 
 
-[dev HEAD]: https://github.com/jfbu/etoc/compare/2024-01-12...HEAD
+[dev HEAD]: https://github.com/jfbu/etoc/compare/2024-01-16...HEAD
+[2024-01-16]: https://github.com/jfbu/etoc/compare/2024-01-12...2024-01-16
 [2024-01-12]: https://github.com/jfbu/etoc/compare/2024-01-05...2024-01-12
 [2024-01-05]: https://github.com/jfbu/etoc/compare/2024-01-03...2024-01-05
 [2024-01-03]: https://github.com/jfbu/etoc/compare/2024-01-02...2024-01-03
