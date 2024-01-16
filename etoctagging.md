@@ -26,7 +26,7 @@ I was initially not quite aware that the more user employs official LaTeX code a
 
 I am reaching end of time which I can devote to this for now, and my free time was devoted to test `etoc` not yet to become familiar with the PDF tagging references, nor with the [latex-lab](latex3/latex2) code, but my conclusion at this stage is that the only way to make this work for (almost-all) eTOCs is for `etoc` to typeset them with:
 - **all** upstream tagging support being turned off, **except** for the sole one devoted to TOC,
-- i.e. the `\@starttoc` and `\@contentsline` tagging hooks, which put into place the `TOC` and `TOCI` struct's.
+- i.e. the `\@starttoc` and `\contentsline` tagging hooks, which put into place the `TOC` and `TOCI` struct's.
 - As alternative to re-using the tagging hooks or socket plugs will be  to have our own custom copy, but it *has* to be closely modeled on upstream, as it *will have to update upstream related structures*.
 
 It is not clear at this stage if the last point is possible in tabular context for example.  There are other more minor problems here that the `\@starttoc` tagsupport code is not compatible (at last time of testing) with being executed from inside a `figure` or `table` environment, see jfbu/etoc#18.
