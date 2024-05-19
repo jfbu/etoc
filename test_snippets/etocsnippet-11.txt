@@ -4,8 +4,7 @@
 %% from source `etoc' on 2024/01/12.
 %% EDITED (\ref) removed figure env
 
-%%%%%%%%\begin{figure}[htbp!]
-\begingroup
+\begin{figure}[htbp!]
 \centering
 \colorlet{subsecnum}{black}
 \colorlet{secbackground}{green!30}
@@ -81,7 +80,6 @@
 %%%%%%%%\vspace{-\baselineskip}
 %%%%%%%%\centeredline{|\tableofcontents \ref{toc:part:styling}|
 %%%%%%%%(\emph{cf.} \hyperref[toc:clone]{this other toc})}
-%%%%%%%%\end{figure}
+\end{figure}
 
-\endgroup
 \endinput
