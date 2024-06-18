@@ -11,13 +11,13 @@ Please insert `@jfbu` inside your bug report else I may not be pinged.
 
 The repository provides only `etoc.sty`, not the full `etoc.dtx` whose latest official release is only on CTAN.  But this version ot `etoc.sty` may contain deliberately comments which ultimately will be moved to the released `dtx` file.
 
-[This diff](https://github.com/jfbu/etoc/compare/1.2d-2023-10-29...HEAD) compares current HEAD with latest CTAN release.
-
-See the [Change log](/ChangeLog.md) for more fine-grained tag-to-tag diffs.
+[This diff](https://github.com/jfbu/etoc/compare/1.2d...HEAD) compares current HEAD with latest CTAN release.
 
 I will try to avoid force-pushing in future, but during the first few days of this repo, this happened frequently.
 
 ## PDF Tagging
+
+**IMPORTANT**: on 2024/06/18 all tagging related work was removed from [`master`](https://github.com/jfbu/etoc/tree/master) branch.  Visit the [`tagging`](https://github.com/jfbu/etoc/tree/tagging) branch.
 
 `etoc` development is currently mostly about adding tentative experimental support for tagging, using the related upstream kernel code in [latex-lab](https://github.com/latex3/latex2e/tree/develop/required/latex-lab) as model and starting point.
 
