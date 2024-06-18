@@ -2,6 +2,8 @@
 
 We will try to keep these items in sync with the actual code, but they may be lagging behind.
 
+IMPORTANT: since 2024/06/18, the code attempting to support tagging is only in the `tagging` branch.  The `master` branch does contain this file but its `etoc.sty` has been trimmed from the tagging code altogether, because it is expected if a new release of `etoc` happens in the next few months (which a priori can only happen as a hotfix to an emerging problem from changes in `hyperref` or other LaTeX itself) that it will not support tagging due to the excessive amount of work needed for that and bleak prospects of actual success.
+
 [etoctagging.tex](/etoctagging.tex) is a user level companion of the more technical explications which are given here.  It may lag behind even more.
 
 ## Perspectives at [2024-01-16]
