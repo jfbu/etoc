@@ -22,12 +22,12 @@
 %% in the same archive or directory.)
 %%
 %% Package: etoc
-%% Version: 1.2d
+%% Version: 1.2e
 %% License: LPPL 1.3c
 %% Copyright (C) 2012-2024 Jean-Francois B.
 %%                         jfbu on GitHub
 \NeedsTeXFormat{LaTeX2e}[2003/12/01]
-\ProvidesPackage{etoc}[2023/10/29 v1.2d Completely customisable TOCs (JFB)]
+\ProvidesPackage{etoc}[2024/01/12 v1.2e (dev) Completely customisable TOCs (JFB)]
 \newif\ifEtoc@oldLaTeX
 \@ifl@t@r\fmtversion{2020/10/01}
   {}
@@ -36,7 +36,7 @@
    Since 1.1a (2023/01/14), etoc prefers LaTeX at least\MessageBreak
    as recent as 2020-10-01, for reasons of the .toc file,\MessageBreak
    and used to require it (from 1.1a to 1.2).\MessageBreak
-   This etoc (1.2d) does not *require* it, but has not been\MessageBreak
+   This etoc (1.2e) does not *require* it, but has not been\MessageBreak
    tested thoroughly on old LaTeX (especially if document\MessageBreak
    does not use hyperref) and retrofitting was done only\MessageBreak
    on basis of author partial remembrances of old context.\MessageBreak
@@ -99,10 +99,10 @@
 \def\etoc@{\etoc@}
 \long\def\Etoc@gobtoetoc@ #1\etoc@{}
 \newtoks\Etoc@toctoks
-\def\Etoc@par{\par}
-\def\etocinline{\def\Etoc@par{}}
-\let\etocnopar\etocinline
+%% was using a \csa{def} prior to \etocrelease{1.2e}
+\def\etocinline{\let\Etoc@par\@empty}\let\etocnopar\etocinline
 \def\etocdisplay{\def\Etoc@par{\par}}
+\etocdisplay
 \let\Etoc@global\@empty
 \def\etocglobaldefs{\let\Etoc@global\global\let\tof@global\global}
 \def\etoclocaldefs {\let\Etoc@global\@empty\let\tof@global\@empty}
@@ -203,10 +203,28 @@
         \etocifunknownlevelTF{#1}{\Etoc@newlevel{#1}}{}%
         \expandafter\let\csname Etoc@#1@@\expandafter\endcsname
                         \csname Etoc@\Etoc@tmp @@\endcsname
+%% TODO: review next code/comment in tagpdf context
+%% So we create |@<levelname>| as aliases to |<levelname>|.  This is really
+%% needed only for the level names actually involved by ``to toc'' thing, but
+%% let's do it systematically to avoid implementation complications.
         \expandafter\edef\csname Etoc@@#1@@\endcsname
                          {\expandafter\noexpand\csname Etoc@#1@@\endcsname}%
+%% TODO: review next code/comment in tagpdf context
+%% As ``to toc'' will use some \csa{addcontentsline}, we must make
+%% \ctanpkg{hyperref} happy and also define the suitable |toclevel@| prefixed
+%% extra macros.
+%% ATTENTION! this means that \csa{toclevel@#1} will exist as \csa{relax} if
+%% it did not exist beforehand (and then |\toclevel@@#1->\toclevel#1|).
         \expandafter\edef\csname toclevel@@#1\endcsname
                          {\expandafter\noexpand\csname toclevel@#1\endcsname}%
+%% TODO: review next code/comment in tagpdf context
+%% But we don't set \ctanpkg{hyperref}'s \csa{toclevel@\string#1} to be
+%% numerically \csa{Etoc@tmp}, with some hesitation.  The level defined by
+%% \csbc{etocsetlevel} should only be for interpretation by \etoc for the
+%% contents of the |.toc| file.  If it also influences how \ctanpkg{hyperref}
+%% hooks into \csa{section} and like commands influence the PDF bookmarks,
+%% unexpected results could follow.  It is up to user to set-up by themself
+%% possibly needed extra \ctanpkg{hyperref} configuration in this regard.
       \fi
    \else
       \PackageWarning{etoc}
@@ -330,44 +348,58 @@
          \csname Etoc@contents@\the\numexpr\Etoc@level\endcsname }%
     \ifEtoc@skipprefix \Etoc@global\def\Etoc@prefix{\@empty}\fi
     \global\Etoc@skipprefixfalse
+    \gdef\@contentsline@destination{#4}%
     \Etoc@lxyz{#2}{#3}{#4}%
     \Etoc@prefix
     \Etoc@contents
 }
+%% \etocrelease{1.2e} defines \csbc{etochyperlink} as a \csa{protected} wrapper
+%% to \csa{hyperlink} and uses it in the \csbc{etocthelinkedname} et al.  This
+%% allows easier constructs of 2-stages TOC where first pass will use
+%% \csa{edef} to prepare some structure.
+%% does \long make any sense here?
+\long\protected\def\etochyperlink{\hyperlink}%
 \def\Etoc@lxyz #1#2#3{%
-    \ifEtoc@hyperref
-       \Etoc@global\def\etocthelink##1{\hyperlink{#3}{##1}}%
-    \else
-       \Etoc@global\let\etocthelink\@firstofone
-    \fi
-    \Etoc@global\def\etocthepage {#2}%
-    \ifEtoc@hyperref
-       \ifx\etocthepage\@empty
-         \Etoc@global\let\etocthelinkedpage\@empty
-       \else
-         \Etoc@global\def\etocthelinkedpage{\hyperlink {#3}{#2}}%
-       \fi
-    \else
-       \Etoc@global\let\etocthelinkedpage\etocthepage
-    \fi
+    \Etoc@global\def\etocthepage{#2}%
     \Etoc@global\def\etocthename{#1}%
     \futurelet\Etoc@getnb@token\Etoc@@getnb #1\hspace\etoc@
     \ifEtoc@hyperref
-      \def\Etoc@tmp##1##2{\Etoc@global\def##2{\hyperlink{#3}{##1}}}%
+%% "tagged" here in case of hyperref means "tagged but not linked"
+      \Etoc@global\let\etocthetaggedname  \etocthename
+      \Etoc@global\let\etocthetaggedpage  \etocthepage
+      \Etoc@global\let\etocthetaggednumber\etocthenumber
+%% \etocthetaggedlink is not public for time being
+%% let's define it now and modify below if tagging is active
+      \Etoc@global\def\etocthetaggedlink##1{\etochyperlink{#3}{##1}}%
+      \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etochyperlink{#3}{##1}}}%
       \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthelinkedname
-      \ifEtoc@numbered
-         \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthelinkednumber
-      \else
-         \Etoc@global\let\etocthelinkednumber\@empty
-      \fi
+      \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthelinkedpage
+      \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthelinkednumber
     \else
-      \Etoc@global\let\etocthelinkedname  \etocthename
-      \Etoc@global\let\etocthelinkednumber\etocthenumber
+      \Etoc@global\let\etocthetaggedlink\@firstofone
+      \let\etocthelinkedname  \etocthename
+      \let\etocthelinkedpage  \etocthepage
+      \let\etocthelinkednumber\etocthenumber
+      \Etoc@global\let\etocthetaggedname  \etocthelinkedname
+      \Etoc@global\let\etocthetaggednumber\etocthelinkednumber
+      \Etoc@global\let\etocthetaggedpage  \etocthelinkedpage
+    \fi
+    \Etoc@global\let\etocthelink\etocthetaggedlink
+    \ifx\etocthepage\@empty
+        \Etoc@global\let\etocthelinkedpage\@empty
+        \Etoc@global\let\etocthetaggedpage\@empty
+    \fi
+    \ifEtoc@numbered\else
+%% TODO: It is possible that I added this |\let\etocthenumber\@empty| now and it
+%% is in fact superfluous
+        \let\etocthenumber\@empty
+        \let\etocthelinkednumber\@empty
+        \let\etocthetaggednumber\@empty
     \fi
     \Etoc@global\expandafter\let\csname etoclink \endcsname  \etocthelink
-    \Etoc@global\expandafter\let\csname etocname \endcsname  \etocthename
-    \Etoc@global\expandafter\let\csname etocnumber \endcsname\etocthenumber
-    \Etoc@global\expandafter\let\csname etocpage \endcsname  \etocthepage
+    \Etoc@global\expandafter\let\csname etocname \endcsname  \etocthetaggedname
+    \Etoc@global\expandafter\let\csname etocnumber \endcsname\etocthetaggednumber
+    \Etoc@global\expandafter\let\csname etocpage \endcsname  \etocthetaggedpage
     \ifEtoc@hyperref
       \Etoc@lxyz@linktoc
     \fi
@@ -485,6 +517,7 @@
   \gdef\Etoc@stackofends{{-3}{}}%
   \global\let\Etoc@level\Etoc@minf
   \global\let\Etoc@virtualtop\Etoc@minf
+%% for local toc gets done in \csbc{Etoc@@startlocaltoc}/\csbc{Etoc@@startlocallistof}
   \the\Etoc@toctoks
   \ifEtoc@notactive
   \else
@@ -578,9 +611,24 @@
 \let\etoclocaltableofcontentshook\@empty
 \if1\ifEtoc@lof0\fi\ifEtoc@lot0\fi1%
 \else
+%% This fixes \etocissue{7}
+%% Formerly we did
+%% \centeredline{|\def\addcontentsline{\Etoc@hackedaddcontentsline}|
+%% but this
+%% change of signature of \csa{addcontentsline} breaks the hyperref way to alter
+%% \csa{addcontentsline} (but currently only if tagpdf related code is loaded), as
+%% it uses then generic cmd hooks with arguments to add its code.  Let's not
+%% complicate things, so we unconditionally use the proper signature.  This
+%% should work independently of whether hyperref adds its hook before or
+%% after this is executed but actually the kernel applies the cmd hooks
+%% it seems always both after package ABD code and also after preamble user
+%% ABD code.  So the hyperref cmd/addcontentsline/before will end up inserted
+%% before the \csbc{Etoc@hackedcontentsline} token.  It does not matter actually
+%% before the only code of our hack is to filter #1 and take appropriate
+%% additional action which does not interfere with hyperref hook.
 \AtBeginDocument{%
   \let\Etoc@originaladdcontentsline\addcontentsline
-  \def\addcontentsline{\Etoc@hackedaddcontentsline}%
+  \def\addcontentsline#1#2#3{\Etoc@hackedaddcontentsline{#1}{#2}{#3}}%
 }%
 \fi
 \ifEtoc@lof
@@ -634,12 +682,28 @@
     \Etoc@originaladdcontentsline{#1}{#2}{#3}%
   }
 \fi
+%% #1 is |figure| or |table|
+%%
+%% TODO: decide if it should be rather `lof' or `lot' rather.  But then some
+%% auxiliaries must be renamed.  For example \csbc{etoclocallistoffigureshook}
+%% but unfortunately it is already documented; I am sure noone on Earth has
+%% read the docs and those few who did do not use it anyhow.
 \def\Etoc@@startlocallistof#1#2#3{%
     \ifEtoc@localtoc
        \ifnum #2=#3\relax
           \global\let\etoclocaltop\Etoc@virtualtop
           \global\Etoc@notactivefalse
+%% MEMO: this has been configured in \csbc{locallistoffigures} or
+%% \csbc{locallistoftables} to trigger \csbc{Etoc@@startlocallistof@setlevels}
+%% with |figure| or |table| as argument as it must match the actual first
+%% argument of \csa{contentsline} in the |.toc| file.  But I see here that the
+%% |#1| here is not tied by that.
           \Etoc@@startlocaltochook
+%% TODO: decide if this next one should be before or after the maketitle It
+%% looks odd before, as the maketitle here is executed only in a specific
+%% case, which however is the default package configuration to detect
+%% appropriate level automatically.  If after I could use it to insert the
+%% tagging thing.  Maybe I need a private one, in addition.
           \csname etoclocallistof#1shook\endcsname
           \ifEtoc@etocstyle
               \csname etocetoclistof#1smaketitle\endcsname
@@ -992,6 +1056,9 @@
     \etocaftercontentshook
 }%
 \def\Etoc@tableofcontents@etoc@after{%
+%% TODO:
+%% this \csa{nobreakfalse} has been here for ages, probably from upstream
+%% kernel code, check its status
     \@nobreakfalse
     \Etoc@restoretocdepth
     \ifx\Etoc@global\global
@@ -1010,6 +1077,7 @@
                       \expandafter\Etoc@setstyle@error
                     \fi {#1}%
 }
+\let\etocsetlinestyle\etocsetstyle
 \def\Etoc@setstyle@error #1{%
     \PackageWarning{etoc}{`#1' is unknown to etoc. \space Did you\MessageBreak
                     forget some \string\etocsetlevel{#1}{<level>}?\MessageBreak
@@ -1027,7 +1095,9 @@
         \in@{.#1,}{.figure,.table,}%
         \ifin@
            \PackageWarning{etoc}
-              {You can not use \string\etocsetstyle\space with `#1'.\MessageBreak
+              {You can not use \string\etocsetlinestyle\space (or
+                its\MessageBreak
+                legacy alias \string\etocsetstyle) with `#1'.\MessageBreak
                Check the package documentation (in particular about\MessageBreak
                \string\etoclocallistoffigureshook/\string\etoclocallistoftableshook)%
                \MessageBreak on how to customize
@@ -1107,19 +1177,20 @@
 \def\etocabbrevpagename {p.~}
 \def\etocpartname       {Part}
 \def\etocbookname       {Book}
-\def\etocdefaultlines{%
+\def\etocfallbacklines{%
     \Etoc@standardlinesfalse
-    \etocdefaultlines@setbook
-    \etocdefaultlines@setpart
-    \etocdefaultlines@setchapter
-    \etocdefaultlines@setsection
-    \etocdefaultlines@setsubsection
-    \etocdefaultlines@setsubsubsection
-    \etocdefaultlines@setdeeperones
+    \etocfallbacklines@setbook
+    \etocfallbacklines@setpart
+    \etocfallbacklines@setchapter
+    \etocfallbacklines@setsection
+    \etocfallbacklines@setsubsection
+    \etocfallbacklines@setsubsubsection
+    \etocfallbacklines@setdeeperones
 }
+\let\etocdefaultlines\etocfallbacklines
 \def\etocnoprotrusion{\leavevmode\kern-\p@\kern\p@}
 \@ifclassloaded{memoir}{%
- \def\etocdefaultlines@setbook{%
+ \def\etocfallbacklines@setbook{%
  \Etoc@setstyle@b
   {-2}%
   {\addpenalty\@M\etocskipfirstprefix}
@@ -1139,8 +1210,8 @@
    \endgroup}
   {}%
  }
- }{\let\etocdefaultlines@setbook\@empty}
-\def\etocdefaultlines@setpart{%
+ }{\let\etocfallbacklines@setbook\@empty}
+\def\etocfallbacklines@setpart{%
 \Etoc@setstyle@b
   {-1}%
   {\addpenalty\@M\etocskipfirstprefix}
@@ -1160,7 +1231,7 @@
    \endgroup}
   {}%
 }
-\def\etocdefaultlines@setchapter{%
+\def\etocfallbacklines@setchapter{%
 \Etoc@setstyle@b
   {0}%
   {\addpenalty\@M\etocskipfirstprefix}
@@ -1175,7 +1246,7 @@
    \endgroup}
   {\addpenalty{-\@highpenalty}\addvspace{\etocsepminusone}}%
 }
-\def\etocdefaultlines@setsection{%
+\def\etocfallbacklines@setsection{%
 \Etoc@setstyle@b
   {1}%
   {\addpenalty\@M\etocskipfirstprefix}
@@ -1210,7 +1281,7 @@
    \endgroup}
   {\addpenalty\@secpenalty\addvspace{\etocsepzero}}%
 }
-\def\etocdefaultlines@setsubsection{%
+\def\etocfallbacklines@setsubsection{%
 \Etoc@setstyle@b
   {2}%
   {\addpenalty\@medpenalty\etocskipfirstprefix}
@@ -1244,7 +1315,7 @@
    \endgroup}
   {\addpenalty\@secpenalty\addvspace{\etocsepone}}%
 }
-\def\etocdefaultlines@setsubsubsection{%
+\def\etocfallbacklines@setsubsubsection{%
 \Etoc@setstyle@b
   {3}%
   {\addpenalty\@M
@@ -1261,7 +1332,7 @@
     \endgroup
    \addpenalty{-\@highpenalty}}
 }
-\def\etocdefaultlines@setdeeperones{%
+\def\etocfallbacklines@setdeeperones{%
 \Etoc@setstyle@e{4}%
 \Etoc@setstyle@e{5}%
 \ifEtoc@deeplevels
@@ -1354,85 +1425,111 @@
 \newcommand*\etocframedstyle[2][\etocdefaultnbcol]{%
 \etocsettocstyle{%
     \addvspace{\etocabovetocskip}%
-    \sbox\z@{#2}%
+    \sbox\z@{%
+    #2}% title (horizontal material)
     \dimen\z@\dp\z@
     \ifdim\wd\z@<\linewidth \dp\z@\z@ \else \dimen\z@\z@ \fi
-    \setbox\etoc@framed@titlebox=\hb@xt@\linewidth{\color@begingroup
+%% attention should I use kernel \sbox which has an \endgraf added
+    \setbox\etoc@framed@titlebox=\hb@xt@\linewidth{%
+        \color@begingroup
         \hss
         \ifx\etocbkgcolorcmd\Etoc@relax
         \else
             \sbox\tw@{\color{white}%
-            \vrule\@width\wd\z@\@height\ht\z@\@depth\dimen\z@}%
+                      \vrule\@width\wd\z@\@height\ht\z@\@depth\dimen\z@}%
             \ifdim\wd\z@<\linewidth \dp\tw@\z@\fi
             \box\tw@
             \hskip-\wd\z@
         \fi
-        \copy\z@
+        \copy\z@% the title
         \hss
         \hskip-\linewidth
         \etoctoprulecolorcmd\leaders\etoctoprule\hss
         \hskip\wd\z@
-        \etoctoprulecolorcmd\leaders\etoctoprule\hss\color@endgroup}%
+        \etoctoprulecolorcmd\leaders\etoctoprule\hss
+        \color@endgroup
+    }% \etoc@framed@titlebox
     \setbox\z@\hbox{\etocleftrule\etocrightrule}%
     \dimen\tw@\linewidth\advance\dimen\tw@-\wd\z@
         \advance\dimen\tw@-\etocinnerleftsep
         \advance\dimen\tw@-\etocinnerrightsep
-    \setbox\etoc@framed@contentsbox=\vbox\bgroup
-        \hsize\dimen\tw@
-        \kern\dimen\z@
-        \vskip\etocinnertopsep
-        \hbox\bgroup
+    \setbox\etoc@framed@contentsbox=%
+    \vbox\bgroup % this is in "before"
+      \hsize\dimen\tw@
+      \kern\dimen\z@
+      \vskip\etocinnertopsep
+      \hbox\bgroup
         \begin{minipage}{\hsize}%
         \etocframedmphook
-    \ifnum #1>\@ne
+        \ifnum #1>\@ne
           \expandafter\@firstoftwo
-    \else \expandafter\@secondoftwo
-    \fi
+       \else
+          \expandafter\@secondoftwo
+       \fi
         {\multicolpretolerance\etocmulticolpretolerance
-        \multicoltolerance\etocmulticoltolerance
-        \setlength{\columnsep}{\etoccolumnsep}%
-        \setlength{\multicolsep}{\etocmulticolsep}%
-        \begin{multicols}{#1}}
+         \multicoltolerance\etocmulticoltolerance
+         \setlength{\columnsep}{\etoccolumnsep}%
+         \setlength{\multicolsep}{\etocmulticolsep}%
+         \begin{multicols}{#1}%
+        }
         {\pretolerance\etocmulticolpretolerance
-         \tolerance\etocmulticoltolerance}}
-    {\ifnum #1>\@ne\expandafter\@firstofone
-         \else \expandafter\@gobble
-     \fi
-      {\end{multicols}\unskip }%
-    \end{minipage}%
-    \egroup
-    \vskip\etocinnerbottomsep
-    \egroup
-    \vbox{\hsize\linewidth
+         \tolerance\etocmulticoltolerance
+        }%
+  }% end of \etocsettocstyle first argument
+  {% start of \etocsettocstyle second argument
+        \ifnum #1>\@ne\expandafter\@firstofone\else \expandafter\@gobble \fi
+        {\end{multicols}\unskip }%
+        \end{minipage}% started in the \hbox
+      \egroup %  end of \hbox wrapper around minipage (inside \vbox)
+      \vskip\etocinnerbottomsep
+    \egroup % end of \vbox which included the TOC contents
+    \vbox{%
+        \hsize\linewidth
         \ifx\etocbkgcolorcmd\Etoc@relax
         \else
             \kern\ht\etoc@framed@titlebox
             \kern\dp\etoc@framed@titlebox
-            \hb@xt@\linewidth{\color@begingroup
-            \etocleftrulecolorcmd\etocleftrule
-            \etocbkgcolorcmd
-            \leaders\vrule
+            \hb@xt@\linewidth{%
+              \color@begingroup
+              \etocleftrulecolorcmd
+              \etocleftrule
+              \etocbkgcolorcmd
+              \leaders\vrule
                    \@height\ht\etoc@framed@contentsbox
                    \@depth\dp\etoc@framed@contentsbox
-            \hss
-            \etocrightrulecolorcmd\etocrightrule
-            \color@endgroup}\nointerlineskip
+              \hss
+              \etocrightrulecolorcmd
+              \etocrightrule
+              \color@endgroup
+            }%
+            \nointerlineskip
             \vskip-\dp\etoc@framed@contentsbox
             \vskip-\ht\etoc@framed@contentsbox
             \vskip-\dp\etoc@framed@titlebox
             \vskip-\ht\etoc@framed@titlebox
         \fi
-    \box\etoc@framed@titlebox\nointerlineskip
-    \hb@xt@\linewidth{\color@begingroup
-    {\etocleftrulecolorcmd\etocleftrule}%
-    \hss\box\etoc@framed@contentsbox\hss
-    \etocrightrulecolorcmd\etocrightrule\color@endgroup}
-    \nointerlineskip
-    \vskip\ht\etoc@framed@contentsbox
-    \vskip\dp\etoc@framed@contentsbox
-    \hb@xt@\linewidth{\color@begingroup\etocbottomrulecolorcmd
-          \leaders\etocbottomrule\hss\color@endgroup}}
-    \addvspace{\etocbelowtocskip}}}
+        \box\etoc@framed@titlebox
+        \nointerlineskip
+        \hb@xt@\linewidth{%
+          \color@begingroup
+          {\etocleftrulecolorcmd\etocleftrule}%
+          \hss\box\etoc@framed@contentsbox\hss
+          \etocrightrulecolorcmd\etocrightrule
+          \color@endgroup
+        }%
+        \nointerlineskip
+        \vskip\ht\etoc@framed@contentsbox
+        \vskip\dp\etoc@framed@contentsbox
+        \hb@xt@\linewidth{%
+          \color@begingroup
+          \etocbottomrulecolorcmd
+          \leaders\etocbottomrule\hss
+          \color@endgroup
+        }%
+    }% end of \vbox in after part!
+    \addvspace{\etocbelowtocskip}%
+  }% end of \etocsettocstyle second argument
+}% end of \etocframedstyle definition
 \newcommand\etoc@multicoltoc[2][\etocdefaultnbcol]{%
     \etocmulticolstyle[#1]{#2}%
     \tableofcontents}
@@ -1929,7 +2026,8 @@
 }% end of not with memoir branch
 \def\Etoc@addtocontents #1#2{%
     \addtocontents {toc}{%
-      \protect\contentsline{#1}{#2}{\thepage}{\ifEtoc@hyperref\@currentHref\fi}%
+      \protect\contentsline{#1}{#2}{\thepage}%
+          {\ifEtoc@hyperref\@currentHref\fi}%
       \ifdefined\protected@file@percent\protected@file@percent\fi
     }%
 }
@@ -2138,7 +2236,7 @@
             \let\protect\etoc@setlocaltop\protect\@gobble}{}}%
 \def\etocstandardlines {\Etoc@standardlinestrue}
 \def\etoctoclines      {\Etoc@standardlinesfalse}
-\etocdefaultlines
+\etocfallbacklines
 \etocstandardlines
 \def\etocstandarddisplaystyle{%
     \PackageWarningNoLine{etoc}{%
