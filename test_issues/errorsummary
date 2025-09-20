@@ -1,4 +1,37 @@
-[1;31m!!!! PROBLÈMES AVEC 12/26 TESTS:[0m
+[1;31m!!!! PROBLÈMES AVEC 8/25 TESTS:[0m
+[1;31mgh05_other_test_for_minipage.tex[0m
+! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
+(tagpdf)                Relation is not allowed! on line 48
+(tagpdf)                struct 177, Reference --> struct 178, text-unit
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.48 
+     
+
+[1;31mgh05_warnings_from_minipage.tex[0m
+! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
+(tagpdf)                Relation is not allowed! on line 46
+(tagpdf)                struct 177, Reference --> struct 178, text-unit
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.46 
+     
+
+[1;31mgh08_local_lof.tex[0m
+
+! Package tagpdf Error: Destination '' has no related structure.
+(tagpdf)                /Ref not updated.
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.30 \end{document}
+                   
+
 [1;31mgh10_parbox.tex[0m
 ! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
 (tagpdf)                Relation is not allowed! on line 17
@@ -32,83 +65,6 @@ Type <return> to continue.
 l.15 
      
 
-[1;31mgh5_other_test_for_minipage.tex[0m
-! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
-(tagpdf)                Relation is not allowed! on line 48
-(tagpdf)                struct 177, Reference --> struct 178, text-unit
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.48 
-     
-
-[1;31mgh5_warnings_from_minipage.tex[0m
-! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
-(tagpdf)                Relation is not allowed! on line 46
-(tagpdf)                struct 177, Reference --> struct 178, text-unit
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.46 
-     
-
-[1;31mgh8_local_lof.tex[0m
-
-! Package tagpdf Error: Destination '' has no related structure.
-(tagpdf)                /Ref not updated.
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.30 \end{document}
-                   
-
-[1;31mtest_tagging_compatmode.tex[0m
-Package tagpdf Info: writing ParentTree
-
-! Package tagpdf Error: something is wrong with the mcid--rerun
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.77 \end{document}
-                   
-
-[1;31mtest_tagging_compatmode_hyp.tex[0m
-Package tagpdf Info: writing ParentTree
-
-! Package tagpdf Error: something is wrong with the mcid--rerun
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.77 \end{document}
-                   
-
-[1;31mtest_tagging_fallbacklines.tex[0m
-Package tagpdf Info: writing ParentTree
-
-! Package tagpdf Error: something is wrong with the mcid--rerun
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.82 \end{document}
-                   
-
-[1;31mtest_tagging_fallbacklines_hyp.tex[0m
-Package tagpdf Info: writing ParentTree
-
-! Package tagpdf Error: something is wrong with the mcid--rerun
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.83 \end{document}
-                   
-
 [1;31mtest_tagging_lof_alltotoc.tex[0m
 Package tagpdf Info: writing ParentTree
 
@@ -131,17 +87,13 @@ Type <return> to continue.
 l.181    \the\treetok
                      
 
-[1;31mFAIL=12, PASS=14, TOTAL=26[0m
+[1;31mFAIL=8, PASS=17, TOTAL=25[0m
+fail: gh05_other_test_for_minipage.tex
+fail: gh05_warnings_from_minipage.tex
+fail: gh08_local_lof.tex
 fail: gh10_parbox.tex
 fail: gh24_simplest_tabular.tex
 fail: gh25_start_finish.tex
-fail: gh5_other_test_for_minipage.tex
-fail: gh5_warnings_from_minipage.tex
-fail: gh8_local_lof.tex
-fail: test_tagging_compatmode.tex
-fail: test_tagging_compatmode_hyp.tex
-fail: test_tagging_fallbacklines.tex
-fail: test_tagging_fallbacklines_hyp.tex
 fail: test_tagging_lof_alltotoc.tex
 fail: test_tagging_toc_as_molecule_b.tex
 
