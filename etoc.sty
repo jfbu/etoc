@@ -128,7 +128,7 @@
 \newif\ifEtoc@notocifnotoc
 \def\etocnotocifnotoc {\Etoc@checksemptinesstrue\Etoc@notocifnotoctrue }
 %% 2024 JAN
-%% dtx code comment left deliberately in etoc.sty
+%%
 %% \etocrelease{1.2e} starts minimal support for the ``\LaTeX{} tagged PDF''
 %% project.  Completely unstable code.   The \csbc{ifEtoc@tagactive}
 %% may not be needed or actually correctly used (as it is frozen here)
@@ -235,24 +235,34 @@
         \expandafter\let\csname Etoc@#1@@\expandafter\endcsname
                         \csname Etoc@\Etoc@tmp @@\endcsname
 %% 2024 JAN
-%% TODO: review next code/comment in tagpdf context
+%%
+%% TODO:
+%%
+%% Review next code/comment in tagpdf context
 %% So we create |@<levelname>| as aliases to |<levelname>|.  This is really
 %% needed only for the level names actually involved by ``to toc'' thing, but
 %% let's do it systematically to avoid implementation complications.
         \expandafter\edef\csname Etoc@@#1@@\endcsname
                          {\expandafter\noexpand\csname Etoc@#1@@\endcsname}%
 %% 2024 JAN
-%% TODO: review next code/comment in tagpdf context
+%%
+%% TODO:
+%%
+%% Review next code/comment in tagpdf context
 %% As ``to toc'' will use some \csa{addcontentsline}, we must make
 %% \ctanpkg{hyperref} happy and also define the suitable |toclevel@| prefixed
 %% extra macros.
-%% ATTENTION! this means that \csa{toclevel@#1} will exist as \csa{relax} if
+%%
+%% ATTENTION! this means that |\toclevel@#1| will exist as \csa{relax} if
 %% it did not exist beforehand (and then |\toclevel@@#1->\toclevel#1|).
         \expandafter\edef\csname toclevel@@#1\endcsname
                          {\expandafter\noexpand\csname toclevel@#1\endcsname}%
 %% 2024 JAN
-%% TODO: review next code/comment in tagpdf context
-%% But we don't set \ctanpkg{hyperref}'s \csa{toclevel@\string#1} to be
+%%
+%% TODO:
+%%
+%% Review next code/comment in tagpdf context
+%% But we don't set \ctanpkg{hyperref}'s \csa{toclevel@#1} to be
 %% numerically \csa{Etoc@tmp}, with some hesitation.  The level defined by
 %% \csbc{etocsetlevel} should only be for interpretation by \etoc for the
 %% contents of the |.toc| file.  If it also influences how \ctanpkg{hyperref}
@@ -376,6 +386,7 @@
 }
 \ExplSyntaxOn
 %% 2024 JAN
+%%
 %% This version is for all of <prefix><contents> a priori marked as artifact
 %% and \csbc{etocname}, \csbc{etocnumber}, \csbc{etocpage} will be the only
 %% non-artifact chunks.
@@ -400,11 +411,15 @@
 \let\etocthetocitembegintag\@empty
 \let\etocthetocitemendtag\@empty
 %% 2024 JAN
-%% TODO check how this is called in LaTeX3 and use theirs
+%%
+%% TODO:
+%%
+%% Check how this is called in LaTeX3 and use theirs
 \protected\def\etoc@namedef#1{\expandafter\def\csname#1\endcsname}%
 \def\Etoc@etoccontentsline@ #1#2#3#4{%
     \Etoc@doendsandbegin
 %% 2024 JAN
+%%
 %% Experimental tagging support at \etocrelease{1.2e}.  We need to manually
 %% insert calls to the \LaTeX{} kernel tagging-related
 %% hooks, which is fragile as upstream will evolve regarding in particular
@@ -419,12 +434,14 @@
     \Etoc@lxyz{#2}{#3}{#4}%
     \ifEtoc@tagactive
 %% 2024 JAN
+%%
 %% For sophisticated two stages process, we have already at our
 %% disposal \csbc{etocthelink}, but user will need the naked
 %% destination to rebuild a tagging structure.  Should I do
 %% things such as
 %%     \centeredline{|\global\let\etocthedest\@contentsline@destination|}
 %%     \centeredline{|\Etoc@global\def\etocthelevelname{#1}|}
+%% 2024 JAN
 %%
 %% ??
 %%
@@ -472,11 +489,13 @@
         \tag_mc_begin:n{artifact=layout}%
       }%
 %% 2024 JAN
+%%
 %% Kernel code has no \csa{tag_if_active:T} in \csa{@contentsline@cfgpoint@after}
 %% expansion.  \csa{edef} to expand |#1| to be symmetrical to start, but
 %% anyhow a priori, |#1| is always a priori simply a string.
 %%
 %% 2025 SEP
+%%
 %% \csa{__tag_toc_contentsline_end:n} does not exist anymore
 %% (memo: commit c2f7848d5 Sun Jul 14 affecting
 %% required/latex-lab/latex-lab-toc.dtx).
@@ -490,6 +509,7 @@
     \fi
     \ifEtoc@tagging
 %% 2024 JAN
+%%
 %% UPDATE: latex-lab needs \csa{toclevel@#1} and sets it
 %% to 1 if it does not exist.  But then a problem arise if
 %% the actual level is 0, with a tocdepth at 0... \etocissue{22}!
@@ -498,18 +518,23 @@
       {}%
 %% 2024 JAN
 %%
-%% TODO: this ties the hierarchy of levels to the one expected
+%%
+%% TODO:
+%%
+%% This ties the hierarchy of levels to the one expected
 %% by the kernel code which is probably good.  Once I will have
 %% understood better though the tagging business perhaps I should
 %% drop this entirely and update the PDF structure tree directly
-%% from \csbc{Etoc@doendsandbegins}, or rather incorporate into the
+%% from \csbc{Etoc@doendsandbegin}, or rather incorporate into the
 %% begins and ends the needed thing.  At this stage indeed it
 %% appears impossible to expect using etoc powerful list of
 %% abilities, all using only the single .toc file will possibly
 %% work with upstream kernel code which only knows about standard
 %% things.
 %%
-%% TODO: perhaps use own code; the kernel code tries to separate name from
+%% TODO:
+%%
+%% Perhaps use own code; the kernel code tries to separate name from
 %% number, but this works only if \csa{numberline}, not if for example,
 %% \csa{chapterline} is used.  Having now moved this after \csbc{Etoc@lxyz},
 %% at this stage we are in possession of \csbc{etocthename}. (I think
@@ -526,6 +551,7 @@
       \UseTaggingSocket{toc/contentsline/before}{{#1}{#2}{#3}{#4}}%
     \fi
 %% 2024 JAN
+%%
 %% In order to fix the |etoc/jfbu#6| issue regarding \csa{emph} which
 %% can not appear as a child of TOCI, I will tag *everything*
 %% as artifact, *except* for the sole \csbc{etocname}, \csbc{etocnumber},
@@ -561,11 +587,12 @@
     \fi
 }
 %% 2024 JAN
+%%
 %% \etocrelease{1.2e} defines \csbc{etochyperlink} as a \csa{protected} wrapper
 %% to \csa{hyperlink} and uses it in the \csbc{etocthelinkedname} et al.  This
 %% allows easier constructs of 2-stages TOC where first pass will use
 %% \csa{edef} to prepare some structure.
-%% does \long make any sense here?
+%% does \csa{long} make any sense here?
 \long\protected\def\etochyperlink{\hyperlink}%
 \def\Etoc@lxyz #1#2#3{%
     \Etoc@global\def\etocthepage{#2}%
@@ -590,6 +617,7 @@
           \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthelinkedname
           \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthelinkedpage
 %% 2024 JAN
+%%
 %% Should I really use a Reference tag on top of the Lbl?
 %% Should the Lbl not be rather on top of \csa{hyperlink}? I remember more or
 %% less that the current nesting is inspired from what latex-lab does and the way
@@ -606,12 +634,14 @@
           \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthetaggednumber
         \else
 %% 2024 JAN
+%%
 %% if inline tagging is turned off, we must let the "thelinked" macros hold
 %% no hyperlinks, contrarily to what their names indicate
           \Etoc@global\let\etocthelinkedname  \etocthename
           \Etoc@global\let\etocthelinkedpage  \etocthepage
           \Etoc@global\let\etocthelinkednumber\etocthenumber
 %% 2024 JAN
+%%
 %% Memo: \csbc{etocthetaggedlink} in that context does add an hyperlink.  Use case
 %% could be "Another compatibility mode" context with \csa{l@chapter} like this:
 %% \centeredline{|\l@chapter{\numberline{\etocnumber}\etocname}{\etoclink{\etocpage}}|}
@@ -637,9 +667,15 @@
       \Etoc@global\let\etocthetaggedpage  \etocthelinkedpage
     \fi
 %% 2024 JAN
-%% MEMO: if tagging is on but inline tagging is off, this \etocthelink does
+%%
+%% MEMO:
+%%
+%% If tagging is on but inline tagging is off, this \etocthelink does
 %% actually insert an hyperlink.
-%% TODO: check if the refactoring did not modify in what cases exactly
+%%
+%% TODO:
+%%
+%% Check if the refactoring did not modify in what cases exactly
 %% are the page or number macros let to \csa{@empty}
     \Etoc@global\let\etocthelink\etocthetaggedlink
     \ifx\etocthepage\@empty
@@ -648,7 +684,10 @@
     \fi
     \ifEtoc@numbered\else
 %% 2024 JAN
-%% TODO: It is possible that I added this |\let\etocthenumber\@empty| now and it
+%%
+%% TODO:
+%%
+%% It is possible that I added this |\let\etocthenumber\@empty| now and it
 %% is in fact superfluous
         \let\etocthenumber\@empty
         \let\etocthelinkednumber\@empty
@@ -773,7 +812,7 @@
   \global\let\Etoc@openouttoc\empty
 }
 %% 2024 JAN
-%% dtx comment deliberately left in sty
+%%
 %% \etocrelease{1.2e} adds initial structure to support tagging.  Completely
 %% unstable code.  There is a subtlety here that we can \emph{not} (always)
 %% insert the \csa{@tarttoc} config point ``/before`` material here priori to
@@ -808,6 +847,7 @@
     \def\Etoc@tagging@starttoc@after{\par\tagpdfparaOn}%
   \fi
 %% 2024 JAN
+%%
 %% for \etocissue{11}
 %% should I worry about an |\if@endpe\@doendpe\fi|?
 %% This all looks very fragile and crude... but does work in the initial
@@ -829,27 +869,36 @@
   \fi
 }% \Etoc@tagging@starttoc@before
 %% 2024 JAN
+%%
 %% This is for \etocissue{9}, \etocissue{11}. \etocissue{12} and
 %% \etocissue{13}.  Defined to be empty as fall-back in case the ``before''
 %% did nothing.
 \let\Etoc@tagging@starttoc@after\@empty
 %% 2024 JAN
+%%
 %% User level interface for two-stages TOCs where etoc is used only in first
 %% step to construct for example a TikZ mindmap which is executed later.
 %% Hesitation whether this should check \csbc{ifEtoc@tagging} status.
 %% Or \csbc{ifEtoc@tagactive}.  Hesitation whether it is really useful
 %% to have it take an argument, e.g. \csa{etoctagstartTOCcontentsoftype}
 %% but then I am tied with upstream handling of nature of argument.
-%% TODO: this HAS to be updated in relation to
+%%
+%% TODO:
+%%
+%% This HAS to be updated in relation to
 %% \csbc{Etoc@tagging@starttoc@before}
 %% and \csbc{Etoc@tagging@starttoc@after}%
 %%
-%% TODO: should I open and close a group therein? I decide yes for time being
+%% TODO:
+%%
+%% Should I open and close a group therein? I decide yes for time being
 %% so maybe I don't have to worry here too much about the para-tagging bool
 %% status.  Besides this allows me to stop worrying about the minipage and
 %% parbox tagging sockets.
 %%
-%% TODO: should this be conditional on \csbc{ifEtoc@tagactive}? probably not,
+%% TODO:
+%%
+%% Should this be conditional on \csbc{ifEtoc@tagactive}? probably not,
 %% as for example \csbc{etoctagReference} isn't.
 \protected\def\etoctagstartTOCcontents{%
   \begingroup
@@ -872,10 +921,12 @@
      {\let\Etoc@tagging@starttoc@after\@empty}%
   \else
 %% 2024 JAN
+%%
 %% unnecessary, normally...
     \let\Etoc@tagging@starttoc@after\@empty
   \fi
 %% 2025 SEP
+%%
 %% No more \@starttoc@cfgpoint@before{toc} (or after)
   \UseTaggingSocket{toc/starttoc/before}{toc}%
 }
@@ -889,10 +940,12 @@
   \global\let\Etoc@level\Etoc@minf
   \global\let\Etoc@virtualtop\Etoc@minf
 %% 2024 JAN
-%% for local toc gets done in
+%%
+%% For local toc gets done in
 %% \csbc{Etoc@@startlocaltoc}/\csbc{Etoc@@startlocallistof}
 %%
 %% 2025 SEP
+%%
 %% No more \@starttoc@cfgpoint@before{toc}%
   \ifEtoc@tagging
     \unless\ifEtoc@localtoc
@@ -910,12 +963,14 @@
     \ifEtoc@localtoc
       \unless\ifEtoc@notactive
 %% 2024 JAN
-%% the argument is currently ignored. If it stops being so by
+%%
+%% The argument is currently ignored. If it stops being so by
 %% \csa{@starttoc@cfgpoint@after} at some stage, i will have to make it either
 %% localtoc, locallof, or locallot (or whatever has been used with
 %% \csa{@starttoc@cfgpoint@before} or successor.
 %%
 %% 2025 SEP
+%%
 %% No more \@starttoc@cfgpoint@after{localtoc}%
         \UseTaggingSocket{toc/starttoc/after}{toc}%
         \Etoc@tagging@starttoc@after
@@ -947,7 +1002,7 @@
           \fi
           \global\Etoc@notactivefalse
 %% 2024 JAN
-%% dtx comment deliberately left in sty
+%%
 %% \etocrelease{1.2e} locates this here and not before \csbc{Etoc@toctoc} else
 %% \csbc{etocetoclocaltocmaketitle} could have kicked in and typeset a chapter
 %% title creating a Parent-Child tagging problem. \etocissue{2}
@@ -959,6 +1014,7 @@
 %% The same addition is made to \csbc{Etoc@@startlocallistof}.
 %%
 %% 2025 SEP
+%%
 %% No more \@starttoc@cfgpoint@before{toc}%
           \ifEtoc@tagging
             \Etoc@tagging@starttoc@before
@@ -1031,9 +1087,10 @@
 \if1\ifEtoc@lof0\fi\ifEtoc@lot0\fi1%
 \else
 %% 2024 JAN
+%%
 %% This fixes \etocissue{7}
 %% Formerly we did
-%% \centeredline{|\def\addcontentsline{\Etoc@hackedaddcontentsline}|
+%% \centeredline{|\def\addcontentsline{\Etoc@hackedaddcontentsline}|}
 %% but this
 %% change of signature of \csa{addcontentsline} breaks the hyperref way to alter
 %% \csa{addcontentsline} (but currently only if tagpdf related code is loaded), as
@@ -1043,8 +1100,10 @@
 %% after this is executed but actually the kernel applies the cmd hooks
 %% it seems always both after package ABD code and also after preamble user
 %% ABD code.  So the hyperref cmd/addcontentsline/before will end up inserted
-%% before the \csbc{Etoc@hackedcontentsline} token.  It does not matter actually
-%% before the only code of our hack is to filter #1 and take appropriate
+%% before the \csa{Etoc@hackedcontentsline} token.
+%% \emph{This comment is in need of an updated in Sep.\@ 2025, because this token
+%% does not exist}.  It does not matter actually
+%% before the only code of our hack is to filter |#1| and take appropriate
 %% additional action which does not interfere with hyperref hook.
 \AtBeginDocument{%
   \let\Etoc@originaladdcontentsline\addcontentsline
@@ -1103,9 +1162,12 @@
   }
 \fi
 %% 2024 JAN
-%% #1 is |figure| or |table|
 %%
-%% TODO: decide if it should be rather `lof' or `lot' rather.  But then some
+%% |#1| is |figure| or |table|
+%%
+%% TODO:
+%%
+%% Decide if it should be rather `lof' or `lot' rather.  But then some
 %% auxiliaries must be renamed.  For example \csbc{etoclocallistoffigureshook}
 %% but unfortunately it is already documented; I am sure noone on Earth has
 %% read the docs and those few who did do not use it anyhow.
@@ -1115,6 +1177,7 @@
           \global\let\etoclocaltop\Etoc@virtualtop
           \global\Etoc@notactivefalse
 %% 2024 JAN
+%%
 %% MEMO: this has been configured in \csbc{locallistoffigures} or
 %% \csbc{locallistoftables} to trigger \csbc{Etoc@@startlocallistof@setlevels}
 %% with |figure| or |table| as argument as it must match the actual first
@@ -1122,7 +1185,10 @@
 %% |#1| here is not tied by that.
           \Etoc@@startlocaltochook
 %% 2024 JAN
-%% TODO: decide if this next one should be before or after the maketitle It
+%%
+%% TODO:
+%%
+%% Decide if this next one should be before or after the maketitle It
 %% looks odd before, as the maketitle here is executed only in a specific
 %% case, which however is the default package configuration to detect
 %% appropriate level automatically.  If after I could use it to insert the
@@ -1132,17 +1198,19 @@
               \csname etocetoclistof#1smaketitle\endcsname
           \fi
 %% 2024 JAN
+%%
 %% \etocissue{8}
 %% Same tagging related addition as in \csbc{Etoc@@startlocaltoc}, The macro
 %% uses \csbc{ifEtoc@tagging}.  Can the argument which ends up being passed
 %% to the kernel code (at this stage) have a space? like `local lof'?
-%% Anyway as #1 is currently figure or table, and localfigure/localtable do
+%% Anyway as |#1| is currently figure or table, and localfigure/localtable do
 %% not make much sense, let's simply use `localtoc' here.  And I have
 %% to decide how to make the finish macro inherit the argument; which however
 %% attow is disposed of by the \csa{@starttoc@cfgpoint@after} to which it
 %% maps.
 %%
 %% 2025 SEP
+%%
 %% No more \@starttoc@cfgpoint@before
           \ifEtoc@tagging\UseTaggingSocket{toc/starttoc/before}{localtoc}\fi
        \fi
@@ -1256,7 +1324,7 @@
     \gdef\Etoc@stackofends{{-3}{}}%
     \begingroup
 %% 2024 JAN
-%% dtx comment deliberately left in sty
+%%
 %% \etocrelease{1.2e} turns off tagging unconditionally here.
     \Etoc@taggingfalse
       \ifEtoc@localtoc
@@ -1493,12 +1561,14 @@
     \ifEtoc@parskip\parskip\z@skip\fi
     \Etoc@aftertitlehook
 %% 2024 JAN
+%%
 %% seems we need to deactivate minipage tagging (github issues \etocissue{5},
 %% which is related to \etocissue{4})
 \ifEtoc@tagactive
 \AssignSocketPlug{tagsupport/minipage/before}{noop}%
 \AssignSocketPlug{tagsupport/minipage/after}{noop}%
 %% 2024 JAN
+%%
 %% let's also deactivate parbox tagging hooks (\etocissue{10})
 %% it is expected that this and the above may come back
 %% to hit us at some point...
@@ -1507,6 +1577,7 @@
 \fi
     \gdef\etoclocaltop{-\thr@@}%
 %% 2024 JAN
+%%
 %% the kernel \csa{@starttoc} hooks for tagging will be done from
 %% \csbc{Etoc@toctoc} expansion
     \Etoc@toctoc
@@ -1514,8 +1585,10 @@
 }%
 \def\Etoc@tableofcontents@etoc@after{%
 %% 2024 JAN
+%%
 %% TODO:
-%% this \csa{nobreakfalse} has been here for ages, probably from upstream
+%%
+%% This \csa{nobreakfalse} has been here for ages, probably from upstream
 %% kernel code, check its status
     \@nobreakfalse
     \Etoc@restoretocdepth
@@ -1852,6 +1925,7 @@
    \hb@xt@\linewidth{\color@begingroup
 \ifEtoc@tagactive
 %% 2024 JAN
+%%
 %% \etocissue{15} same root cause as \etocissue{17}
 \AssignSocketPlug{tagsupport/minipage/before}{noop}%
 \AssignSocketPlug{tagsupport/minipage/after}{noop}%
@@ -1892,6 +1966,7 @@
 \etocsettocstyle{%
     \addvspace{\etocabovetocskip}%
 %% 2024 JAN
+%%
 %% same problem as fixed below with the minipage, one can
 %% not enclose not only a minipage but also a \csa{parbox}
 %% in an \csa{hbox},
@@ -1905,13 +1980,15 @@
 \AssignSocketPlug{tagsupport/parbox/before}{noop}%
 \AssignSocketPlug{tagsupport/parbox/after}{noop}%
 %% 2024 JAN
+%%
 %% ... others ?
 \fi
     #2}% title (horizontal material)
     \dimen\z@\dp\z@
     \ifdim\wd\z@<\linewidth \dp\z@\z@ \else \dimen\z@\z@ \fi
 %% 2024 JAN
-%% attention should I use kernel \sbox which has an \endgraf added
+%%
+%% attention should I use kernel \csa{sbox} which has an \csa{endgraf} added
     \setbox\etoc@framed@titlebox=\hb@xt@\linewidth{%
         \color@begingroup
         \hss
@@ -1942,13 +2019,15 @@
       \vskip\etocinnertopsep
       \hbox\bgroup
 %% 2024 JAN
-%% as per @u-fischer advice at
+%%
+%% as per |@u-fischer| advice at
 %% \centeredline{\url{https://github.com/latex3/tagging-project/issues/54}}
 \ifEtoc@tagactive
 \AssignSocketPlug{tagsupport/minipage/before}{noop}%
 \AssignSocketPlug{tagsupport/minipage/after}{noop}%
 \fi
 %% 2024 JAN
+%%
 %% the start of a minipage which will hold a multicols if nbofcolumns>1
         \begin{minipage}{\hsize}%
         \etocframedmphook
@@ -2516,7 +2595,7 @@
   }% end of at begin document
 }% end of not with memoir branch
 %% 2024 JAN
-%% dtx comment deliberately left in sty
+%%
 %% \etocrelease{1.2e} attempts to mirror upstream \LaTeX{} if tagging is active.
 \def\Etoc@addtocontents #1#2{%
     \addtocontents {toc}{%
@@ -2526,7 +2605,10 @@
     }%
 }
 %% 2024 JAN
-%% TODO: review next code/comment in tagpdf context
+%%
+%% TODO:
+%%
+%% Review next code/comment in tagpdf context
 \def\Etoc@addcontentsline@ #1#2#3{%
     \@namedef{toclevel@#1}{#3}\addcontentsline {toc}{#1}{#2}%
 }
