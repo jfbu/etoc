@@ -83,6 +83,8 @@ fi
 
 :> $LOG_FILE
 
+# I do not understand why in certain circumstances user has to hit
+# RET on end of run.
 exec &> >(tee -a $LOG_FILE)
 
 if [ $status -eq 0 ]
