@@ -1,1 +1,1 @@
-msgredirectwarning_to_error.txt
+msgredirectwarning_asis.txt

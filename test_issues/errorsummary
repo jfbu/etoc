@@ -1,15 +1,4 @@
-[1;31m!!!! PROBLÈMES AVEC 8/26 TESTS:[0m
-[1;31mgh10_parbox.tex[0m
-\tf@toc=\write3
-
-\openout3 = gh10_parbox.toc
-
-! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
-(tagpdf)                Relation is not allowed! on line 19
-(tagpdf)                struct 9, Reference --> struct 10, text-unit
-
-Type <return> to continue.
- ...                                              
+[1;31m!!!! PROBLÈMES AVEC 2/26 TESTS:[0m
 [1;31mgh24_simplest_tabular.tex[0m
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-08-13>
@@ -21,79 +10,18 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 ! Package tagpdf Error: there is no open structure on the stack
 
 Type <return> to continue.
-[1;31mgh25_start_finish.tex[0m
-\tf@toc=\write3
-
-\openout3 = gh25_start_finish.toc
-
-! Package tagpdf Error: Parent-Child ':TOC' --> ':Span'.
-(tagpdf)                Relation is not allowed! on line 17
-(tagpdf)                struct 7, TOC --> struct 16, Em
-
-Type <return> to continue.
- ...                                              
-[1;31mgh5_other_test_for_minipage.tex[0m
-
-]
-Chapter 1.
-
-! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
-(tagpdf)                Relation is not allowed! on line 50
-(tagpdf)                struct 177, Reference --> struct 178, text-unit
-
-Type <return> to continue.
- ...                                              
-[1;31mgh5_warnings_from_minipage.tex[0m
-]
-Chapter 1.
-
-! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
-(tagpdf)                Relation is not allowed! on line 48
-(tagpdf)                struct 177, Reference --> struct 178, text-unit
-
-Type <return> to continue.
- ...                                              
-                                                  
-[1;31mgh8_local_lof.tex[0m
-Package tagpdf Info: writing IDTree
-Package tagpdf Info: writing RoleMap
-Package tagpdf Info: writing ClassMap
-Package tagpdf Info: writing NameSpaces
-Package tagpdf Info: writing StructElems
-
-! Package tagpdf Error: Destination '' has no related structure.
-(tagpdf)                /Ref not updated.
-
-Type <return> to continue.
 [1;31mtest_tagging_lof_alltotoc.tex[0m
-Package tagpdf Info: writing RoleMap
-Package tagpdf Info: writing ClassMap
-Package tagpdf Info: writing NameSpaces
-Package tagpdf Info: writing StructElems
+warning  (pdf backend): unreferenced structure destination with name 'figure.str
+uct.393'
 
-! Package tagpdf Error: Destination 'figure.struct.22' has no related
-(tagpdf)                structure.
-(tagpdf)                /Ref not updated.
+warning  (pdf backend): unreferenced structure destination with name 'figure.str
+uct.381'
 
-Type <return> to continue.
-[1;31mtest_tagging_toc_as_molecule_b.tex[0m
-(Font)              <7> on input line 183.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 183.
+warning  (pdf backend): unreferenced structure destination with name 'figure.str
+uct.372'
 
-! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
-(tagpdf)                Relation is not allowed! on line 183
-(tagpdf)                struct 7, Reference --> struct 8, text-unit
-
-Type <return> to continue.
- ...                                              
-[1;31mFAIL=8, PASS=18, TOTAL=26[0m
-fail: gh10_parbox.tex
+warning  (pdf backend): unreferenced structure destination with name 'figure.str
+[1;31mFAIL=2, PASS=24, TOTAL=26[0m
 fail: gh24_simplest_tabular.tex
-fail: gh25_start_finish.tex
-fail: gh5_other_test_for_minipage.tex
-fail: gh5_warnings_from_minipage.tex
-fail: gh8_local_lof.tex
 fail: test_tagging_lof_alltotoc.tex
-fail: test_tagging_toc_as_molecule_b.tex
 
