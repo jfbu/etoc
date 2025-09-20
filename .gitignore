@@ -12,3 +12,4 @@ LISMOIAVANTTOUTPUSH
 *.html
 *.out
 *.out.ps
+test_issues/msgredirectwarning.txt

@@ -2,8 +2,7 @@
 
 LOG_FILE="./errorsummary"
 
-# use latexmk per default
-latex="${LATEX:-latexmk -pdf} -halt-on-error --interaction=batchmode "
+latex="${LATEX:-pdflatex} -halt-on-error --interaction=batchmode "
 
 # by default
 # execute tex only on committed files, allowing new ones to
@@ -56,6 +55,38 @@ fi
 for file in $filelist
 do
     ((nboffiles+=1))
+    ln -fs msgredirectwarning_as_is.txt msgredirectwarning.txt
+    $latex $file
+    if [ $? -eq 0 ]
+    then
+	:
+    else
+        ((nbofbadfiles+=1))
+        echo -e "\033[1;31m"
+        echo "$starline"
+        echo "**** PROBLÈME AVEC $file À LA PREMIÈRE COMPILATION"
+        echo -e "$starline\033[0m"
+	echo ""
+        status=1
+        errorfiles="$errorfiles $file"
+	continue
+    fi
+    $latex $file
+    if [ $? -eq 0 ]
+    then
+	:
+    else
+        ((nbofbadfiles+=1))
+        echo -e "\033[1;31m"
+        echo "$starline"
+        echo "**** PROBLÈME AVEC $file À LA SECONDE COMPILATION"
+        echo -e "$starline\033[0m"
+	echo ""
+        status=1
+        errorfiles="$errorfiles $file"
+	continue
+    fi
+    ln -fs msgredirectwarning_to_error.txt msgredirectwarning.txt
     $latex $file
     if [ $? -eq 0 ]
     then
@@ -66,7 +97,7 @@ do
         ((nbofbadfiles+=1))
         echo -e "\033[1;31m"
         echo "$starline"
-        echo "**** PROBLÈME AVEC $file"
+        echo "**** PROBLÈME AVEC $file SI WARNING=ERROR"
         echo -e "$starline\033[0m"
         status=1
         errorfiles="$errorfiles $file"

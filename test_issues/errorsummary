@@ -1,27 +1,147 @@
-[1;31m!!!! PROBLÈMES AVEC 2/26 TESTS:[0m
-[1;31mgh24_simplest_tabular.tex[0m
-LaTeX2e <2025-06-01> patch level 1
-L3 programming layer <2025-08-13>
- ***********
+[1;31m!!!! PROBLÈMES AVEC 12/26 TESTS:[0m
+[1;31mgh10_parbox.tex[0m
+! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
+(tagpdf)                Relation is not allowed! on line 17
+(tagpdf)                struct 9, Reference --> struct 10, text-unit
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+Type <return> to continue.
+ ...                                              
+                                                  
+l.17 
+     
+
+[1;31mgh24_simplest_tabular.tex[0m
 
 
 ! Package tagpdf Error: there is no open structure on the stack
 
 Type <return> to continue.
+ ...                                              
+                                                  
+l.32 \end{document}
+                   
+
+[1;31mgh25_start_finish.tex[0m
+! Package tagpdf Error: Parent-Child ':TOC' --> ':Span'.
+(tagpdf)                Relation is not allowed! on line 15
+(tagpdf)                struct 7, TOC --> struct 16, Em
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.15 
+     
+
+[1;31mgh5_other_test_for_minipage.tex[0m
+! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
+(tagpdf)                Relation is not allowed! on line 48
+(tagpdf)                struct 177, Reference --> struct 178, text-unit
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.48 
+     
+
+[1;31mgh5_warnings_from_minipage.tex[0m
+! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
+(tagpdf)                Relation is not allowed! on line 46
+(tagpdf)                struct 177, Reference --> struct 178, text-unit
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.46 
+     
+
+[1;31mgh8_local_lof.tex[0m
+
+! Package tagpdf Error: Destination '' has no related structure.
+(tagpdf)                /Ref not updated.
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.30 \end{document}
+                   
+
+[1;31mtest_tagging_compatmode.tex[0m
+Package tagpdf Info: writing ParentTree
+
+! Package tagpdf Error: something is wrong with the mcid--rerun
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.77 \end{document}
+                   
+
+[1;31mtest_tagging_compatmode_hyp.tex[0m
+Package tagpdf Info: writing ParentTree
+
+! Package tagpdf Error: something is wrong with the mcid--rerun
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.77 \end{document}
+                   
+
+[1;31mtest_tagging_fallbacklines.tex[0m
+Package tagpdf Info: writing ParentTree
+
+! Package tagpdf Error: something is wrong with the mcid--rerun
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.82 \end{document}
+                   
+
+[1;31mtest_tagging_fallbacklines_hyp.tex[0m
+Package tagpdf Info: writing ParentTree
+
+! Package tagpdf Error: something is wrong with the mcid--rerun
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.83 \end{document}
+                   
+
 [1;31mtest_tagging_lof_alltotoc.tex[0m
-warning  (pdf backend): unreferenced structure destination with name 'figure.str
-uct.393'
+Package tagpdf Info: writing ParentTree
 
-warning  (pdf backend): unreferenced structure destination with name 'figure.str
-uct.381'
+! Package tagpdf Error: something is wrong with the mcid--rerun
 
-warning  (pdf backend): unreferenced structure destination with name 'figure.str
-uct.372'
+Type <return> to continue.
+ ...                                              
+                                                  
+l.160 \end{document}
+                    
 
-warning  (pdf backend): unreferenced structure destination with name 'figure.str
-[1;31mFAIL=2, PASS=24, TOTAL=26[0m
+[1;31mtest_tagging_toc_as_molecule_b.tex[0m
+! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
+(tagpdf)                Relation is not allowed! on line 181
+(tagpdf)                struct 7, Reference --> struct 8, text-unit
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.181    \the\treetok
+                     
+
+[1;31mFAIL=12, PASS=14, TOTAL=26[0m
+fail: gh10_parbox.tex
 fail: gh24_simplest_tabular.tex
+fail: gh25_start_finish.tex
+fail: gh5_other_test_for_minipage.tex
+fail: gh5_warnings_from_minipage.tex
+fail: gh8_local_lof.tex
+fail: test_tagging_compatmode.tex
+fail: test_tagging_compatmode_hyp.tex
+fail: test_tagging_fallbacklines.tex
+fail: test_tagging_fallbacklines_hyp.tex
 fail: test_tagging_lof_alltotoc.tex
+fail: test_tagging_toc_as_molecule_b.tex
 
