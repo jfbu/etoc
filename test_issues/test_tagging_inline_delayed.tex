@@ -17,7 +17,7 @@
 \ExplSyntaxOff
 
 \begin{document}
-
+\ifdefined\NOTAGGING\PackageError{JFBU}{ABORTING AS THIS REQUIRES TAGGING ON}{}\fi
 \def\foo{}
 \makeatletter
 \let\protectededef\protected@edef

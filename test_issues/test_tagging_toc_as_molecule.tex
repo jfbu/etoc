@@ -90,6 +90,7 @@
                                          (\etoctagLbl{\etocthelinkednumber})}%
                        \etocthetocitemendtag}}%
 }
+\ifdefined\NOTAGGING\let\preparetreenodeastaggedtocitem\empty\fi
 \makeatother
 % The main objective of these somewhat subtle constructs is to build up
 % the expected by TikZ input tree in its syntax
@@ -111,9 +112,13 @@
 % we need a global in the "after" code because there will be a grouping
 % created always by \tableofcontents
 \etocsettocstyle
-  {\treetok{\node {\tagstop %% TODO: THINK OF A BETTER WAY TO HANDLE THIS
+  {\treetok{\node {\unless\ifdefined\NOTAGGING
+\tagstop %% TODO: THINK OF A BETTER WAY TO HANDLE THIS
+\fi
                    \parbox{2cm}{\raggedright THE eTOC AS A TIKZ MOLECULE}%
-                   \tagstart
+                   \unless\ifdefined\NOTAGGING
+\tagstart
+\fi
                    }%
            }%
   }
@@ -150,9 +155,9 @@
 % because \etoctaggingon/\etoctaggingoff is only related to the
 % *automatic* tagging done by etoc.  Here we are using user-added
 % manual tagging, using etoc helpers.
-\etoctagstartTOCcontents
+\unless\ifdefined\NOTAGGING\etoctagstartTOCcontents\fi
    \the\treetok
-\etoctagfinishTOCcontents
+\unless\ifdefined\NOTAGGING\etoctagfinishTOCcontents\fi
    \end{tikzpicture}%
 }
 

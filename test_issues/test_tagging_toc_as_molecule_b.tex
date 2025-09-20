@@ -85,7 +85,10 @@
 %% MEMO: I was originally using \etoctagReference but as the argument
 %% always is hyperlinked it has seemingly no impact on the final tree
 %% I see in the ngpdf.com editor
-  \protected@edef\treenode{node {\etocthetocitembegintag
+  \protected@edef\treenode{node {%
+\unless\ifdefined\NOTAGGING
+                                 \etocthetocitembegintag
+\fi
                                  \parbox{2.5cm}{%
                                    \Centering
                                    \textbf{\etocthelinkedname}
@@ -93,12 +96,18 @@
 %% tagged as artifact
 %% Using here Lbl directly under TOCI, not nested in \etoctagReference
 %% but it maybe it would be better to nest
+\ifdefined\NOTAGGING
+    (\textit{\etocthelinkedname})
+\else
                                    (\textit{\etoctagLbl{\etocthelinkednumber}})
+\fi
 %% \etocthelinkedpage carries hyperlink even if hyperref is left to its
 %% default to not link the page number
                                    on page \etocthelinkedpage
                                  }% parbox
+\unless\ifdefined\NOTAGGING
                                  \etocthetocitemendtag
+\fi
                                }% end of node
                           }% end of \treenode definition
 }
@@ -132,9 +141,14 @@
 %% could make it work seems I am lacking stuff from latex-lab such as
 %% \seq_gpush:Nx \g_@@_toc_stack_seq {{TOCI}\use:c{toclevel@#1}} ???
 \etocsettocstyle
-  {\treetok{\node {\tagstop %% TODO: THINK OF A BETTER WAY TO HANDLE THIS
+  {\treetok{\node {%
+\unless\ifdefined\NOTAGGING
+                   \tagstop %% TODO: THINK OF A BETTER WAY TO HANDLE THIS
+\fi
                    \parbox{2cm}{\raggedright THE eTOC AS A TIKZ MOLECULE}%
+\unless\ifdefined\NOTAGGING
                    \tagstart
+\fi
                    }%
            }%
   }
@@ -171,9 +185,13 @@
 % because \etoctaggingon/\etoctaggingoff is only related to the
 % *automatic* tagging done by etoc.  Here we are using user-added
 % manual tagging, using etoc helpers.
+\unless\ifdefined\NOTAGGING
 \etoctagstartTOCcontents
+\fi
    \the\treetok
+\unless\ifdefined\NOTAGGING
 \etoctagfinishTOCcontents
+\fi
    \end{tikzpicture}%
 }
 
