@@ -26,8 +26,15 @@ nboffiles=0
 nbofgoodfiles=0
 nbofbadfiles=0
 
+# I do not understand why in certain circumstances user has to hit
+# RET on end of run.
+exec &> >(tee -a $LOG_FILE)
+
+:> $LOG_FILE
+
 # pass any argument to let the script remove auxiliary files
 # for example ./dotests.sh clean
+# USE ABOVE SYNTAX FOR ANY UPDATE TO errorsummary TO BE COMMITTED
 # pass "no" as first argument to do not activate tagging,
 # clean all aux files and run latexmk
 # for example ./dotests.sh no
@@ -141,12 +148,6 @@ then
 else
     echo "N.B.: auxiliary files have all been removed before compilation"
 fi
-
-:> $LOG_FILE
-
-# I do not understand why in certain circumstances user has to hit
-# RET on end of run.
-exec &> >(tee -a $LOG_FILE)
 
 if [ $status -eq 0 ]
 then
