@@ -1,15 +1,4 @@
-[1;31m!!!! PROBLÈMES AVEC 4/18 TESTS:[0m
-[1;31mtestsnippet-02.tex[0m
-                                                  
-l.11 \end{document}
-                   
-
-LaTeX does not know anything more about this error, sorry.
-
-Try typing <return> to proceed.
-If that doesn't work, type X <return> to quit.
-
-
+[1;31m!!!! PROBLÈMES AVEC 1/18 TESTS:[0m
 [1;31mtestsnippet-11.tex[0m
                                                   
 l.83 \end
@@ -21,30 +10,5 @@ Try typing <return> to proceed.
 If that doesn't work, type X <return> to quit.
 
 
-[1;31mtestsnippet-12.tex[0m
-                                                  
-l.52 \endgroup
-              
-
-LaTeX does not know anything more about this error, sorry.
-
-Try typing <return> to proceed.
-If that doesn't work, type X <return> to quit.
-
-
-[1;31mtestsnippet-13.tex[0m
-                                                  
-l.75 \endgroup
-              
-
-LaTeX does not know anything more about this error, sorry.
-
-Try typing <return> to proceed.
-If that doesn't work, type X <return> to quit.
-
-
-[1;31mFAIL=4, PASS=14, TOTAL=18[0m
-fail: testsnippet-02.tex
+[1;31mFAIL=1, PASS=17, TOTAL=18[0m
 fail: testsnippet-11.tex
-fail: testsnippet-12.tex
-fail: testsnippet-13.tex
