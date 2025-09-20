@@ -1,38 +1,39 @@
 [1;31m!!!! PROBLÈMES AVEC 3/26 TESTS:[0m
-[1;31mgh25_start_finish.tex[0m
+[1;31mtest_tagging_inline_delayed.tex[0m
+No file test_tagging_inline_delayed.toc.
+\tf@toc=\write4
+\openout4 = `test_tagging_inline_delayed.toc'.
+
+
+! LaTeX socket Error: Socket 'tagsupport/minipage/before' undeclared!
+
+For immediate help type H <return>.
+ ...                                              
                                                   
-l.22 
-     
-
-LaTeX does not know anything more about this error, sorry.
-
-Try typing <return> to proceed.
-If that doesn't work, type X <return> to quit.
+[1;31mtest_tagging_toc_as_molecule.tex[0m
+\subsectiontok=\toks35
+\tf@toc=\write5
+\openout5 = `test_tagging_toc_as_molecule.toc'.
 
 
-[1;31mgh8_local_lof.tex[0m
+! LaTeX socket Error: Socket 'tagsupport/minipage/before' undeclared!
+
+For immediate help type H <return>.
+ ...                                              
                                                   
-l.37 \end{document}
-                   
-
-LaTeX does not know anything more about this error, sorry.
-
-Try typing <return> to proceed.
-If that doesn't work, type X <return> to quit.
+[1;31mtest_tagging_toc_as_molecule_b.tex[0m
+\subsectiontok=\toks35
+\tf@toc=\write5
+\openout5 = `test_tagging_toc_as_molecule_b.toc'.
 
 
-[1;31mtest_tagging_lof_alltotoc.tex[0m
+! LaTeX socket Error: Socket 'tagsupport/minipage/before' undeclared!
+
+For immediate help type H <return>.
+ ...                                              
                                                   
-l.160 \end{document}
-                    
-
-LaTeX does not know anything more about this error, sorry.
-
-Try typing <return> to proceed.
-If that doesn't work, type X <return> to quit.
-
-
 [1;31mFAIL=3, PASS=23, TOTAL=26[0m
-fail: gh25_start_finish.tex
-fail: gh8_local_lof.tex
-fail: test_tagging_lof_alltotoc.tex
+fail: test_tagging_inline_delayed.tex
+fail: test_tagging_toc_as_molecule.tex
+fail: test_tagging_toc_as_molecule_b.tex
+

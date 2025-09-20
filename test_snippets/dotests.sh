@@ -30,8 +30,8 @@ nbofbadfiles=0
 # pass any argument to let the script remove auxiliary files
 # for example ./dotests.sh clean
 # pass "no" as first argument to do not activate tagging,
-# then pdflatex is used (latexmk requires -usepretex options...)
-# for example ./dotests.sh no clean
+# clean all aux files and run latexmk
+# for example ./dotests.sh no
 if [ $# -eq 0 ]
 then
     :
@@ -40,9 +40,10 @@ else
     then
         echo -e "\033[1;31m"
         echo "$starline"
-        echo "**** NOT DOING ANY TAGGING! AND IGNORING LATEX ENV VARIABLE!"
+        echo "**** NOT DOING ANY TAGGING!  CLEANING ALL AUX AND USING latexmk!"
         echo -e "$starline\033[0m"
-        latex="pdflatex -halt-on-error --interaction=batchmode \\def\\NOTAGGING{}\\input "
+        rm -f *.{aux,toc,log,div,lof,lot,out,ps,fls,fdb_latexmk}
+        latex="latexmk -pdf -halt-on-error --interaction=batchmode -usepretex=\\def\\NOTAGGING{}"
 	shift
     fi
 fi
@@ -101,6 +102,7 @@ else
     do
         echo "fail: $file"
     done
+    echo ""
 fi
 
 exit $status

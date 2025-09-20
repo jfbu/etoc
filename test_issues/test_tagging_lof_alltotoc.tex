@@ -13,12 +13,15 @@
 \newif\iftagging
 \taggingtrue
 \iftagging
+\ifdefined\NOTAGGING
+\else
 \DocumentMetadata{
  uncompress,
  pdfversion=1.7,
  lang=en-US,
  testphase=phase-III
 }
+\fi
 \fi
 \ExplSyntaxOn
   \msg_redirect_module:nnn { tag } { warning } { error }
