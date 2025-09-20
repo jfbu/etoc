@@ -26,8 +26,15 @@ nboffiles=0
 nbofgoodfiles=0
 nbofbadfiles=0
 
+# I do not understand why in certain circumstances user has to hit
+# RET on end of run.
+exec &> >(tee -a $LOG_FILE)
+
+:> $LOG_FILE
+
 # pass any argument to let the script remove auxiliary files
 # for example ./dotests.sh clean
+# USE ABOVE SYNTAX FOR ANY UPDATE TO errorsummary TO BE COMMITTED
 # pass "no" as first argument to do not activate tagging,
 # clean all aux files and run latexmk
 # for example ./dotests.sh no
@@ -42,6 +49,7 @@ else
         echo "**** NOT DOING ANY TAGGING!  CLEANING ALL AUX AND USING latexmk!"
         echo -e "$starline\033[0m"
         rm -f *.{aux,toc,log,div,lof,lot,out,ps,fls,fdb_latexmk}
+	ln -fs msgredirectwarning_as_is.txt msgredirectwarning.txt
         latex="latexmk -pdf -halt-on-error --interaction=batchmode -usepretex=\\def\\NOTAGGING{}"
 	shift
     fi
@@ -86,7 +94,36 @@ do
         errorfiles="$errorfiles $file"
 	continue
     fi
+    $latex $file
+    if [ $? -eq 0 ]
+    then
+	:
+    else
+        ((nbofbadfiles+=1))
+        echo -e "\033[1;31m"
+        echo "$starline"
+        echo "**** PROBLÈME AVEC $file À LA TROISIÈME COMPILATION"
+        echo -e "$starline\033[0m"
+	echo ""
+        status=1
+        errorfiles="$errorfiles $file"
+	continue
+    fi
     ln -fs msgredirectwarning_to_error.txt msgredirectwarning.txt
+    $latex $file
+    if [ $? -eq 0 ]
+    then
+	:
+    else
+        ((nbofbadfiles+=1))
+        echo -e "\033[1;31m"
+        echo "$starline"
+        echo "**** PROBLÈME AVEC $file SI WARNING=ERROR À LA QUATRIÈME COMPILATION"
+        echo -e "$starline\033[0m"
+        status=1
+        errorfiles="$errorfiles $file"
+	continue
+    fi
     $latex $file
     if [ $? -eq 0 ]
     then
@@ -97,7 +134,7 @@ do
         ((nbofbadfiles+=1))
         echo -e "\033[1;31m"
         echo "$starline"
-        echo "**** PROBLÈME AVEC $file SI WARNING=ERROR"
+        echo "**** PROBLÈME AVEC $file SI WARNING=ERROR À LA CINQUIÈME COMPILATION"
         echo -e "$starline\033[0m"
         status=1
         errorfiles="$errorfiles $file"
@@ -111,12 +148,6 @@ then
 else
     echo "N.B.: auxiliary files have all been removed before compilation"
 fi
-
-:> $LOG_FILE
-
-# I do not understand why in certain circumstances user has to hit
-# RET on end of run.
-exec &> >(tee -a $LOG_FILE)
 
 if [ $status -eq 0 ]
 then
