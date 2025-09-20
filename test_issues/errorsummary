@@ -1,39 +1,243 @@
-[1;31m!!!! PROBLÈMES AVEC 3/26 TESTS:[0m
+[1;31m!!!! PROBLÈMES AVEC 20/26 TESTS:[0m
+[1;31mgh10_parbox.tex[0m
+! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
+(tagpdf)                Relation is not allowed! on line 28
+(tagpdf)                struct 9, Reference --> struct 10, text-unit
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.28 
+     
+
+[1;31mgh11_TOC_starts_in_hmode.tex[0m
+Package tagpdf Info: writing ParentTree
+
+! Package tagpdf Error: something is wrong with the mcid--rerun
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.43 \end{document}
+                   
+
+[1;31mgh1_no_open_structure_error.tex[0m
+Package tagpdf Info: writing ParentTree
+
+! Package tagpdf Error: something is wrong with the mcid--rerun
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.52 \end{document}
+                   
+
+[1;31mgh24_simplest_tabular.tex[0m
+
+
+! Package tagpdf Error: there is no open structure on the stack
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.42 \end{document}
+                   
+
+[1;31mgh25_start_finish.tex[0m
+! Package tagpdf Error: Parent-Child ':TOC' --> ':Span'.
+(tagpdf)                Relation is not allowed! on line 25
+(tagpdf)                struct 7, TOC --> struct 16, Em
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.25 
+     
+
+[1;31mgh3_another_compat_mode.tex[0m
+Package tagpdf Info: writing ParentTree
+
+! Package tagpdf Error: something is wrong with the mcid--rerun
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.70 \end{document}
+                   
+
+[1;31mgh4_framedstyle_relation_not_allowed.tex[0m
+Package tagpdf Info: writing ParentTree
+
+! Package tagpdf Error: something is wrong with the mcid--rerun
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.63 \end{document}
+                   
+
+[1;31mgh5_other_test_for_minipage.tex[0m
+! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
+(tagpdf)                Relation is not allowed! on line 58
+(tagpdf)                struct 177, Reference --> struct 178, text-unit
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.58 
+     
+
+[1;31mgh5_warnings_from_minipage.tex[0m
+! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
+(tagpdf)                Relation is not allowed! on line 56
+(tagpdf)                struct 177, Reference --> struct 178, text-unit
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.56 
+     
+
+[1;31mgh8_local_lof.tex[0m
+
+! Package tagpdf Error: Destination '' has no related structure.
+(tagpdf)                /Ref not updated.
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.40 \end{document}
+                   
+
+[1;31mgh9_error_if_no_par_is_used.tex[0m
+Package tagpdf Info: writing ParentTree
+
+! Package tagpdf Error: something is wrong with the mcid--rerun
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.70 \end{document}
+                   
+
+[1;31mgh9_with_localtoc.tex[0m
+Package tagpdf Info: writing ParentTree
+
+! Package tagpdf Error: something is wrong with the mcid--rerun
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.79 \end{document}
+                   
+
+[1;31mtest_tagging_compatmode.tex[0m
+Package tagpdf Info: writing ParentTree
+
+! Package tagpdf Error: something is wrong with the mcid--rerun
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.87 \end{document}
+                   
+
+[1;31mtest_tagging_compatmode_hyp.tex[0m
+Package tagpdf Info: writing ParentTree
+
+! Package tagpdf Error: something is wrong with the mcid--rerun
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.87 \end{document}
+                   
+
+[1;31mtest_tagging_fallbacklines.tex[0m
+Package tagpdf Info: writing ParentTree
+
+! Package tagpdf Error: something is wrong with the mcid--rerun
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.92 \end{document}
+                   
+
+[1;31mtest_tagging_fallbacklines_hyp.tex[0m
+Package tagpdf Info: writing ParentTree
+
+! Package tagpdf Error: something is wrong with the mcid--rerun
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.93 \end{document}
+                   
+
 [1;31mtest_tagging_inline_delayed.tex[0m
-No file test_tagging_inline_delayed.toc.
-\tf@toc=\write4
-\openout4 = `test_tagging_inline_delayed.toc'.
+Package tagpdf Info: writing ParentTree
 
+! Package tagpdf Error: something is wrong with the mcid--rerun
 
-! LaTeX socket Error: Socket 'tagsupport/minipage/before' undeclared!
-
-For immediate help type H <return>.
+Type <return> to continue.
  ...                                              
                                                   
+l.116 \end{document}
+                    
+
+[1;31mtest_tagging_lof_alltotoc.tex[0m
+Package tagpdf Info: writing ParentTree
+
+! Package tagpdf Error: something is wrong with the mcid--rerun
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.160 \end{document}
+                    
+
 [1;31mtest_tagging_toc_as_molecule.tex[0m
-\subsectiontok=\toks35
-\tf@toc=\write5
-\openout5 = `test_tagging_toc_as_molecule.toc'.
+Package tagpdf Info: writing ParentTree
 
+! Package tagpdf Error: something is wrong with the mcid--rerun
 
-! LaTeX socket Error: Socket 'tagsupport/minipage/before' undeclared!
-
-For immediate help type H <return>.
+Type <return> to continue.
  ...                                              
                                                   
+l.212 \end{document}
+                    
+
 [1;31mtest_tagging_toc_as_molecule_b.tex[0m
-\subsectiontok=\toks35
-\tf@toc=\write5
-\openout5 = `test_tagging_toc_as_molecule_b.toc'.
+! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
+(tagpdf)                Relation is not allowed! on line 191
+(tagpdf)                struct 7, Reference --> struct 8, text-unit
 
-
-! LaTeX socket Error: Socket 'tagsupport/minipage/before' undeclared!
-
-For immediate help type H <return>.
+Type <return> to continue.
  ...                                              
                                                   
-[1;31mFAIL=3, PASS=23, TOTAL=26[0m
+l.191    \the\treetok
+                     
+
+[1;31mFAIL=20, PASS=6, TOTAL=26[0m
+fail: gh10_parbox.tex
+fail: gh11_TOC_starts_in_hmode.tex
+fail: gh1_no_open_structure_error.tex
+fail: gh24_simplest_tabular.tex
+fail: gh25_start_finish.tex
+fail: gh3_another_compat_mode.tex
+fail: gh4_framedstyle_relation_not_allowed.tex
+fail: gh5_other_test_for_minipage.tex
+fail: gh5_warnings_from_minipage.tex
+fail: gh8_local_lof.tex
+fail: gh9_error_if_no_par_is_used.tex
+fail: gh9_with_localtoc.tex
+fail: test_tagging_compatmode.tex
+fail: test_tagging_compatmode_hyp.tex
+fail: test_tagging_fallbacklines.tex
+fail: test_tagging_fallbacklines_hyp.tex
 fail: test_tagging_inline_delayed.tex
+fail: test_tagging_lof_alltotoc.tex
 fail: test_tagging_toc_as_molecule.tex
 fail: test_tagging_toc_as_molecule_b.tex
 
