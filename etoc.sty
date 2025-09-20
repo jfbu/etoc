@@ -425,7 +425,7 @@
 %% things such as
 %%     \centeredline{|\global\let\etocthedest\@contentsline@destination|}
 %%     \centeredline{|\Etoc@global\def\etocthelevelname{#1}|}
-%% 2024 JAN
+%%
 %% ??
 %%
 %% Attention that it would be wrong to make the next definitions only if
@@ -436,16 +436,38 @@
 %% of user defined prefix and contents!
 %%
 %% Let's avoid submitting \csbc{etocthename} to a full \csa{edef} here.
+%%
 %% ATTENTION: usage of tagpdf internal command is not best practice.
+%%
 %% ATTENTION: this means that this macro will have the same frailty
 %% against \csa{edef} as \csa{etocthename} and one should use
 %% \csa{protected@edef} when using it, or a single expansion.
+%%
+%% 2025 SEP
+%% \csa{__tag_toc_contentsline_begin:nnn} does not exist anymore
+%% (memo: commit c2f7848d5 Sun Jul 14 affecting
+%% required/latex-lab/latex-lab-toc.dtx).
+%% Anyway using it was bad as mentioned earlier.
+%%
+%% At this stage I have no idea why I used only \etocthename
+%% expanded once as second argument (there were only three not four).
+%% To be honest I have no idea what this \etocthetocitembegintag
+%% is supposed to be used for (perhaps I should check what I
+%% said in user manual) and it is not used anywhere in the code,
+%% it must be something for end-user.  This \csa{edef} is a bit
+%% frightening, let's put all the tagging socket in \csa{unexpanded},
+%% and use the raw data, cross fingers and see what my test suite says.
       \Etoc@global\edef\etocthetocitembegintag{%
         \@ifundefined{toclevel@#1}%
           {\etoc@namedef{toclevel@#1}{\the\numexpr\Etoc@level}}%
           {}%
-        \__tag_toc_contentsline_begin:nnn
-            {#1}{\unexpanded\expandafter{\etocthename}}{#4}%
+        \unexpanded{\UseTaggingSocket{toc/contentsline/before}{%
+            {#1}{#2}{#3}{#4}%
+        }}%
+%% 2025 SEP
+%%
+%% I also at this stage have no clear idea for the rationale beyond
+%% these next two lines.
         \tag_struct_begin:n{tag=Reference}%
         \tag_mc_begin:n{artifact=layout}%
       }%
@@ -453,10 +475,17 @@
 %% Kernel code has no \csa{tag_if_active:T} in \csa{@contentsline@cfgpoint@after}
 %% expansion.  \csa{edef} to expand |#1| to be symmetrical to start, but
 %% anyhow a priori, |#1| is always a priori simply a string.
-      \Etoc@global\edef\etocthetocitemendtag{%
+%%
+%% 2025 SEP
+%% \csa{__tag_toc_contentsline_end:n} does not exist anymore
+%% (memo: commit c2f7848d5 Sun Jul 14 affecting
+%% required/latex-lab/latex-lab-toc.dtx).
+%% Anyway using it was bad as mentioned earlier.
+%% No \csa{edef}.
+      \Etoc@global\def\etocthetocitemendtag{%
         \tag_mc_end:
         \tag_struct_end:
-        \__tag_toc_contentsline_end:n {#1}%
+        \UseTaggingSocket{toc/contentsline/after}{{#1}{#2}{#3}{#4}}%
       }%
     \fi
     \ifEtoc@tagging
