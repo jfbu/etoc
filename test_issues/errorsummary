@@ -1,50 +1,38 @@
-[1;31m!!!! PROBLÈMES AVEC 4/26 TESTS:[0m
-[1;31mgh24_simplest_tabular.tex[0m
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-! Package tagpdf Error: there is no open structure on the stack
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.39 \end{document}
-                    
+[1;31m!!!! PROBLÈMES AVEC 3/26 TESTS:[0m
 [1;31mgh25_start_finish.tex[0m
-
-! Package tagpdf Error: Parent-Child 'TOC/' --> 'Em/pdf2'.
-(tagpdf)                Relation is not allowed (struct 6, /TOC --> struct
-(tagpdf)                15) on line 22
-
-Type <return> to continue.
- ...                                              
                                                   
 l.22 
-      
+     
+
+LaTeX does not know anything more about this error, sorry.
+
+Try typing <return> to proceed.
+If that doesn't work, type X <return> to quit.
+
+
 [1;31mgh8_local_lof.tex[0m
-
-
-! Package tagpdf Error: Destination  has no related structure.
-(tagpdf)                /Ref for structure 10 not updated
-
-Type <return> to continue.
- ...                                              
                                                   
 l.37 \end{document}
-                    
+                   
+
+LaTeX does not know anything more about this error, sorry.
+
+Try typing <return> to proceed.
+If that doesn't work, type X <return> to quit.
+
+
 [1;31mtest_tagging_lof_alltotoc.tex[0m
-
-
-! Package tagpdf Error: Destination figure.1 has no related structure.
-(tagpdf)                /Ref for structure 63 not updated
-
-Type <return> to continue.
- ...                                              
                                                   
 l.160 \end{document}
-                     
-[1;31mFAIL=4, PASS=22, TOTAL=26[0m
-fail: gh24_simplest_tabular.tex
+                    
+
+LaTeX does not know anything more about this error, sorry.
+
+Try typing <return> to proceed.
+If that doesn't work, type X <return> to quit.
+
+
+[1;31mFAIL=3, PASS=23, TOTAL=26[0m
 fail: gh25_start_finish.tex
 fail: gh8_local_lof.tex
 fail: test_tagging_lof_alltotoc.tex
