@@ -2,8 +2,20 @@
 
 LOG_FILE="./errorsummary"
 
-# export LATEX="latexmk -pdf" for using latexmk
-latex="${LATEX:-pdflatex} -halt-on-error --interaction=batchmode "
+# use latexmk per default
+latex="${LATEX:-latexmk -pdf} -halt-on-error --interaction=batchmode "
+
+# by default
+# execute tex only on committed files, allowing new ones to
+# reside in directory while they are being manually tested
+# but allow override via a custome file containing a space
+# separated list of testsnippet-XX.tex names.
+if [ -f "testthose" ]
+then
+    read -r filelist<"testthose"
+else
+    filelist="$(git ls-files | grep tex)"
+fi
 
 shopt -s nullglob
 
@@ -40,9 +52,7 @@ then
     rm -f *.{aux,toc,log,div,lof,lot,out,ps,fls,fdb_latexmk}
 fi
 
-# execute tex only on committed files, allowing new ones to
-# reside in directory while they are being manually tested
-for file in $(git ls-files | grep tex)
+for file in $filelist
 do
     ((nboffiles+=1))
     $latex $file
@@ -78,6 +88,7 @@ if [ $status -eq 0 ]
 then
     echo -e "\033[32m==== Aucune erreur lors des compilations TeX.     ====\033[0m"
     echo -e "\033[32mFAIL=$nbofbadfiles, PASS=$nbofgoodfiles, TOTAL=$nboffiles\033[0m"
+    echo ""
 else
     echo -e "\033[1;31m!!!! PROBLÈMES AVEC $nbofbadfiles/$nboffiles TESTS:\033[0m"
     for file in $errorfiles

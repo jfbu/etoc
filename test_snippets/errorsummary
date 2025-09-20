@@ -1,4 +1,15 @@
-[1;31m!!!! PROBLÈMES AVEC 1/18 TESTS:[0m
+[1;31m!!!! PROBLÈMES AVEC 6/18 TESTS:[0m
+[1;31mtestsnippet-01.tex[0m
+                                                  
+l.7 ...TOC\MyLocalTOC\else\localtableofcontents\fi
+                                                  \fi
+
+LaTeX does not know anything more about this error, sorry.
+
+Try typing <return> to proceed.
+If that doesn't work, type X <return> to quit.
+
+
 [1;31mtestsnippet-11.tex[0m
                                                   
 l.83 \end
@@ -10,5 +21,54 @@ Try typing <return> to proceed.
 If that doesn't work, type X <return> to quit.
 
 
-[1;31mFAIL=1, PASS=17, TOTAL=18[0m
+[1;31mtestsnippet-12.tex[0m
+                                                  
+l.52 \endgroup
+              
+
+LaTeX does not know anything more about this error, sorry.
+
+Try typing <return> to proceed.
+If that doesn't work, type X <return> to quit.
+
+
+[1;31mtestsnippet-13.tex[0m
+                                                  
+l.75 \endgroup
+              
+
+LaTeX does not know anything more about this error, sorry.
+
+Try typing <return> to proceed.
+If that doesn't work, type X <return> to quit.
+
+
+[1;31mtestsnippet-19.tex[0m
+                                                  
+l.50 \endgroup
+              
+
+LaTeX does not know anything more about this error, sorry.
+
+Try typing <return> to proceed.
+If that doesn't work, type X <return> to quit.
+
+
+[1;31mtestsnippet-20.tex[0m
+                                                  
+l.35 \end
+         {center}
+
+LaTeX does not know anything more about this error, sorry.
+
+Try typing <return> to proceed.
+If that doesn't work, type X <return> to quit.
+
+
+[1;31mFAIL=6, PASS=12, TOTAL=18[0m
+fail: testsnippet-01.tex
 fail: testsnippet-11.tex
+fail: testsnippet-12.tex
+fail: testsnippet-13.tex
+fail: testsnippet-19.tex
+fail: testsnippet-20.tex
