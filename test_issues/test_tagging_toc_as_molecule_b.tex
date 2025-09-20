@@ -10,15 +10,7 @@
 %% worried though in ngpdf.com about the boxes shown in the two panels view.
 
 % This is a variation on the test_tagging_toc_as_molecule.tex
-\ifdefined\NOTAGGING
-\else
-\DocumentMetadata{
- uncompress,
- pdfversion=1.7,
- lang=en-US,
- testphase=phase-III
-}
-\fi
+\input documentmetadata.txt
 \ExplSyntaxOn
  \msg_redirect_module:nnn { tag } { warning } { error }
 \ExplSyntaxOff
