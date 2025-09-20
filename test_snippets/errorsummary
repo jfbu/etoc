@@ -1,15 +1,15 @@
 [1;31m!!!! PROBLÈMES AVEC 6/18 TESTS:[0m
 [1;31mtestsnippet-01.tex[0m
-! Package tagpdf Error: Parent-Child ':TOC' --> ':L'.
-(tagpdf)                Relation is not allowed! on line 7
-(tagpdf)                struct 14, text-unit --> struct 15, enumerate
+LaTeX2e <2025-06-01> patch level 1
+L3 programming layer <2025-08-13>
+ ***********
 
-Type <return> to continue.
+! Package tagpdf Error: The number of automatic begin (22) and end (21)
+(tagpdf)                text-unit para hooks differ!
+
+For immediate help type H <return>.
  ...                                              
                                                   
-l.7 ...TOC\MyLocalTOC\else\localtableofcontents\fi
-                                                  \fi
-
 [1;31mtestsnippet-11.tex[0m
 ! Package tagpdf Error: Parent-Child ':Note' --> ':TOC'.
 (tagpdf)                Relation is not allowed! on line 83
@@ -55,15 +55,15 @@ l.50 \endgroup
               
 
 [1;31mtestsnippet-20.tex[0m
-! Package tagpdf Error: Parent-Child ':Reference' --> ':P'.
-(tagpdf)                Relation is not allowed! on line 35
-(tagpdf)                struct 13, Reference --> struct 14, text
+
+
+! Package tagpdf Error: there is no open structure on the stack
 
 Type <return> to continue.
  ...                                              
                                                   
-l.35 \end
-         {center}
+l.11 \end{document}
+                   
 
 [1;31mFAIL=6, PASS=12, TOTAL=18[0m
 fail: testsnippet-01.tex
@@ -72,3 +72,4 @@ fail: testsnippet-12.tex
 fail: testsnippet-13.tex
 fail: testsnippet-19.tex
 fail: testsnippet-20.tex
+

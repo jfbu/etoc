@@ -39,8 +39,6 @@
 %%%%%%% need to update this one to have them numbered
 \setcounter{secnumdepth}{3}
 
-\ExplSyntaxOn
- \msg_redirect_module:nnn { tag } { warning } { error }
-\ExplSyntaxOff
+\input msgredirectwarning.txt
 
 \endinput
