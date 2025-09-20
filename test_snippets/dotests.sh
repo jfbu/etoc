@@ -94,7 +94,7 @@ else
     for file in $errorfiles
     do
         echo -e "\033[1;31m$file\033[0m"
-        tail -n 20 $(basename $file .tex).log | head -n 10
+        tail -n 26 $(basename $file .tex).log | head -n 10
     done
     echo -e "\033[1;31mFAIL=$nbofbadfiles, PASS=$nbofgoodfiles, TOTAL=$nboffiles\033[0m"
     for file in $errorfiles

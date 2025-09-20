@@ -1,69 +1,69 @@
 [1;31m!!!! PROBLÈMES AVEC 6/18 TESTS:[0m
 [1;31mtestsnippet-01.tex[0m
+! Package tagpdf Error: Parent-Child ':TOC' --> ':L'.
+(tagpdf)                Relation is not allowed! on line 7
+(tagpdf)                struct 14, text-unit --> struct 15, enumerate
+
+Type <return> to continue.
+ ...                                              
                                                   
 l.7 ...TOC\MyLocalTOC\else\localtableofcontents\fi
                                                   \fi
 
-LaTeX does not know anything more about this error, sorry.
-
-Try typing <return> to proceed.
-If that doesn't work, type X <return> to quit.
-
-
 [1;31mtestsnippet-11.tex[0m
+! Package tagpdf Error: Parent-Child ':Note' --> ':TOC'.
+(tagpdf)                Relation is not allowed! on line 83
+(tagpdf)                struct 5, float --> struct 6, TOC
+
+Type <return> to continue.
+ ...                                              
                                                   
 l.83 \end
          {figure}
 
-LaTeX does not know anything more about this error, sorry.
-
-Try typing <return> to proceed.
-If that doesn't work, type X <return> to quit.
-
-
 [1;31mtestsnippet-12.tex[0m
+! Package tagpdf Error: Parent-Child ':TOC' --> ':P'.
+(tagpdf)                Relation is not allowed! on line 52
+(tagpdf)                struct 49, text-unit --> struct 50, text
+
+Type <return> to continue.
+ ...                                              
                                                   
 l.52 \endgroup
               
 
-LaTeX does not know anything more about this error, sorry.
-
-Try typing <return> to proceed.
-If that doesn't work, type X <return> to quit.
-
-
 [1;31mtestsnippet-13.tex[0m
+! Package tagpdf Error: Parent-Child ':TOC' --> ':P'.
+(tagpdf)                Relation is not allowed! on line 75
+(tagpdf)                struct 11, text-unit --> struct 12, text
+
+Type <return> to continue.
+ ...                                              
                                                   
 l.75 \endgroup
               
 
-LaTeX does not know anything more about this error, sorry.
-
-Try typing <return> to proceed.
-If that doesn't work, type X <return> to quit.
-
-
 [1;31mtestsnippet-19.tex[0m
+! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
+(tagpdf)                Relation is not allowed! on line 50
+(tagpdf)                struct 11, Reference --> struct 14, text-unit
+
+Type <return> to continue.
+ ...                                              
                                                   
 l.50 \endgroup
               
 
-LaTeX does not know anything more about this error, sorry.
-
-Try typing <return> to proceed.
-If that doesn't work, type X <return> to quit.
-
-
 [1;31mtestsnippet-20.tex[0m
+! Package tagpdf Error: Parent-Child ':Reference' --> ':P'.
+(tagpdf)                Relation is not allowed! on line 35
+(tagpdf)                struct 13, Reference --> struct 14, text
+
+Type <return> to continue.
+ ...                                              
                                                   
 l.35 \end
          {center}
-
-LaTeX does not know anything more about this error, sorry.
-
-Try typing <return> to proceed.
-If that doesn't work, type X <return> to quit.
-
 
 [1;31mFAIL=6, PASS=12, TOTAL=18[0m
 fail: testsnippet-01.tex
