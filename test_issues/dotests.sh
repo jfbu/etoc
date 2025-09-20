@@ -2,8 +2,20 @@
 
 LOG_FILE="./errorsummary"
 
-# export LATEX="latexmk -pdf" for using latexmk
-latex="${LATEX:-pdflatex} -halt-on-error --interaction=batchmode "
+# use latexmk per default
+latex="${LATEX:-latexmk -pdf} -halt-on-error --interaction=batchmode "
+
+# by default
+# execute tex only on committed files, allowing new ones to
+# reside in directory while they are being manually tested
+# but allow override via a custome file containing a space
+# separated list of testsnippet-XX.tex names.
+if [ -f "testthose" ]
+then
+    read -r filelist<"testthose"
+else
+    filelist="$(git ls-files | grep tex)"
+fi
 
 shopt -s nullglob
 
@@ -17,16 +29,30 @@ nbofbadfiles=0
 
 # pass any argument to let the script remove auxiliary files
 # for example ./dotests.sh clean
+# pass "no" as first argument to do not activate tagging,
+# then pdflatex is used (latexmk requires -usepretex options...)
+# for example ./dotests.sh no clean
 if [ $# -eq 0 ]
 then
     :
 else
+    if [ "$1" = "no" ]
+    then
+        echo -e "\033[1;31m"
+        echo "$starline"
+        echo "**** NOT DOING ANY TAGGING! AND IGNORING LATEX ENV VARIABLE!"
+        echo -e "$starline\033[0m"
+        latex="pdflatex -halt-on-error --interaction=batchmode \\def\\NOTAGGING{}\\input "
+	shift
+    fi
+fi
+
+if [ $# -gt 0 ]
+then
     rm -f *.{aux,toc,log,div,lof,lot,out,ps,fls,fdb_latexmk}
 fi
 
-# execute tex only on committed files, allowing new ones to
-# reside in directory while they are being manually tested
-for file in $(git ls-files | grep tex)
+for file in $filelist
 do
     ((nboffiles+=1))
     $latex $file
@@ -61,12 +87,14 @@ exec &> >(tee -a $LOG_FILE)
 if [ $status -eq 0 ]
 then
     echo -e "\033[32m==== Aucune erreur lors des compilations TeX.     ====\033[0m"
+    echo -e "\033[32mFAIL=$nbofbadfiles, PASS=$nbofgoodfiles, TOTAL=$nboffiles\033[0m"
+    echo ""
 else
     echo -e "\033[1;31m!!!! PROBLÈMES AVEC $nbofbadfiles/$nboffiles TESTS:\033[0m"
     for file in $errorfiles
     do
         echo -e "\033[1;31m$file\033[0m"
-        tail -n 20 $(basename $file .tex).log | head -n 10
+        tail -n 26 $(basename $file .tex).log | head -n 10
     done
     echo -e "\033[1;31mFAIL=$nbofbadfiles, PASS=$nbofgoodfiles, TOTAL=$nboffiles\033[0m"
     for file in $errorfiles
