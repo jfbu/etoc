@@ -517,7 +517,13 @@
 %%
 %% MEMO: can not use here \csbc{etocthetocitemendtag} which does not
 %% query \csbc{ifEtoc@tagginginline}.
-      \@contentsline@cfgpoint@before{#1}{\etocthename}{#3}{#4}%
+%%
+%% 2025 SEP
+%%
+%% No idea why I had used \csbc{etocthename} here in 2024 and not |#2|.
+%%
+%% There is no more a \csa{@contentsline@cfgpoint@before}.
+      \UseTaggingSocket{toc/contentsline/before}{{#1}{#2}{#3}{#4}}%
     \fi
 %% 2024 JAN
 %% In order to fix the |etoc/jfbu#6| issue regarding \csa{emph} which
@@ -536,6 +542,7 @@
       \tag_struct_end:
     \fi
 %% 2024 JAN
+%%
 %% MEMO: Attention that groups may be closed in the certain rare cases
 %% by the user code from prefix and contents: \csbc{etocthetocitemendtag}
 %% is not global, but done with \csbc{Etoc@global}.  But more
@@ -545,8 +552,12 @@
 %% stage.  No need to worry about using \csbc{etocthename} which may
 %% actually have the same (a priori rare) problem with an unbalanced
 %% group closing in user prefix plus contents code.
+%%
+%% 2025 SEP
+%%
+%% There is no \csa{@contentsline@cfgpoint@after} anymore.
     \ifEtoc@tagging
-      \@contentsline@cfgpoint@after{#1}{#2}{#3}{#4}%
+      \UseTaggingSocket{toc/contentsline/after}{{#1}{#2}{#3}{#4}}%
     \fi
 }
 %% 2024 JAN
@@ -882,7 +893,7 @@
 %% \csbc{Etoc@@startlocaltoc}/\csbc{Etoc@@startlocallistof}
 %%
 %% 2025 SEP
-%% no more \@starttoc@cfgpoint@before{toc}%
+%% No more \@starttoc@cfgpoint@before{toc}%
   \ifEtoc@tagging
     \unless\ifEtoc@localtoc
       \Etoc@tagging@starttoc@before
