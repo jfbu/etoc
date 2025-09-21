@@ -1,0 +1,173 @@
+#!/bin/bash
+
+LOG_FILE="./errorsummary"
+
+latex="${LATEX:-pdflatex} -halt-on-error --interaction=batchmode "
+
+# by default
+# execute tex only on committed files, allowing new ones to
+# reside in directory while they are being manually tested
+# but allow override via a custome file containing a space
+# separated list of testsnippet-XX.tex names.
+if [ -f "testthose" ]
+then
+    read -r filelist<"testthose"
+else
+    filelist="$(git ls-files | grep tex)"
+fi
+
+shopt -s nullglob
+
+starline="******************************************************************************"
+
+status=0
+errorfiles=""
+nboffiles=0
+nbofgoodfiles=0
+nbofbadfiles=0
+
+# I do not understand why in certain circumstances user has to hit
+# RET on end of run.
+exec &> >(tee -a $LOG_FILE)
+
+:> $LOG_FILE
+
+# pass any argument to let the script remove auxiliary files
+# for example ./dotests.sh clean
+# USE ABOVE SYNTAX FOR ANY UPDATE TO errorsummary TO BE COMMITTED
+# pass "no" as first argument to do not activate tagging,
+# clean all aux files and run latexmk
+# for example ./dotests.sh no
+if [ $# -eq 0 ]
+then
+    :
+else
+    if [ "$1" = "no" ]
+    then
+        echo -e "\033[1;31m"
+        echo "$starline"
+        echo "**** NOT DOING ANY TAGGING!  CLEANING ALL AUX AND USING latexmk!"
+        echo -e "$starline\033[0m"
+        rm -f *.{aux,toc,log,div,lof,lot,out,ps,fls,fdb_latexmk}
+	ln -fs ../msgredirectwarning_as_is.txt msgredirectwarning.txt
+        latex="latexmk -pdf -halt-on-error --interaction=batchmode -usepretex=\\def\\NOTAGGING{}"
+	shift
+    fi
+fi
+
+if [ $# -gt 0 ]
+then
+    rm -f *.{aux,toc,log,div,lof,lot,out,ps,fls,fdb_latexmk}
+fi
+
+for file in $filelist
+do
+    ((nboffiles+=1))
+    ln -fs ../msgredirectwarning_as_is.txt msgredirectwarning.txt
+    $latex $file
+    if [ $? -eq 0 ]
+    then
+	:
+    else
+        ((nbofbadfiles+=1))
+        echo -e "\033[1;31m"
+        echo "$starline"
+        echo "**** PROBLÈME AVEC $file À LA PREMIÈRE COMPILATION"
+        echo -e "$starline\033[0m"
+	echo ""
+        status=1
+        errorfiles="$errorfiles $file"
+	continue
+    fi
+    $latex $file
+    if [ $? -eq 0 ]
+    then
+	:
+    else
+        ((nbofbadfiles+=1))
+        echo -e "\033[1;31m"
+        echo "$starline"
+        echo "**** PROBLÈME AVEC $file À LA SECONDE COMPILATION"
+        echo -e "$starline\033[0m"
+	echo ""
+        status=1
+        errorfiles="$errorfiles $file"
+	continue
+    fi
+    $latex $file
+    if [ $? -eq 0 ]
+    then
+	:
+    else
+        ((nbofbadfiles+=1))
+        echo -e "\033[1;31m"
+        echo "$starline"
+        echo "**** PROBLÈME AVEC $file À LA TROISIÈME COMPILATION"
+        echo -e "$starline\033[0m"
+	echo ""
+        status=1
+        errorfiles="$errorfiles $file"
+	continue
+    fi
+    ln -fs ../msgredirectwarning_to_error.txt msgredirectwarning.txt
+    $latex $file
+    if [ $? -eq 0 ]
+    then
+	:
+    else
+        ((nbofbadfiles+=1))
+        echo -e "\033[1;31m"
+        echo "$starline"
+        echo "**** PROBLÈME AVEC $file SI WARNING=ERROR À LA QUATRIÈME COMPILATION"
+        echo -e "$starline\033[0m"
+        status=1
+        errorfiles="$errorfiles $file"
+	continue
+    fi
+    $latex $file
+    if [ $? -eq 0 ]
+    then
+        ((nbofgoodfiles+=1))
+        echo -e "\033[32m"
+        echo -e "ok pour $file\033[0m"
+    else
+        ((nbofbadfiles+=1))
+        echo -e "\033[1;31m"
+        echo "$starline"
+        echo "**** PROBLÈME AVEC $file SI WARNING=ERROR À LA CINQUIÈME COMPILATION"
+        echo -e "$starline\033[0m"
+        status=1
+        errorfiles="$errorfiles $file"
+    fi
+    echo ""
+done
+
+if [ $# -eq 0 ]
+then
+    :
+else
+    echo "N.B.: auxiliary files have all been removed before compilation"
+fi
+
+if [ $status -eq 0 ]
+then
+    echo -e "\033[32m==== Aucune erreur lors des compilations TeX.     ====\033[0m"
+    echo -e "\033[32mFAIL=$nbofbadfiles, PASS=$nbofgoodfiles, TOTAL=$nboffiles\033[0m"
+    echo ""
+else
+    echo -e "\033[1;31m!!!! PROBLÈMES AVEC $nbofbadfiles/$nboffiles TESTS:\033[0m"
+    for file in $errorfiles
+    do
+        echo -e "\033[1;31m$file\033[0m"
+        tail -n 26 $(basename $file .tex).log | head -n 10
+    done
+    echo -e "\033[1;31mFAIL=$nbofbadfiles, PASS=$nbofgoodfiles, TOTAL=$nboffiles\033[0m"
+    for file in $errorfiles
+    do
+        echo "fail: $file"
+    done
+    echo ""
+fi
+
+exit $status
+

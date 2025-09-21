@@ -1,12 +1,7 @@
 % -*- mode: latex -*-
 \ifdefined\NOTAGGING
 \else
-\DocumentMetadata{
- uncompress,
- pdfversion=1.7,
- lang=en-US,
- testphase=phase-III
-}
+\input documentmetadata.txt
 \fi
 \documentclass{report}
 \usepackage[T1]{fontenc}
@@ -39,6 +34,8 @@
 %%%%%%% need to update this one to have them numbered
 \setcounter{secnumdepth}{3}
 
+\ifdefined\NOTAGGING
+\else
 \input msgredirectwarning.txt
-
+\fi
 \endinput
