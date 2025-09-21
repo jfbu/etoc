@@ -496,9 +496,9 @@ l.15
      
 
 [1;31mtest_tagging_lof_alltotoc.tex[0m
-Package tagpdf Info: writing ParentTree
-
-! Package tagpdf Error: something is wrong with the mcid--rerun
+! Package tagpdf Error: Destination 'figure.struct.205' has no related
+(tagpdf)                structure.
+(tagpdf)                /Ref not updated.
 
 Type <return> to continue.
  ...                                              
