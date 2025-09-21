@@ -60,10 +60,31 @@ then
     rm -f *.{aux,toc,log,div,lof,lot,out,ps,fls,fdb_latexmk}
 fi
 
+ordinaux=("PREMIÈRE" "SECONDE" "TROISIÈME" "QUATRIÈME" "CINQUIÈME" "SIXIÈME")
+
 for file in $filelist
 do
     ((nboffiles+=1))
     ln -fs ../msgredirectwarning_as_is.txt msgredirectwarning.txt
+    for i in {0..4}
+    do
+	$latex $file
+	if [ $? -eq 0 ]
+	then
+	    :
+	else
+            ((nbofbadfiles+=1))
+            echo -e "\033[1;31m"
+            echo "$starline"
+            echo "**** PROBLÈME AVEC $file À LA ${ordinaux[$i]} COMPILATION"
+            echo -e "$starline\033[0m"
+	    echo ""
+            status=1
+            errorfiles="$errorfiles $file"
+	    continue 2
+	fi
+    done
+    ln -fs ../msgredirectwarning_to_error.txt msgredirectwarning.txt
     $latex $file
     if [ $? -eq 0 ]
     then
@@ -72,53 +93,7 @@ do
         ((nbofbadfiles+=1))
         echo -e "\033[1;31m"
         echo "$starline"
-        echo "**** PROBLÈME AVEC $file À LA PREMIÈRE COMPILATION"
-        echo -e "$starline\033[0m"
-	echo ""
-        status=1
-        errorfiles="$errorfiles $file"
-	continue
-    fi
-    $latex $file
-    if [ $? -eq 0 ]
-    then
-	:
-    else
-        ((nbofbadfiles+=1))
-        echo -e "\033[1;31m"
-        echo "$starline"
-        echo "**** PROBLÈME AVEC $file À LA SECONDE COMPILATION"
-        echo -e "$starline\033[0m"
-	echo ""
-        status=1
-        errorfiles="$errorfiles $file"
-	continue
-    fi
-    $latex $file
-    if [ $? -eq 0 ]
-    then
-	:
-    else
-        ((nbofbadfiles+=1))
-        echo -e "\033[1;31m"
-        echo "$starline"
-        echo "**** PROBLÈME AVEC $file À LA TROISIÈME COMPILATION"
-        echo -e "$starline\033[0m"
-	echo ""
-        status=1
-        errorfiles="$errorfiles $file"
-	continue
-    fi
-    ln -fs ../msgredirectwarning_to_error_except_rerun.txt msgredirectwarning.txt
-    $latex $file
-    if [ $? -eq 0 ]
-    then
-	:
-    else
-        ((nbofbadfiles+=1))
-        echo -e "\033[1;31m"
-        echo "$starline"
-        echo "**** PROBLÈME AVEC $file SI WARNING=ERROR À LA QUATRIÈME COMPILATION"
+        echo "**** PROBLÈME AVEC $file SI WARNING=ERROR À LA SIXIÈME COMPILATION"
         echo -e "$starline\033[0m"
         status=1
         errorfiles="$errorfiles $file"
@@ -135,7 +110,7 @@ do
         ((nbofbadfiles+=1))
         echo -e "\033[1;31m"
         echo "$starline"
-        echo "**** PROBLÈME AVEC $file SI WARNING=ERROR À LA CINQUIÈME COMPILATION"
+        echo "**** PROBLÈME AVEC $file SI WARNING=ERROR À LA SIXIÈME COMPILATION"
         echo -e "$starline\033[0m"
         status=1
         errorfiles="$errorfiles $file"
