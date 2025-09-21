@@ -9,9 +9,9 @@ latex="${LATEX:-pdflatex} -halt-on-error --interaction=batchmode "
 # reside in directory while they are being manually tested
 # but allow override via a custome file containing a space
 # separated list of testsnippet-XX.tex names.
-if [ -f "testthose" ]
+if [ -f "testonlythose" ]
 then
-    read -r filelist<"testthose"
+    read -r filelist<"testonlythose"
 else
     filelist="$(git ls-files | grep tex)"
 fi

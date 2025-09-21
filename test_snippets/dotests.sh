@@ -1,1 +1,1 @@
-../dotests.sh
+../testscriptforsubdirs
