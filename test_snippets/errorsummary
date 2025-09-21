@@ -304,7 +304,7 @@ N.B.: auxiliary files have all been removed before compilation
 [1;31m!!!! PROBLÈMES AVEC 6/18 TESTS:[0m
 [1;31mtestsnippet-01.tex[0m
 LaTeX2e <2025-06-01> patch level 1
-L3 programming layer <2025-08-13>
+L3 programming layer <2025-09-02>
  ***********
 
 ! Package tagpdf Error: The number of automatic begin (22) and end (21)
