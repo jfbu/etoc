@@ -1,0 +1,4 @@
+\ExplSyntaxOn
+ \msg_redirect_module:nnn { tag } { warning } { error }
+ \msg_redirect_name:nnn { tag } { tree-mcid-index-wrong } { warning }
+\ExplSyntaxOff

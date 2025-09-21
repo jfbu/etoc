@@ -109,7 +109,7 @@ do
         errorfiles="$errorfiles $file"
 	continue
     fi
-    ln -fs ../msgredirectwarning_to_error.txt msgredirectwarning.txt
+    ln -fs ../msgredirectwarning_to_error_except_rerun.txt msgredirectwarning.txt
     $latex $file
     if [ $? -eq 0 ]
     then
@@ -124,6 +124,7 @@ do
         errorfiles="$errorfiles $file"
 	continue
     fi
+    ln -fs ../msgredirectwarning_to_error.txt msgredirectwarning.txt
     $latex $file
     if [ $? -eq 0 ]
     then

@@ -1,1 +1,1 @@
-../testscriptforsubdirs
+../scriptforsubdirtests
