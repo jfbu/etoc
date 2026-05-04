@@ -2,7 +2,7 @@
 
 Description of the changes to `etoc.sty` since its initial commit in this repo at version `1.2d 2023/10/29`.
 
-[This diff](https://github.com/jfbu/etoc/compare/1.2d...HEAD) compares current HEAD with latest CTAN release (which currently is the `1.2d 2023/10/29` one).
+[This diff](https://github.com/jfbu/etoc/compare/1.2d...HEAD) compares current HEAD with latest CTAN release (which currently is `1.2e 2026/05/04`).
 
 Currently this change log has no more detailed entries because most of the
 work was done in the [`tagging`](https://github.com/jfbu/etoc/tree/tagging)
