@@ -7,13 +7,12 @@ This repository:
 - serves as an issue tracker for the current release of the [etoc](https://ctan.org/pkg/etoc) LaTeX package on [CTAN](https://ctan.org),
 - provides snapshots of the current dev version of the package, allowing interested people to test it and report bugs or feature requests.
 
-Please insert `@jfbu` inside your bug report else I may not be pinged.
+**MAKE SURE YOUR BUG REPORT PINGS ME (`@jfbu`) ELSE I WILL NOT BE AWARE OF IT**.
 
-The repository provides only `etoc.sty`, not the full `etoc.dtx` whose latest official release is only on CTAN.  But this version ot `etoc.sty` may contain deliberately comments which ultimately will be moved to the released `dtx` file.
+The repository provides only `etoc.sty`, not the full `etoc.dtx` whose latest official release is only on CTAN.
 
-[This diff](https://github.com/jfbu/etoc/compare/1.2d...HEAD) compares current HEAD with latest CTAN release.
-
-I will try to avoid force-pushing in future, but during the first few days of this repo, this happened frequently.
+- [compare 1.2e...HEAD](https://github.com/jfbu/etoc/compare/1.2e...HEAD).
+- [compare 1.2d...1.2e](https://github.com/jfbu/etoc/compare/1.2d...1.2e).
 
 ## PDF Tagging
 
