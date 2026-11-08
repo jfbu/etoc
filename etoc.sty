@@ -858,7 +858,7 @@
       \tagstructend % is there a push for struct?
       \def\Etoc@tagging@starttoc@after{%
         \ifhmode
-          \tagstructbegin{tag=text}%
+          \tagstructbegin{tag=\UseStructureName{para/textblock}}%
           \tagmcbegin{tag=P}%
         \fi
         \tagpdfparaOn
@@ -912,7 +912,7 @@
       \tagstructend % is there a push for struct?
       \def\Etoc@tagging@starttoc@after{%
         \ifhmode
-          \tagstructbegin{tag=text}%
+          \tagstructbegin{tag=\UseStructureName{para/textblock}}%
           \tagmcbegin{tag=P}%
         \fi
       }%
