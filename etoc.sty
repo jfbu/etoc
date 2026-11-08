@@ -1134,7 +1134,7 @@
     \expanded{\noexpand\in@{.#1;#2,}}{.lof;figure,.lot;table,}%
     \ifin@
     \addtocontents {toc}{%
-      \protect\contentsline{#2}{#3}{\thepage}{\ifEtoc@hyperref\@currentHref\fi}%
+      \protect\contentsline{#2}{#3}{\thepage}{\ifEtoc@hyperref\@currentHref\else\ifEtoc@tagactive\@currentHref\fi\fi}%
       \ifdefined\protected@file@percent\protected@file@percent\fi
     }%
     \fi
@@ -1153,7 +1153,7 @@
     \Etoc@tmp{.lof;figure,.lot;table,}%
     \ifin@
     \addtocontents {toc}{%
-      \protect\contentsline{#2}{#3}{\thepage}{\ifEtoc@hyperref\@currentHref\fi}%
+      \protect\contentsline{#2}{#3}{\thepage}{\ifEtoc@hyperref\@currentHref\else\ifEtoc@tagactive\@currentHref\fi\fi}%
       \ifdefined\protected@file@percent\protected@file@percent\fi
     }%
     \fi
