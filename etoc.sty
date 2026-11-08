@@ -22,12 +22,12 @@
 %% in the same archive or directory.)
 %%
 %% Package: etoc
-%% Version: 1.2e
+%% Version: 1.2f (dev)
 %% License: LPPL 1.3c
-%% Copyright (C) 2012-2025 Jean-Francois B.
-%%                         jfbu on GitHub
+%% Copyright (C) 2012-2023, 2026 Jean-Francois B.
+%%                               (jfbu on GitHub)
 \NeedsTeXFormat{LaTeX2e}[2003/12/01]
-\ProvidesPackage{etoc}[2025/12/01 v1.2e (dev) Completely customisable TOCs (JFB)]
+\ProvidesPackage{etoc}[2026/11/01 v1.2f (dev) Completely customisable TOCs (JFB)]
 \newif\ifEtoc@oldLaTeX
 \@ifl@t@r\fmtversion{2020/10/01}
   {}
@@ -252,8 +252,7 @@
 %% As ``to toc'' will use some \csa{addcontentsline}, we must make
 %% \ctanpkg{hyperref} happy and also define the suitable |toclevel@| prefixed
 %% extra macros.
-%%
-%% ATTENTION! this means that |\toclevel@#1| will exist as \csa{relax} if
+%% ATTENTION! this means that \csa{toclevel@#1} will exist as \csa{relax} if
 %% it did not exist beforehand (and then |\toclevel@@#1->\toclevel#1|).
         \expandafter\edef\csname toclevel@@#1\endcsname
                          {\expandafter\noexpand\csname toclevel@#1\endcsname}%
@@ -1167,7 +1166,7 @@
 %%
 %% TODO:
 %%
-%% Decide if it should be rather `lof' or `lot' rather.  But then some
+%% TODO: decide if it should be rather `lof' or `lot' rather.  But then some
 %% auxiliaries must be renamed.  For example \csbc{etoclocallistoffigureshook}
 %% but unfortunately it is already documented; I am sure noone on Earth has
 %% read the docs and those few who did do not use it anyhow.
