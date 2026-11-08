@@ -858,6 +858,9 @@
       \tagstructend % is there a push for struct?
       \def\Etoc@tagging@starttoc@after{%
         \ifhmode
+%% 2026 NOV
+%%
+%% Not tag=text
           \tagstructbegin{tag=\UseStructureName{para/textblock}}%
           \tagmcbegin{tag=P}%
         \fi
@@ -912,8 +915,10 @@
       \tagstructend % is there a push for struct?
       \def\Etoc@tagging@starttoc@after{%
         \ifhmode
+%% 2026 NOV
+%%
+%% Not tag=text
           \tagstructbegin{tag=\UseStructureName{para/textblock}}%
-          \tagmcbegin{tag=P}%
         \fi
       }%
       }% true branch
@@ -1134,6 +1139,9 @@
     \expanded{\noexpand\in@{.#1;#2,}}{.lof;figure,.lot;table,}%
     \ifin@
     \addtocontents {toc}{%
+%% 2026 NOV
+%%
+%% Add destination even if no hyperref.
       \protect\contentsline{#2}{#3}{\thepage}{\ifEtoc@hyperref\@currentHref\else\ifEtoc@tagactive\@currentHref\fi\fi}%
       \ifdefined\protected@file@percent\protected@file@percent\fi
     }%
@@ -1153,6 +1161,9 @@
     \Etoc@tmp{.lof;figure,.lot;table,}%
     \ifin@
     \addtocontents {toc}{%
+%% 2026 NOV
+%%
+%% Add destination even if no hyperref.
       \protect\contentsline{#2}{#3}{\thepage}{\ifEtoc@hyperref\@currentHref\else\ifEtoc@tagactive\@currentHref\fi\fi}%
       \ifdefined\protected@file@percent\protected@file@percent\fi
     }%
