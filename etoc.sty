@@ -154,6 +154,7 @@
 %%
 %% See \csbc{Etoc@tagsuspend}.
     \def\Etoc@tagsuspend{\UseName{tag_suspend:n}{etoc}}%
+    \def\Etoc@fallbacklines@numpagebox{\hbox{\Etoc@fallbacklines@numpage}}%
   \else
     \Etoc@taggingfalse
     \def\etoctaggingon{%
@@ -169,6 +170,14 @@
 %% structure tree although it never reaches the PDF.  Tagging is suspended
 %% locally, i.e. until the end of the box.  Empty without active tagging.
 \let\Etoc@tagsuspend\@empty
+%% 2026 NOV
+%%
+%% The section and subsection fall-back line styles build the box with
+%% number and page before typesetting the name, to measure it.  With active
+%% tagging this box is built with tagging suspended and typeset again in
+%% place, so that the structure follows the reading order (name, number,
+%% page).  Without active tagging the measured box is used, as before.
+\def\Etoc@fallbacklines@numpagebox{\box\tw@}
 \newcounter{etoc@tocid}
 \def\Etoc@tocext{toc}
 \def\Etoc@lofext{lof}
@@ -1837,18 +1846,21 @@
    \setbox\z@=\etoctoclineleaders
    \advance\dimen\z@\wd\z@
    \etocifnumbered
-     {\setbox\tw@\hbox{\etocnumber, \etocabbrevpagename\etocpage\etocnoprotrusion}}
-     {\setbox\tw@\hbox{\etocabbrevpagename\etocpage\etocnoprotrusion}}%
+     {\def\Etoc@fallbacklines@numpage
+         {\etocnumber, \etocabbrevpagename\etocpage\etocnoprotrusion}}%
+     {\def\Etoc@fallbacklines@numpage
+         {\etocabbrevpagename\etocpage\etocnoprotrusion}}%
+   \setbox\tw@\hbox{\Etoc@tagsuspend\Etoc@fallbacklines@numpage}%
    \advance\dimen\z@\wd\tw@
    \ifdim\dimen\z@ < \linewidth
        \vbox{\etocname~%
-             \leaders\box\z@\hfil\box\tw@
+             \leaders\box\z@\hfil\Etoc@fallbacklines@numpagebox
              \baselineskip\etocbaselinespreadone\baselineskip
              \par}%
    \else
        \vbox{\etocname~%
              \leaders\copy\z@\hfil\break
-             \hbox{}\leaders\box\z@\hfil\box\tw@
+             \hbox{}\leaders\box\z@\hfil\Etoc@fallbacklines@numpagebox
              \baselineskip\etocbaselinespreadone\baselineskip
              \par}%
    \fi
@@ -1871,18 +1883,21 @@
    \setbox\z@=\etoctoclineleaders
    \advance\dimen\z@\wd\z@
    \etocifnumbered
-     {\setbox\tw@\hbox{\etocnumber, \etocabbrevpagename\etocpage\etocnoprotrusion}}
-     {\setbox\tw@\hbox{\etocabbrevpagename\etocpage\etocnoprotrusion}}%
+     {\def\Etoc@fallbacklines@numpage
+         {\etocnumber, \etocabbrevpagename\etocpage\etocnoprotrusion}}%
+     {\def\Etoc@fallbacklines@numpage
+         {\etocabbrevpagename\etocpage\etocnoprotrusion}}%
+   \setbox\tw@\hbox{\Etoc@tagsuspend\Etoc@fallbacklines@numpage}%
    \advance\dimen\z@\wd\tw@
    \ifdim\dimen\z@ < \linewidth
        \vbox{\etocname~%
-             \leaders\box\z@\hfil\box\tw@
+             \leaders\box\z@\hfil\Etoc@fallbacklines@numpagebox
              \baselineskip\etocbaselinespreadtwo\baselineskip
              \par}%
    \else
        \vbox{\etocname~%
              \leaders\copy\z@\hfil\break
-             \hbox{}\leaders\box\z@\hfil\box\tw@
+             \hbox{}\leaders\box\z@\hfil\Etoc@fallbacklines@numpagebox
              \baselineskip\etocbaselinespreadtwo\baselineskip
              \par}%
    \fi
