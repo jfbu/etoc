@@ -31,7 +31,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === testsnippet-02.pdf
-  OPEN  4 top-level TOC structure(s)
+  TOCS  4 top-level TOC structure(s)
 [32m
 ok pour testsnippet-02.tex[0m
 
@@ -57,7 +57,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === testsnippet-04.pdf
-  OPEN  4 top-level TOC structure(s)
+  TOCS  4 top-level TOC structure(s)
 [32m
 ok pour testsnippet-04.tex[0m
 
@@ -83,7 +83,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === testsnippet-05.pdf
-  OPEN  4 top-level TOC structure(s)
+  TOCS  4 top-level TOC structure(s)
 [32m
 ok pour testsnippet-05.tex[0m
 
@@ -109,7 +109,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === testsnippet-06.pdf
-  OPEN  4 top-level TOC structure(s)
+  TOCS  4 top-level TOC structure(s)
 [32m
 ok pour testsnippet-06.tex[0m
 
@@ -135,7 +135,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === testsnippet-07.pdf
-  OPEN  3 top-level TOC structure(s)
+  TOCS  3 top-level TOC structure(s)
 [32m
 ok pour testsnippet-07.tex[0m
 
@@ -161,7 +161,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === testsnippet-08.pdf
-  OPEN  4 top-level TOC structure(s)
+  TOCS  4 top-level TOC structure(s)
 [32m
 ok pour testsnippet-08.tex[0m
 
@@ -187,7 +187,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === testsnippet-10.pdf
-  OPEN  4 top-level TOC structure(s)
+  TOCS  4 top-level TOC structure(s)
 [32m
 ok pour testsnippet-10.tex[0m
 
@@ -265,7 +265,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === testsnippet-14.pdf
-  OPEN  4 top-level TOC structure(s)
+  TOCS  4 top-level TOC structure(s)
 [32m
 ok pour testsnippet-14.tex[0m
 
@@ -307,7 +307,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === testsnippet-21.pdf
-  OPEN  4 top-level TOC structure(s)
+  TOCS  4 top-level TOC structure(s)
 [32m
 ok pour testsnippet-21.tex[0m
 
@@ -333,7 +333,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === testsnippet-23.pdf
-  OPEN  3 top-level TOC structure(s)
+  TOCS  3 top-level TOC structure(s)
 [32m
 ok pour testsnippet-23.tex[0m
 
@@ -359,7 +359,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === testsnippet-24.pdf
-  OPEN  4 top-level TOC structure(s)
+  TOCS  4 top-level TOC structure(s)
 [32m
 ok pour testsnippet-24.tex[0m
 
@@ -385,7 +385,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === testsnippet-25.pdf
-  OPEN  3 top-level TOC structure(s)
+  TOCS  3 top-level TOC structure(s)
 [32m
 ok pour testsnippet-25.tex[0m
 

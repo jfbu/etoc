@@ -20,7 +20,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === gh01_no_open_structure_error.pdf
-  OPEN  3 top-level TOC structure(s)
+  TOCS  3 top-level TOC structure(s)
 [32m
 ok pour gh01_no_open_structure_error.tex[0m
 
@@ -46,7 +46,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === gh02_Sect_can_not_be_closed.pdf
-  OPEN  1 top-level TOC structure(s)
+  TOCS  1 top-level TOC structure(s)
 [32m
 ok pour gh02_Sect_can_not_be_closed.tex[0m
 
@@ -72,7 +72,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === gh03_another_compat_mode.pdf
-  OPEN  4 top-level TOC structure(s)
+  TOCS  4 top-level TOC structure(s)
 [32m
 ok pour gh03_another_compat_mode.tex[0m
 
@@ -142,7 +142,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === gh06_emph_in_toc_linestyle.pdf
-  OPEN  2 top-level TOC structure(s)
+  TOCS  2 top-level TOC structure(s)
 [32m
 ok pour gh06_emph_in_toc_linestyle.tex[0m
 
@@ -168,7 +168,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === gh07_lof_option_with_hyperref.pdf
-  OPEN  0 top-level TOC structure(s)
+  TOCS  0 top-level TOC structure(s)
 [32m
 ok pour gh07_lof_option_with_hyperref.tex[0m
 
@@ -194,7 +194,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === gh08_local_lof.pdf
-  OPEN  1 top-level TOC structure(s)
+  TOCS  1 top-level TOC structure(s)
 [32m
 ok pour gh08_local_lof.tex[0m
 
@@ -220,7 +220,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === gh09_error_if_no_par_is_used.pdf
-  OPEN  6 top-level TOC structure(s)
+  TOCS  6 top-level TOC structure(s)
 [32m
 ok pour gh09_error_if_no_par_is_used.tex[0m
 
@@ -246,7 +246,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === gh09_with_localtoc.pdf
-  OPEN  6 top-level TOC structure(s)
+  TOCS  6 top-level TOC structure(s)
 [32m
 ok pour gh09_with_localtoc.tex[0m
 
@@ -294,7 +294,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === gh11_TOC_starts_in_hmode.pdf
-  OPEN  1 top-level TOC structure(s)
+  TOCS  1 top-level TOC structure(s)
 [32m
 ok pour gh11_TOC_starts_in_hmode.tex[0m
 
@@ -320,7 +320,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === gh12_section_from_after_contents_a.pdf
-  OPEN  1 top-level TOC structure(s)
+  TOCS  1 top-level TOC structure(s)
 [32m
 ok pour gh12_section_from_after_contents_a.tex[0m
 
@@ -346,7 +346,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === gh12_section_from_after_contents_b.pdf
-  OPEN  1 top-level TOC structure(s)
+  TOCS  1 top-level TOC structure(s)
 [32m
 ok pour gh12_section_from_after_contents_b.tex[0m
 
@@ -372,7 +372,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === gh13_para_tagging_off_if_no_par.pdf
-  OPEN  1 top-level TOC structure(s)
+  TOCS  1 top-level TOC structure(s)
 [32m
 ok pour gh13_para_tagging_off_if_no_par.tex[0m
 
@@ -428,7 +428,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === test_tagging_compatmode.pdf
-  OPEN  13 top-level TOC structure(s)
+  TOCS  13 top-level TOC structure(s)
 [32m
 ok pour test_tagging_compatmode.tex[0m
 
@@ -454,7 +454,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === test_tagging_compatmode_hyp.pdf
-  OPEN  13 top-level TOC structure(s)
+  TOCS  13 top-level TOC structure(s)
 [32m
 ok pour test_tagging_compatmode_hyp.tex[0m
 
@@ -480,7 +480,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === test_tagging_fallbacklines.pdf
-  OPEN  7 top-level TOC structure(s)
+  TOCS  7 top-level TOC structure(s)
 [32m
 ok pour test_tagging_fallbacklines.tex[0m
 
@@ -506,7 +506,7 @@ This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded forma
  restricted \write18 enabled.
 entering extended mode
 === test_tagging_fallbacklines_hyp.pdf
-  OPEN  7 top-level TOC structure(s)
+  TOCS  7 top-level TOC structure(s)
 [32m
 ok pour test_tagging_fallbacklines_hyp.tex[0m
 
@@ -543,7 +543,7 @@ entering extended mode
   EMPTY TOC T='localtoc' under <subsection->Sect>
   EMPTY TOC T='localtoc' under <paragraph->Sect>
   EMPTY TOC T='localtoc' under <subsection->Sect>
-  OPEN  18 top-level TOC structure(s)
+  TOCS  18 top-level TOC structure(s)
 [32m
 ok pour test_tagging_lof_alltotoc.tex[0m
 

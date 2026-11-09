@@ -21,7 +21,8 @@ checks do not depend on the names chosen by LaTeX (toc, toc-item, text-block,
          kernel does not produce it
 * DUPMC  a marked content (page, MCID) referenced by several structure
          elements (or several times by one)
-  OPEN   number of top-level TOC structures (always printed)
+  TOCS   number of top-level TOC structures, i.e. not nested in another
+         TOC (always printed; not a defect)
   NOTAGGED  the PDF has no structure tree (not a defect)
 
 Parent-child legality itself is checked by tagpdf, not here.
@@ -195,7 +196,7 @@ def check(path):
         more = f" (and {len(dups) - 10} more)" if len(dups) > 10 else ""
         msgs.append(f"DUPMC {len(dups)} marked content(s) referenced more than"
                     f" once: {shown}{more}")
-    msgs.append(f"OPEN  {toplevel} top-level TOC structure(s)")
+    msgs.append(f"TOCS  {toplevel} top-level TOC structure(s)")
     return msgs
 
 
