@@ -868,27 +868,16 @@
 %% test files!
   %% Testing for \hmode is no good if in a tikz picture for example
   \ifhmode %% WIP! This is probably not the good test!
-    \tagmcifinTF{%
-      \tagmcend
-      \tagstructend % is there a push for struct?
-      \def\Etoc@tagging@starttoc@after{%
-        \ifhmode
 %% 2026 NOV
 %%
-%% Not tag=text
-          \tagstructbegin{tag=\UseStructureName{para/textblock}}%
-%% 2026 NOV
-%%
-%% Use symbolic structure name instead of hard-coded P.
-          \tagmcbegin{tag=\UseStructureName{para/semantic}}%
-        \fi
-%% 2026 NOV
-%%
-%% Use para/restore socket instead of \tagpdfparaOn.
-        \UseTaggingSocket{para/restore}
-      }%
-      }% true branch
-     {\let\Etoc@tagging@starttoc@after\@empty}%
+%% Use para/end and para/begin sockets instead of manual structure/MC handling.
+    \UseTaggingSocket{para/end}%
+    \def\Etoc@tagging@starttoc@after{%
+      \UseTaggingSocket{para/restore}%
+      \ifhmode
+        \UseTaggingSocket{para/begin}%
+      \fi
+    }%
   \fi
 }% \Etoc@tagging@starttoc@before
 %% 2024 JAN
@@ -931,19 +920,15 @@
   \AssignSocketPlug{tagsupport/parbox/after}{noop}%
   %% Testing for \hmode is no good if in a tikz picture for example
   \ifhmode %% WIP! This is probably not the good test!
-    \tagmcifinTF{%
-      \tagmcend
-      \tagstructend % is there a push for struct?
-      \def\Etoc@tagging@starttoc@after{%
-        \ifhmode
 %% 2026 NOV
 %%
-%% Not tag=text
-          \tagstructbegin{tag=\UseStructureName{para/textblock}}%
-        \fi
-      }%
-      }% true branch
-     {\let\Etoc@tagging@starttoc@after\@empty}%
+%% Use para/end and para/begin sockets instead of manual structure/MC handling.
+    \UseTaggingSocket{para/end}%
+    \def\Etoc@tagging@starttoc@after{%
+      \ifhmode
+        \UseTaggingSocket{para/begin}%
+      \fi
+    }%
   \else
 %% 2024 JAN
 %%
