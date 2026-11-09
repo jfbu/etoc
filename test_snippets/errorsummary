@@ -256,34 +256,17 @@ ok pour testsnippet-14.tex[0m
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
- restricted \write18 enabled.
-entering extended mode
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
- restricted \write18 enabled.
-entering extended mode
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
- restricted \write18 enabled.
-entering extended mode
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
- restricted \write18 enabled.
-entering extended mode
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
- restricted \write18 enabled.
-entering extended mode
 [1;31m
 ******************************************************************************
-**** PROBLÈME AVEC testsnippet-19.tex SI WARNING=ERROR À LA SIXIÈME COMPILATION
+**** PROBLÈME AVEC testsnippet-19.tex À LA PREMIÈRE COMPILATION
 ******************************************************************************[0m
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
- restricted \write18 enabled.
-entering extended mode
+
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
 [1;31m
 ******************************************************************************
-**** PROBLÈME AVEC testsnippet-20.tex À LA SECONDE COMPILATION
+**** PROBLÈME AVEC testsnippet-20.tex À LA PREMIÈRE COMPILATION
 ******************************************************************************[0m
 
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
@@ -397,13 +380,13 @@ For immediate help type H <return>.
                                                   
 [1;31mtestsnippet-11.tex[0m
 ! Package tagpdf Error: Parent-Child ':Note' --> ':TOC'.
-(tagpdf)                Relation is not allowed! on line 83
+(tagpdf)                Relation is not allowed! on line 82
 (tagpdf)                struct 5, float --> struct 6, TOC
 
 Type <return> to continue.
  ...                                              
                                                   
-l.83 \end
+l.82 \end
          {figure}
 
 [1;31mtestsnippet-12.tex[0m
@@ -429,27 +412,27 @@ l.75 \endgroup
               
 
 [1;31mtestsnippet-19.tex[0m
-! Package tagpdf Error: Parent-Child ':TR' --> ':TOC'.
-(tagpdf)                Relation is not allowed! on line 50
-(tagpdf)                struct 6, TR --> struct 8, TOC
+LaTeX2e <2026-11-01>
+L3 programming layer <2026-09-09>
+ ***********
 
-Type <return> to continue.
+! Package tagpdf Error: The number of automatic begin (8) and end (7)
+(tagpdf)                text-block para hooks differ!
+
+For immediate help type H <return>.
  ...                                              
                                                   
-l.50 \endgroup
-              
-
 [1;31mtestsnippet-20.tex[0m
+LaTeX2e <2026-11-01>
+L3 programming layer <2026-09-09>
+ ***********
 
+! Package tagpdf Error: The number of automatic begin (9) and end (8)
+(tagpdf)                text-block para hooks differ!
 
-! Package tagpdf Error: there is no open structure on the stack
-
-Type <return> to continue.
+For immediate help type H <return>.
  ...                                              
                                                   
-l.11 \end{document}
-                   
-
 [1;31mFAIL=6, PASS=12, TOTAL=18[0m
 fail: testsnippet-01.tex
 fail: testsnippet-11.tex

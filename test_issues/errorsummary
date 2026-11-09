@@ -180,10 +180,12 @@ entering extended mode
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
-[1;31m
-******************************************************************************
-**** PROBLÈME AVEC gh08_local_lof.tex SI WARNING=ERROR À LA SIXIÈME COMPILATION
-******************************************************************************[0m
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+[32m
+ok pour gh08_local_lof.tex[0m
+
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
@@ -353,12 +355,9 @@ ok pour gh13_para_tagging_off_if_no_par.tex[0m
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
- restricted \write18 enabled.
-entering extended mode
 [1;31m
 ******************************************************************************
-**** PROBLÈME AVEC gh24_simplest_tabular.tex À LA SECONDE COMPILATION
+**** PROBLÈME AVEC gh24_simplest_tabular.tex À LA PREMIÈRE COMPILATION
 ******************************************************************************[0m
 
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
@@ -482,26 +481,10 @@ ok pour test_tagging_fallbacklines_hyp.tex[0m
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
- restricted \write18 enabled.
-entering extended mode
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
- restricted \write18 enabled.
-entering extended mode
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
- restricted \write18 enabled.
-entering extended mode
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
- restricted \write18 enabled.
-entering extended mode
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
- restricted \write18 enabled.
-entering extended mode
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
- restricted \write18 enabled.
-entering extended mode
-[32m
-ok pour test_tagging_inline_delayed.tex[0m
+[1;31m
+******************************************************************************
+**** PROBLÈME AVEC test_tagging_inline_delayed.tex À LA PREMIÈRE COMPILATION
+******************************************************************************[0m
 
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
@@ -595,17 +578,6 @@ Type <return> to continue.
 l.46 
      
 
-[1;31mgh08_local_lof.tex[0m
-
-! Package tagpdf Error: Destination '' has no related structure.
-(tagpdf)                /Ref not updated.
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.30 \end{document}
-                   
-
 [1;31mgh10_parbox.tex[0m
 ! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
 (tagpdf)                Relation is not allowed! on line 17
@@ -618,16 +590,16 @@ l.17
      
 
 [1;31mgh24_simplest_tabular.tex[0m
+LaTeX2e <2026-11-01>
+L3 programming layer <2026-09-09>
+ ***********
 
+! Package tagpdf Error: The number of automatic begin (2) and end (1)
+(tagpdf)                text-block para hooks differ!
 
-! Package tagpdf Error: there is no open structure on the stack
-
-Type <return> to continue.
+For immediate help type H <return>.
  ...                                              
                                                   
-l.32 \end{document}
-                   
-
 [1;31mgh25_start_finish.tex[0m
 ! Package tagpdf Error: Parent-Child ':TOC' --> ':Span'.
 (tagpdf)                Relation is not allowed! on line 15
@@ -637,6 +609,17 @@ Type <return> to continue.
  ...                                              
                                                   
 l.15 
+     
+
+[1;31mtest_tagging_inline_delayed.tex[0m
+
+
+! Package tagpdf Error: there is no open structure on the stack
+
+Type <return> to continue.
+ ...                                              
+                                                  
+l.58 
      
 
 [1;31mtest_tagging_toc_as_molecule.tex[0m
@@ -664,10 +647,10 @@ l.181    \the\treetok
 [1;31mFAIL=8, PASS=17, TOTAL=25[0m
 fail: gh05_other_test_for_minipage.tex
 fail: gh05_warnings_from_minipage.tex
-fail: gh08_local_lof.tex
 fail: gh10_parbox.tex
 fail: gh24_simplest_tabular.tex
 fail: gh25_start_finish.tex
+fail: test_tagging_inline_delayed.tex
 fail: test_tagging_toc_as_molecule.tex
 fail: test_tagging_toc_as_molecule_b.tex
 
