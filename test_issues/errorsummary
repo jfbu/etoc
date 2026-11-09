@@ -603,7 +603,7 @@ For immediate help type H <return>.
 [1;31mgh25_start_finish.tex[0m
 ! Package tagpdf Error: Parent-Child ':TOC' --> ':Span'.
 (tagpdf)                Relation is not allowed! on line 15
-(tagpdf)                struct 7, TOC --> struct 16, Em
+(tagpdf)                struct 7, TOC --> struct 8, Em
 
 Type <return> to continue.
  ...                                              
