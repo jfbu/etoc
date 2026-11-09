@@ -457,6 +457,7 @@
 %%
 %% Check how this is called in LaTeX3 and use theirs
 \protected\def\etoc@namedef#1{\expandafter\def\csname#1\endcsname}%
+\newif\ifEtoc@emptyline
 \def\Etoc@etoccontentsline@ #1#2#3#4{%
     \Etoc@doendsandbegin
 %% 2024 JAN
@@ -552,6 +553,19 @@
       }%
     \fi
     \ifEtoc@tagging
+%% 2026 NOV
+%%
+%% A line whose prefix and contents are both empty (for example the levels
+%% below subsubsection with \csbc{etocfallbacklines}) displays nothing: do
+%% not open a TOCI with an empty Reference for it.  The flag is global as
+%% user code in prefix and contents may close groups (see below).
+      \global\Etoc@emptylinefalse
+      \expandafter\ifx\Etoc@prefix\@empty
+        \expandafter\ifx\Etoc@contents\@empty
+          \global\Etoc@emptylinetrue
+        \fi
+      \fi
+    \unless\ifEtoc@emptyline
 %% 2024 JAN
 %%
 %% UPDATE: latex-lab needs \csa{toclevel@#1} and sets it
@@ -594,6 +608,7 @@
 %% There is no more a \csa{@contentsline@cfgpoint@before}.
       \UseTaggingSocket{toc/contentsline/before}{{#1}{#2}{#3}{#4}}%
     \fi
+    \fi
 %% 2024 JAN
 %%
 %% In order to fix the |etoc/jfbu#6| issue regarding \csa{emph} which
@@ -602,17 +617,21 @@
 %% \csbc{etocpage} which will introduce their own marked content,
 %% interrupting and reactivating the artifact.
     \ifEtoc@tagginginline
+    \unless\ifEtoc@emptyline
 %% 2026 NOV
 %%
 %% Use symbolic structure name instead of hard-coded Reference.
       \tag_struct_begin:n{tag=\UseStructureName{toc/item/text}}%
       \tag_mc_begin:n{artifact=layout}%
     \fi
+    \fi
     \Etoc@prefix
     \Etoc@contents
     \ifEtoc@tagginginline
+    \unless\ifEtoc@emptyline
       \tag_mc_end:
       \tag_struct_end:
+    \fi
     \fi
 %% 2024 JAN
 %%
@@ -630,7 +649,9 @@
 %%
 %% There is no \csa{@contentsline@cfgpoint@after} anymore.
     \ifEtoc@tagging
+    \unless\ifEtoc@emptyline
       \UseTaggingSocket{toc/contentsline/after}{{#1}{#2}{#3}{#4}}%
+    \fi
     \fi
 }
 %% 2024 JAN
