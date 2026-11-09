@@ -392,16 +392,22 @@
 %%
 %% These \csa{long}'s look silly.
 \long\protected\def\etoctagReference#1{%
+%% 2026 NOV
+%%
+%% Use symbolic structure name instead of hard-coded Reference.
                 \tag_mc_end_push:
-                \tag_mc_begin:n{tag=Reference}%
+                \tag_mc_begin:n{tag=\UseStructureName{toc/item/text}}%
                 #1%
                 \tag_mc_end:
                 \tag_mc_begin_pop:n{}%
                 }%
 \long\protected\def\etoctagLbl #1{%
+%% 2026 NOV
+%%
+%% Use symbolic structure name instead of hard-coded Lbl.
                 \tag_mc_end_push:
-                \tag_struct_begin:n{tag=Lbl}%
-                \tag_mc_begin:n{tag=Lbl}%
+                \tag_struct_begin:n{tag=\UseStructureName{toc/item/label}}%
+                \tag_mc_begin:n{tag=\UseStructureName{toc/item/label}}%
                 #1%
                 \tag_mc_end:
                 \tag_struct_end:
@@ -484,7 +490,10 @@
 %%
 %% I also at this stage have no clear idea for the rationale beyond
 %% these next two lines.
-        \tag_struct_begin:n{tag=Reference}%
+%% 2026 NOV
+%%
+%% Use symbolic structure name instead of hard-coded Reference.
+        \tag_struct_begin:n{tag=\UseStructureName{toc/item/text}}%
         \tag_mc_begin:n{artifact=layout}%
       }%
 %% 2024 JAN
@@ -557,7 +566,10 @@
 %% \csbc{etocpage} which will introduce their own marked content,
 %% interrupting and reactivating the artifact.
     \ifEtoc@tagginginline
-      \tag_struct_begin:n{tag=Reference}%
+%% 2026 NOV
+%%
+%% Use symbolic structure name instead of hard-coded Reference.
+      \tag_struct_begin:n{tag=\UseStructureName{toc/item/text}}%
       \tag_mc_begin:n{artifact=layout}%
     \fi
     \Etoc@prefix
@@ -862,7 +874,10 @@
 %%
 %% Not tag=text
           \tagstructbegin{tag=\UseStructureName{para/textblock}}%
-          \tagmcbegin{tag=P}%
+%% 2026 NOV
+%%
+%% Use symbolic structure name instead of hard-coded P.
+          \tagmcbegin{tag=\UseStructureName{para/semantic}}%
         \fi
         \tagpdfparaOn
       }%
