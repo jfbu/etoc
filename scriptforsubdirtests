@@ -21,6 +21,7 @@ shopt -s nullglob
 starline="******************************************************************************"
 
 status=0
+notagging=0
 errorfiles=""
 nboffiles=0
 nbofgoodfiles=0
@@ -51,6 +52,7 @@ else
         rm -f *.{aux,toc,log,div,lof,lot,out,ps,fls,fdb_latexmk}
 	ln -fs ../msgredirectwarning_as_is.txt msgredirectwarning.txt
         latex="latexmk -pdf -halt-on-error --interaction=batchmode -usepretex=\\def\\NOTAGGING{}"
+        notagging=1
 	shift
     fi
 fi
@@ -103,9 +105,33 @@ do
     $latex $file
     if [ $? -eq 0 ]
     then
-        ((nbofgoodfiles+=1))
-        echo -e "\033[32m"
-        echo -e "ok pour $file\033[0m"
+        # structure checks on the final PDF (see tocchecks.py for the list)
+        # exit status 3: pikepdf not available, checks skipped
+        checkstatus=0
+        if [ $notagging -eq 0 ]
+        then
+            python3 ../tocchecks.py "$(basename $file .tex).pdf"
+            checkstatus=$?
+            if [ $checkstatus -eq 3 ]
+            then
+                echo "(structure checks skipped)"
+                checkstatus=0
+            fi
+        fi
+        if [ $checkstatus -eq 0 ]
+        then
+            ((nbofgoodfiles+=1))
+            echo -e "\033[32m"
+            echo -e "ok pour $file\033[0m"
+        else
+            ((nbofbadfiles+=1))
+            echo -e "\033[1;31m"
+            echo "$starline"
+            echo "**** PROBLÈME AVEC $file : STRUCTURE PDF (tocchecks.py)"
+            echo -e "$starline\033[0m"
+            status=1
+            errorfiles="$errorfiles $file"
+        fi
     else
         ((nbofbadfiles+=1))
         echo -e "\033[1;31m"
