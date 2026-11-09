@@ -8,11 +8,28 @@
 % in a \part, \localtableofcontents will use a \chapter*.
 % See doc on \etocclasstocstyle, \etocarticlestyle, etc...
 
+% No \etocsetstyle (or \etocsetlinestyle) anywhere: etoc stays in
+% compatibility mode and uses the class \l@<level> macros.
+
 \etocchecksemptiness
+
+% Entries down to subparagraph go to the .toc; etoc's own depth
+% setting decides what each table of contents displays.
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
 
 \input msgredirectwarning.txt
 \begin{document}
+\frontmatter
+
+\etocsettocdepth{subsection}
 \tableofcontents
+
+\chapter*{Preface}
+\addcontentsline{toc}{chapter}{Preface}
+An unnumbered chapter added manually to the toc.
+
+\mainmatter
 
 \part{ONE}
 
@@ -73,5 +90,86 @@ et rien ne doit apparaître
 \subsection{Subsection four two one}
 \subsection{Subsection four two two}
 \subsection{Subsection four two three}
+
+\part{THREE}
+
+% Deeper levels.
+\chapter{Test chapter five}
+% local toc showing all levels below chapter
+\etocsetnexttocdepth{subparagraph}
+\localtableofcontents
+
+\section[Short title five one]{A long title for section five one, which
+  is replaced by its short title in the tables of contents}
+\subsection{Subsection five one one}
+% local toc of a subsection
+\etocsetnexttocdepth{subparagraph}
+\localtableofcontents
+\subsubsection{Subsubsection five one one one}
+\paragraph{Paragraph five one one one one}
+Some text.
+\subparagraph{Subparagraph five one one one one one}
+Some text.
+\subsubsection{Subsubsection five one one two}
+\paragraph{Paragraph five one one two one}
+Some text.
+
+\section*{Section five two PAS NUMERO}
+\addcontentsline{toc}{section}{Section five two PAS NUMERO}
+
+\section{Section five three}
+% invisible local toc, displayed later on by reference
+\invisiblelocaltableofcontents\label{toc:invisible}
+\subsection{Subsection five three one}
+\subsubsection{Subsubsection five three one one}
+\subsection{Subsection five three two}
+
+% Depth changes written to the toc file.
+\chapter{Test chapter six}
+\etocsettocdepth.toc{chapter}
+\localtableofcontents % nothing to show: suppressed by \etocchecksemptiness
+\section{Section six one}
+\subsection{Subsection six one one}
+\section{Section six two}
+\etocsettocdepth.toc{subsection}
+
+% Depth tags.
+\etocdepthtag.toc{tagged}
+\chapter{Test chapter seven}
+\section{Section seven one}
+\subsection{Subsection seven one one}
+\subsubsection{Subsubsection seven one one one}
+\section{Section seven two}
+\subsection{Subsection seven two one}
+\etocdepthtag.toc{untagged}
+
+\appendix
+
+\chapter{Appendix chapter one}
+\localtableofcontents
+\section{Appendix section one one}
+\subsection{Appendix subsection one one one}
+\section{Appendix section one two}
+
+\chapter{Appendix chapter two}
+\section{Appendix section two one}
+
+\backmatter
+
+\chapter{Postface}
+% invisible local toc of section five three, displayed here
+\localtableofcontents*\ref{toc:invisible}
+
+% main toc again, at another depth, then with depth tags obeyed
+\etocsetnexttocdepth{chapter}
+\tableofcontents*
+
+\etocsettagdepth{tagged}{subsubsection}
+\etocsettagdepth{untagged}{chapter}
+\etocobeydepthtags
+\etocsetnexttocdepth{subsubsection}
+\renewcommand\contentsname{Contents with depth tags}
+\tableofcontents*
+\etocignoredepthtags
 
 \end{document}
