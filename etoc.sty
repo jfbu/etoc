@@ -855,7 +855,10 @@
 %% TOC actually will be active.
 \def\Etoc@tagging@starttoc@before{%
   \ifvmode
-    \def\Etoc@tagging@starttoc@after{\par\tagpdfparaOn}%
+%% 2026 NOV
+%%
+%% Use para/restore socket instead of \tagpdfparaOn.
+    \def\Etoc@tagging@starttoc@after{\par\UseTaggingSocket{para/restore}}%
   \fi
 %% 2024 JAN
 %%
@@ -879,7 +882,10 @@
 %% Use symbolic structure name instead of hard-coded P.
           \tagmcbegin{tag=\UseStructureName{para/semantic}}%
         \fi
-        \tagpdfparaOn
+%% 2026 NOV
+%%
+%% Use para/restore socket instead of \tagpdfparaOn.
+        \UseTaggingSocket{para/restore}
       }%
       }% true branch
      {\let\Etoc@tagging@starttoc@after\@empty}%
