@@ -150,6 +150,10 @@
 \AtBeginDocument{%
   \ifEtoc@tagactive
     \PackageInfo{etoc}{Experimental tagging support activated}%
+%% 2026 NOV
+%%
+%% See \csbc{Etoc@tagsuspend}.
+    \def\Etoc@tagsuspend{\UseName{tag_suspend:n}{etoc}}%
   \else
     \Etoc@taggingfalse
     \def\etoctaggingon{%
@@ -158,6 +162,13 @@
     }%
   \fi
 }
+%% 2026 NOV
+%%
+%% Used at the start of boxes which are typeset only to be measured and are
+%% then discarded: marked content created there would be referenced in the
+%% structure tree although it never reaches the PDF.  Tagging is suspended
+%% locally, i.e. until the end of the box.  Empty without active tagging.
+\let\Etoc@tagsuspend\@empty
 \newcounter{etoc@tocid}
 \def\Etoc@tocext{toc}
 \def\Etoc@lofext{lof}
@@ -395,12 +406,28 @@
 %% 2026 NOV
 %%
 %% Use symbolic structure name instead of hard-coded Reference.
-                \tag_mc_end_push:
-                \tag_mc_begin:n{tag=\UseStructureName{toc/item/text}}%
-                #1%
-                \tag_mc_end:
-                \tag_mc_begin_pop:n{}%
-                }%
+%%
+%% Do not use \tag_mc_end_push: and \tag_mc_begin_pop:n here: the stack
+%% records the tag of the interrupted marked content but not that it was an
+%% artifact, so the pop restarted a Reference marked content and all the
+%% rest of the line (leaders, punctuation, ...) was tagged as content.  The
+%% surrounding marked content is by design an artifact (see
+%% \csbc{etocthetocitembegintag} and \csbc{Etoc@etoccontentsline@}), so
+%% restart it as such.  Without active tagging #1 is simply inserted, as
+%% the tagpdf commands were no-ops then.
+    \ifEtoc@tagactive
+      \expandafter\@firstoftwo
+    \else
+      \expandafter\@secondoftwo
+    \fi
+    {\tag_mc_if_in:T{\tag_mc_end:}%
+     \tag_mc_begin:n{tag=\UseStructureName{toc/item/text}}%
+     #1%
+     \tag_mc_end:
+     \tag_mc_begin:n{artifact=layout}%
+    }%
+    {#1}%
+}%
 \long\protected\def\etoctagLbl #1{%
 %% 2026 NOV
 %%
@@ -1749,7 +1776,7 @@
    \leftskip  \etocminustwoleftmargin
    \rightskip \etocminustworightmargin
    \parfillskip \@flushglue
-   \vbox{\etocifnumbered{\etoclink{\etocbookname\enspace\etocthenumber:\quad}}{}%
+   \vbox{\etocifnumbered{\etoclink{\etocbookname\enspace\etocthetaggednumber:\quad}}{}%
          \etocname
          \baselineskip\etocbaselinespreadminustwo\baselineskip
          \par}%
@@ -1770,7 +1797,7 @@
    \leftskip  \etocminusoneleftmargin
    \rightskip \etocminusonerightmargin
    \parfillskip \@flushglue
-   \vbox{\etocifnumbered{\etoclink{\etocpartname\enspace\etocthenumber.\quad}}{}%
+   \vbox{\etocifnumbered{\etoclink{\etocpartname\enspace\etocthetaggednumber.\quad}}{}%
          \etocname
          \baselineskip\etocbaselinespreadminusone\baselineskip
          \par}%
@@ -1802,7 +1829,7 @@
    \etocfontone
    \addvspace{\etocsepone}%
    \parindent \z@ \parfillskip \z@
-   \setbox\z@\vbox{\parfillskip\@flushglue
+   \setbox\z@\vbox{\Etoc@tagsuspend\parfillskip\@flushglue
                    \etocname\par
                    \setbox\tw@\lastbox
                    \global\setbox\@ne\hbox{\unhbox\tw@\ }}%
@@ -1837,7 +1864,7 @@
    \etocfonttwo
    \addvspace{\etocseptwo}%
    \parindent \z@ \parfillskip \z@
-   \setbox\z@\vbox{\parfillskip\@flushglue
+   \setbox\z@\vbox{\Etoc@tagsuspend\parfillskip\@flushglue
                    \etocname\par\setbox\tw@\lastbox
                    \global\setbox\@ne\hbox{\unhbox\tw@}}%
    \dimen\z@=\wd\@ne
