@@ -21,13 +21,13 @@ Tagging support, for pdfLaTeX and the LaTeX release of 2026-11-01 only.
 - `\etoctaggingon` in the preamble of a document without tagging does not cause errors anymore.
 - `\etocsetlocaltop.toc` accepts a level number such as `-2` or `0`, not only a level name: numbers did not survive the round trip of the `.toc` data through the `.aux` file and caused errors.
 - [testing] each test file is compiled 7 times, tagpdf warnings being turned into errors for the last 2 compilations only, as the structure becomes stable only after about 6 passes; then `tocchecks.py` checks the structure of the PDF (requires [pikepdf](https://pypi.org/project/pikepdf/)); `structtree.py` prints the structure tree.  The test infrastructure is shared by `test_issues` and `test_snippets`, with scripts at top level.
-- Current [test_issues errorsummary](https://github.com/jfbu/etoc/blob/dc7028c38c4e56a44adb2390aca5f01bd895422b/test_issues/errorsummary): FAIL=5, TOTAL=26
+- [testing] the test files use PDF 2.0 and PDF/UA-2 metadata (`documentmetadata_pdf20_ua2.txt`).  New test `gh30_tagging_project_test_598.tex`, from latex3/tagging-project#598 (jfbu/etoc#30).  With PDF 2.0 a float is tagged `Aside`, so a TOC inside a `figure` passes (jfbu/etoc#18, which remains with PDF 1.7).
+- Current [test_issues errorsummary](https://github.com/jfbu/etoc/blob/e4f97fed7b737269265c6d12c4ad45e6df2fc7f2/test_issues/errorsummary): FAIL=5, TOTAL=27
   * fail: gh24_simplest_tabular.tex (a `tabular` for the display)
   * fail: gh25_start_finish.tex (material from the start and finish parts of a line style)
   * fail: test_tagging_inline_delayed.tex, test_tagging_toc_as_molecule.tex, test_tagging_toc_as_molecule_b.tex (two-stage constructions)
-- Current [test_snippets errorsummary](https://github.com/jfbu/etoc/blob/dc7028c38c4e56a44adb2390aca5f01bd895422b/test_snippets/errorsummary): FAIL=4, TOTAL=18
+- Current [test_snippets errorsummary](https://github.com/jfbu/etoc/blob/e4f97fed7b737269265c6d12c4ad45e6df2fc7f2/test_snippets/errorsummary): FAIL=3, TOTAL=18
   * fail: testsnippet-01.tex (lists for the display)
-  * fail: testsnippet-11.tex (TOC inside a `figure`, upstream)
   * fail: testsnippet-19.tex, testsnippet-20.tex (a `tabular` for the display)
 
 ## [1.2e]
