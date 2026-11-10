@@ -8,10 +8,9 @@ The PDF and LaTeX views of what a TOC is are simply too archaic and restrictive 
 
 ## Dev notes and perspectives at [1.2f]
 
-The tagging support of 1.2f has been checked only with pdfLaTeX and the LaTeX release of 2026-11-01.  The later sections of this file describe the state at 2024-01-16; the items below say where it changed.
+The tagging support of 1.2f has been checked only with pdfLaTeX and the LaTeX release of 2026-11-01.  The sections after this one describe the state at 2025-09-20 and at 2024-01-16.
 
-Work done:
-- the `@cfgpoint@` macros and the internal tagpdf commands used earlier no longer exist; `etoc` uses the tagging sockets `toc/starttoc/before` and `toc/starttoc/after` around the TOC contents (argument `toc`, or `localtoc` for local lists of figures and tables), and `toc/contentsline/before` and `toc/contentsline/after` with arguments `{#1}{#2}{#3}{#4}` in `\Etoc@etoccontentsline@` (in compatibility mode the kernel `\contentsline` does it),
+Work done in November 2026:
 - around the TOC, the paragraph state is handled with the sockets `para/end`, `para/restore` and `para/begin`, according to whether the TOC starts in vertical or horizontal mode,
 - the structure names are obtained via `\UseStructureName` from the kernel symbolic names `toc/item/text`, `toc/item/label` and `para/textblock`,
 - a line is a `TOCI` (opened by the socket) containing a `Reference` structure; the prefix and contents are in an artifact marked content; `\etocname`, `\etocnumber` and `\etocpage` end it, insert their data as `Reference` marked content (the number as `Lbl` marked content in an `Lbl` structure which is a child of the `Reference`), then restart an artifact explicitly: `\tag_mc_end_push:` and `\tag_mc_begin_pop:n` can not be used, as the pop restarts a tagged marked content,
@@ -20,9 +19,10 @@ Work done:
 - boxes typeset only to be measured, then discarded, are built with tagging suspended, else their marked content is referenced in the structure tree although it never reaches the PDF,
 - the fall-back line styles produce a correct structure (leaders and punctuation as artifacts, number as `Lbl`, order name, number, page),
 - during the TOC contents the sockets `parbox/before`, `parbox/after`, `minipage/before`, `minipage/after` and `para/restore` are set to `noop`: with the LaTeX release of 2026-11-01, `\parbox` and `minipage` use `para/restore` inside their box, which re-activated paragraph tagging inside a `Reference`; at the end of the TOC `etoc` assigns the `default` plug of `para/restore` again before using it,
-- contrarily to what the 2024 notes below say, `etoc` defines `\toclevel@<levelname>` from its own level if it is undefined, as latex-lab needs it (see the code comments mentioning jfbu/etoc#22),
 - the `lof` and `lot` package options write the destination of the copied figure and table entries also without hyperref (jfbu/etoc#8),
 - each test file is compiled 7 times, tagpdf warnings being turned into errors for the last 2 only, then `tocchecks.py` checks the structure of the PDF.
+
+Correction to the 2024 notes below: since the fix of jfbu/etoc#22 (2024-01-14), `etoc` defines `\toclevel@<levelname>` from its own level if it is undefined, as latex-lab needs it.
 
 Unsolved:
 - material typeset by the `{<start>}` and `{<finish>}` parts of a line style is not tagged at all, neither as content nor as artifact, and a structure created there (for example by `\emph`) becomes a child of the `TOC` (jfbu/etoc#25),
@@ -32,6 +32,11 @@ Unsolved:
 - `etoc` can not recover the plug of `para/restore` assigned by the document before the TOC, and assumes it was `default`,
 - the test `\ifhmode` deciding the paragraph handling at the start of the TOC is probably not the right one (for example in a TikZ picture),
 - `etoc`'s level system versus the kernel's `\toclevel@<levelname>`.
+
+## Dev notes up to [2025-09-20]
+
+- the `@cfgpoint@` macros (`\@starttoc@cfgpoint@before`, `\@starttoc@cfgpoint@after`, `\@contentsline@cfgpoint@before`, `\@contentsline@cfgpoint@after`) and the internal tagpdf commands `\__tag_toc_contentsline_begin:nnn` and `\__tag_toc_contentsline_end:n` used earlier no longer exist; `etoc` uses via `\UseTaggingSocket` the tagging sockets `toc/starttoc/before` and `toc/starttoc/after` around the TOC contents (argument `toc`, or `localtoc` for local lists of figures and tables), and `toc/contentsline/before` and `toc/contentsline/after` with arguments `{#1}{#2}{#3}{#4}` in `\Etoc@etoccontentsline@` (in compatibility mode the kernel `\contentsline` does it); the second argument is no longer replaced by `\etocthename`,
+- the test files are compiled several times, tagpdf warnings being turned into errors only at the last compilations, as some warnings disappear only after several passes; they have their `\DocumentMetadata` in an external file and can be compiled with tagging off.
 
 ## Perspectives at [2024-01-16]
 
@@ -83,4 +88,5 @@ It is not clear at this stage if the last point is possible in tabular context f
 
 
 [1.2f]: https://github.com/jfbu/etoc/releases/tag/1.2f
+[2025-09-20]: https://github.com/jfbu/etoc/releases/tag/2025-09-20
 [2024-01-16]: https://github.com/jfbu/etoc/releases/tag/2024-01-16
