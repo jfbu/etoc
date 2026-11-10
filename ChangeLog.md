@@ -19,6 +19,7 @@ Tagging support, for pdfLaTeX and the LaTeX release of 2026-11-01 only.
 - no `TOCI` for a line whose style displays nothing.
 - fix jfbu/etoc#5, jfbu/etoc#10, jfbu/etoc#29: a `minipage` or a `\parbox` in a line style does not open a paragraph structure inside the `Reference` anymore (the `para/restore` socket is set to `noop` for the TOC contents).
 - `\etoctaggingon` in the preamble of a document without tagging does not cause errors anymore.
+- `\etocsetlocaltop.toc` accepts a level number such as `-2` or `0`, not only a level name: numbers did not survive the round trip of the `.toc` data through the `.aux` file and caused errors.
 - [testing] each test file is compiled 7 times, tagpdf warnings being turned into errors for the last 2 compilations only, as the structure becomes stable only after about 6 passes; then `tocchecks.py` checks the structure of the PDF (requires [pikepdf](https://pypi.org/project/pikepdf/)); `structtree.py` prints the structure tree.  The test infrastructure is shared by `test_issues` and `test_snippets`, with scripts at top level.
 - Current [test_issues errorsummary](https://github.com/jfbu/etoc/blob/dc7028c38c4e56a44adb2390aca5f01bd895422b/test_issues/errorsummary): FAIL=5, TOTAL=26
   * fail: gh24_simplest_tabular.tex (a `tabular` for the display)
