@@ -20,8 +20,8 @@ Tagging support, for pdfLaTeX and the LaTeX release of 2026-11-01 only.
 - fix jfbu/etoc#5, jfbu/etoc#10, jfbu/etoc#29: a `minipage` or a `\parbox` in a line style does not open a paragraph structure inside the `Reference` anymore (the `para/restore` socket is set to `noop` for the TOC contents).
 - `\etoctaggingon` in the preamble of a document without tagging does not cause errors anymore.
 - `\etocsetlocaltop.toc` accepts a level number such as `-2` or `0`, not only a level name: numbers did not survive the round trip of the `.toc` data through the `.aux` file and caused errors.
-- [testing] each test file is compiled 7 times, tagpdf warnings being turned into errors for the last 2 compilations only, as the structure becomes stable only after about 6 passes; then `tocchecks.py` checks the structure of the PDF (requires [pikepdf](https://pypi.org/project/pikepdf/)); `structtree.py` prints the structure tree.  The test infrastructure is shared by `test_issues` and `test_snippets`, with scripts at top level.
-- [testing] the test files use PDF 2.0 and PDF/UA-2 metadata (`documentmetadata_pdf20_ua2.txt`).  New test `gh30_tagging_project_test_598.tex`, from latex3/tagging-project#598 (jfbu/etoc#30).  With PDF 2.0 a float is tagged `Aside`, so a TOC inside a `figure` passes (jfbu/etoc#18, which remains with PDF 1.7).
+- Testing: each test file is compiled 7 times, tagpdf warnings being turned into errors for the last 2 compilations only, as the structure becomes stable only after about 6 passes; then `tocchecks.py` checks the structure of the PDF (requires [pikepdf](https://pypi.org/project/pikepdf/)); `structtree.py` prints the structure tree.  The test infrastructure is shared by `test_issues` and `test_snippets`, with scripts at top level.
+- Testing: the test files use PDF 2.0 and PDF/UA-2 metadata (`documentmetadata_pdf20_ua2.txt`).  New test `gh30_tagging_project_test_598.tex`, from latex3/tagging-project#598 (jfbu/etoc#30).  With PDF 2.0 a float is tagged `Aside`, so a TOC inside a `figure` passes (jfbu/etoc#18, which remains with PDF 1.7).
 - Current [test_issues errorsummary](https://github.com/jfbu/etoc/blob/e4f97fed7b737269265c6d12c4ad45e6df2fc7f2/test_issues/errorsummary): FAIL=5, TOTAL=27
   * fail: gh24_simplest_tabular.tex (a `tabular` for the display)
   * fail: gh25_start_finish.tex (material from the start and finish parts of a line style)
@@ -43,8 +43,8 @@ Released on 2026/05/04 from the `master` branch, which had been trimmed on 2024/
 ## [2025-09-20]
 
 - use the upstream tagging sockets `toc/starttoc/before`, `toc/starttoc/after`, `toc/contentsline/before` and `toc/contentsline/after` via `\UseTaggingSocket`, in place of the `@cfgpoint@` macros and of the internal tagpdf commands `\__tag_toc_contentsline_begin:nnn` and `\__tag_toc_contentsline_end:n`, which no longer exist.
-- [testing] each test file is compiled 5 times, tagpdf warnings being turned into errors at the 4th and 5th compilations only; the test files have their `\DocumentMetadata` in an external file and can be compiled with tagging off (`./dotests.sh no`); the `test_issues` files are renamed `gh0N_*.tex`.
-- [testing] snippet 11 has again its `figure` environment, to test jfbu/etoc#18.
+- Testing: each test file is compiled 5 times, tagpdf warnings being turned into errors at the 4th and 5th compilations only; the test files have their `\DocumentMetadata` in an external file and can be compiled with tagging off (`./dotests.sh no`); the `test_issues` files are renamed `gh0N_*.tex`.
+- Testing: snippet 11 has again its `figure` environment, to test jfbu/etoc#18.
 
 ## [2024-01-16]
 
@@ -73,7 +73,7 @@ Released on 2026/05/04 from the `master` branch, which had been trimmed on 2024/
 - add `\etochyperlink` as `\protected` wrapper of `\hyperlink` and use it in `\etocthelinkedname` et al., which facilitates their use in `\edef` for sophisticated 2-steps TOCs such as those using TikZ trees in the user manual.
 - fix jfbu/etoc#8.  `\locallistoffigures` and `\locallistoftables` raised lots of warnings but this is only because the fix to jfbu/etoc#2 forgot to handle them at the same time.  Only remain now warnings due to upstrem latex3/tagging-project#55.
 - fix jfbu/etoc#7.  Our redefinition of `\addcontentsline` must keep its original signature so that the [hyperref](https://github.com/latex3/hyperref) "before" hook can be inserted, when as currently via [tagpdf](https://github.com/latex3/tagpdf) this is done by kernel via a generic cmd hook.
-- [testing] add a bash script for automated testing using existing test files; the latter got modified so that all [tagpdf](https://github.com/latex3/tagpdf) warnings are made into errors aborting the job, and the bash script can be made if `LATEX` environment variable is suitably set to use `latexmk -pdf` for example, so that one checks no warnings are issued on first as well as next compilations.  Using the script with any argument tells it to clean all auxiliary files first.
+- Testing: add a bash script for automated testing using existing test files; the latter got modified so that all [tagpdf](https://github.com/latex3/tagpdf) warnings are made into errors aborting the job, and the bash script can be made if `LATEX` environment variable is suitably set to use `latexmk -pdf` for example, so that one checks no warnings are issued on first as well as next compilations.  Using the script with any argument tells it to clean all auxiliary files first.
 - strip from code all `\Etoc@tagrule` and `\Etoc@tagleaders` which had been tentatively added, then made no-op's.
 - refactor core `\Etoc@lxyz` in part to avoid sub-optimal `\etocthelinkednumber` containing (begin|end) or (end|begin) with nothing in-between; also for more straightforward coding logic and improved readability of the nested conditionals.
 - fix jfbu/etoc#6.  Everything in the line style apart from name, number, page is automatically tagged as an artifact.  Which may be a bad idea but it solves the `'TOCI/' --> 'Em/pdf2'` forbidden Parent-Child relation.
