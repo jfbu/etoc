@@ -4,8 +4,6 @@ We will try to keep these items in sync with the actual code, but they may be la
 
 The PDF and LaTeX views of what a TOC is are simply too archaic and restrictive to etoc, which flies high above such cages.
 
-[etoctagging.tex](/etoctagging.tex) is a user level companion of the more technical explications which are given here.  It may lag behind even more.
-
 ## Dev notes and perspectives at [1.2f]
 
 The tagging support of 1.2f has been checked only with pdfLaTeX and the LaTeX release of 2026-11-01.  The sections after this one describe the state at 2025-09-20 and at 2024-01-16.

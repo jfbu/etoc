@@ -16,10 +16,7 @@ The repository provides only `etoc.sty`, not the full `etoc.dtx` whose latest of
 
 ## PDF Tagging
 
-`etoc` development is currently mostly about adding tentative experimental support for tagging, using the related upstream kernel code in [latex-lab](https://github.com/latex3/latex2e/tree/develop/required/latex-lab) as model and starting point.
-
-- [`etoctagging.tex`](/etoctagging.tex): this file contains the user level description extracted from dev `etoc.dtx`.  You can compile it to pdf using `pdflatex`.
-- [`etoctagging.md`](/etoctagging.md): this file contains more technical notes, they are complementary to the user manual.
+`etoc 1.2f` incorporated at long last in November 2026 the work regarding tagging which had been started in January 2024.  See [`etoctagging.md`](/etoctagging.md) if you are interested into details.
 
 For background information on the upstream LaTeX project, refer to this PDF document (by Frank Mittelbach and Chris Rowley): [*LaTeX Tagged PDF—A blueprint for a large project*](https://www.latex-project.org/publications/2020-FMi-TUB-tb129mitt-tagpdf.pdf), and to the [latex3/tagging-project](https://github.com/latex3/tagging-project) and [latex3/tagpdf](https://github.com/latex3/tagpdf) repositories.
 
