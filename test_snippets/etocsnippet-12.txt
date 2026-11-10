@@ -40,11 +40,14 @@ enough to let warnings from latex-lab go away AND the PDF looks OK in
 \url{https://ngpdf.com} editor, Hurray!% 
 %%%%%%%%>>>> #19
 \IfDocumentMetadataTF{\aliceandbob{%
-\AssignSocketPlug{tagsupport/fnmark}{identity}%
+\AssignSocketPlug{tagsupport/fnmark}{transparent}%
+\AssignSocketPlug{fnmark/link}{identity}%
+\AssignSocketPlug{tagsupport/inline/begin}{noop}%
+\AssignSocketPlug{tagsupport/inline/end}{noop}%
 \AssignSocketPlug{tagsupport/fntext/begin}{noop}%
 \AssignSocketPlug{tagsupport/fntext/end}{noop}%
-\AssignSocketPlug{tagsupport/fntext/text}{identity}%
-\AssignSocketPlug{tagsupport/fntext/mark}{identity}%
+\AssignSocketPlug{tagsupport/fntext/text}{transparent}%
+\AssignSocketPlug{tagsupport/fntext/mark}{transparent}%
 }{}}{}%
 %%%%%%%%<<<<
                 }{.\par}
