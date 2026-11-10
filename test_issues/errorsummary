@@ -94,6 +94,32 @@ entering extended mode
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+=== gh04_framedstyle_relation_not_allow.pdf
+  TOCS  4 top-level TOC structure(s)
+[32m
+ok pour gh04_framedstyle_relation_not_allow.tex[0m
+
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
 [1;31m
 ******************************************************************************
 **** PROBLÈME AVEC gh05_other_test_for_minipage.tex SI WARNING=ERROR À LA SIXIÈME COMPILATION
@@ -592,7 +618,7 @@ entering extended mode
 **** PROBLÈME AVEC test_tagging_toc_as_molecule_b.tex SI WARNING=ERROR À LA SIXIÈME COMPILATION
 ******************************************************************************[0m
 N.B.: auxiliary files have all been removed before compilation
-[1;31m!!!! PROBLÈMES AVEC 8/25 TESTS:[0m
+[1;31m!!!! PROBLÈMES AVEC 8/26 TESTS:[0m
 [1;31mgh05_other_test_for_minipage.tex[0m
 ! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
 (tagpdf)                Relation is not allowed! on line 48
@@ -681,7 +707,7 @@ Type <return> to continue.
 l.181    \the\treetok
                      
 
-[1;31mFAIL=8, PASS=17, TOTAL=25[0m
+[1;31mFAIL=8, PASS=18, TOTAL=26[0m
 fail: gh05_other_test_for_minipage.tex
 fail: gh05_warnings_from_minipage.tex
 fail: gh10_parbox.tex
