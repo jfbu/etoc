@@ -2,11 +2,38 @@
 
 Description of the changes to `etoc.sty` since its initial commit in this repo at version `1.2d 2023/10/29`.
 
-[This diff](https://github.com/jfbu/etoc/compare/1.2d-2023-10-29...HEAD) compares current HEAD with latest CTAN release (which currently is the `1.2d 2023/10/29` one).
+[This diff](https://github.com/jfbu/etoc/compare/1.2e...HEAD) compares current HEAD with release `1.2e 2026/05/04`, which did not include the tagging work.
 
 These headings map to the diffs between successive tags.
 
 ## [dev HEAD]
+
+## [1.2f]
+
+Tagging support, for pdfLaTeX and the LaTeX release of 2026-11-01 only.
+
+- use the upstream paragraph tagging sockets (`para/restore`, `para/begin`, `para/end`) via `\UseTaggingSocket`, in place of `\tagpdfparaOn` and of manual structure and marked-content handling.
+- obtain the structure names from the kernel symbolic names (`toc/item/text`, `toc/item/label`, `para/textblock`) via `\UseStructureName`, so that a document assigning them another role is obeyed.
+- fix jfbu/etoc#8: the `lof` and `lot` package options write the destination of the figure and table entries also without hyperref when tagging is active.
+- the fall-back line styles (`\etocfallbacklines`) produce a correct structure: leaders and punctuation are artifacts, the part (and book) number is an `Lbl`, the structure order is name, number, page, and no marked content is referenced twice.
+- no `TOCI` for a line whose style displays nothing.
+- fix jfbu/etoc#5, jfbu/etoc#10, jfbu/etoc#29: a `minipage` or a `\parbox` in a line style does not open a paragraph structure inside the `Reference` anymore (the `para/restore` socket is set to `noop` for the TOC contents).
+- `\etoctaggingon` in the preamble of a document without tagging does not cause errors anymore.
+- [testing] each test file is compiled 7 times, tagpdf warnings being turned into errors for the last 2 compilations only, as the structure becomes stable only after about 6 passes; then `tocchecks.py` checks the structure of the PDF (requires [pikepdf](https://pypi.org/project/pikepdf/)); `structtree.py` prints the structure tree.  The test infrastructure is shared by `test_issues` and `test_snippets`, with scripts at top level.
+- Current [test_issues errorsummary](https://github.com/jfbu/etoc/blob/dc7028c38c4e56a44adb2390aca5f01bd895422b/test_issues/errorsummary): FAIL=5, TOTAL=26
+  * fail: gh24_simplest_tabular.tex (a `tabular` for the display)
+  * fail: gh25_start_finish.tex (material from the start and finish parts of a line style)
+  * fail: test_tagging_inline_delayed.tex, test_tagging_toc_as_molecule.tex, test_tagging_toc_as_molecule_b.tex (two-stage constructions)
+- Current [test_snippets errorsummary](https://github.com/jfbu/etoc/blob/dc7028c38c4e56a44adb2390aca5f01bd895422b/test_snippets/errorsummary): FAIL=4, TOTAL=18
+  * fail: testsnippet-01.tex (lists for the display)
+  * fail: testsnippet-11.tex (TOC inside a `figure`, upstream)
+  * fail: testsnippet-19.tex, testsnippet-20.tex (a `tabular` for the display)
+
+## [2025-09-20]
+
+- use the upstream tagging sockets `toc/starttoc/before`, `toc/starttoc/after`, `toc/contentsline/before` and `toc/contentsline/after` via `\UseTaggingSocket`, in place of the `@cfgpoint@` macros and of the internal tagpdf commands `\__tag_toc_contentsline_begin:nnn` and `\__tag_toc_contentsline_end:n`, which no longer exist.
+- [testing] each test file is compiled 5 times, tagpdf warnings being turned into errors at the 4th and 5th compilations only; the test files have their `\DocumentMetadata` in an external file and can be compiled with tagging off (`./dotests.sh no`); the `test_issues` files are renamed `gh0N_*.tex`.
+- [testing] snippet 11 has again its `figure` environment, to test jfbu/etoc#18.
 
 ## [2024-01-16]
 
@@ -58,7 +85,9 @@ These headings map to the diffs between successive tags.
 - initial tagging support.
 
 
-[dev HEAD]: https://github.com/jfbu/etoc/compare/2024-01-16...HEAD
+[dev HEAD]: https://github.com/jfbu/etoc/compare/1.2f...HEAD
+[1.2f]: https://github.com/jfbu/etoc/compare/2025-09-20...1.2f
+[2025-09-20]: https://github.com/jfbu/etoc/compare/2024-01-16...2025-09-20
 [2024-01-16]: https://github.com/jfbu/etoc/compare/2024-01-12...2024-01-16
 [2024-01-12]: https://github.com/jfbu/etoc/compare/2024-01-05...2024-01-12
 [2024-01-05]: https://github.com/jfbu/etoc/compare/2024-01-03...2024-01-05
