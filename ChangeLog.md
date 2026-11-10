@@ -29,6 +29,16 @@ Tagging support, for pdfLaTeX and the LaTeX release of 2026-11-01 only.
   * fail: testsnippet-11.tex (TOC inside a `figure`, upstream)
   * fail: testsnippet-19.tex, testsnippet-20.tex (a `tabular` for the display)
 
+## [1.2e]
+
+Released on 2026/05/04 from the `master` branch, which had been trimmed on 2024/06/18 from the tagging work: hence its diff starts from `1.2d`, not from `2025-09-20`.
+
+- hotfix for jfbu/etoc#28 (compatibility of the `lof` option with hyperref v7.01q): our redefinition of `\addcontentsline` keeps its original signature (same fix as jfbu/etoc#7 in the tagging work).  Thanks to @pkl97 for report.
+- `\etocsetlinestyle` and `\etocfallbacklines` as respective aliases to `\etocsetstyle` and `\etocdefaultlines`.
+- add `\etochyperlink` as `\protected` wrapper of `\hyperlink` and use it in `\etocthelinkedname` et al.
+- refactor core `\Etoc@lxyz`.
+- none of the dev tagging code is included.
+
 ## [2025-09-20]
 
 - use the upstream tagging sockets `toc/starttoc/before`, `toc/starttoc/after`, `toc/contentsline/before` and `toc/contentsline/after` via `\UseTaggingSocket`, in place of the `@cfgpoint@` macros and of the internal tagpdf commands `\__tag_toc_contentsline_begin:nnn` and `\__tag_toc_contentsline_end:n`, which no longer exist.
@@ -87,6 +97,7 @@ Tagging support, for pdfLaTeX and the LaTeX release of 2026-11-01 only.
 
 [dev HEAD]: https://github.com/jfbu/etoc/compare/1.2f...HEAD
 [1.2f]: https://github.com/jfbu/etoc/compare/2025-09-20...1.2f
+[1.2e]: https://github.com/jfbu/etoc/compare/1.2d...1.2e
 [2025-09-20]: https://github.com/jfbu/etoc/compare/2024-01-16...2025-09-20
 [2024-01-16]: https://github.com/jfbu/etoc/compare/2024-01-12...2024-01-16
 [2024-01-12]: https://github.com/jfbu/etoc/compare/2024-01-05...2024-01-12
