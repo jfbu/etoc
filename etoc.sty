@@ -2339,8 +2339,7 @@
   \@ifundefined{Etoc@#1@@}%
    {\PackageWarning{etoc}
         {Unknown sectioning depth #1, \protect\etocsetlocaltop.toc ignored}}%
-   {\addtocontents {toc}
-   {\protect\etoc@setlocaltop\expandafter\protect\csname Etoc@#1@@\endcsname}}%
+   {\addtocontents {toc}{\protect\etoc@setlocaltopname{#1}}}%
 }%
 \def\etocimmediatesetlocaltop #1#{\Etoc@set@localtop@immediately}%
 \def\Etoc@set@localtop@immediately #1{%
@@ -2350,11 +2349,12 @@
    {\begingroup
        \let\Etoc@originalwrite\write
        \def\write{\immediate\Etoc@originalwrite}%
-       \addtocontents {toc}
-           {\protect\etoc@setlocaltop\expandafter\protect
-                                     \csname Etoc@#1@@\endcsname}%
+       \addtocontents{toc}{\protect\etoc@setlocaltopname{#1}}%
     \endgroup
    }%
+}%
+\def\etoc@setlocaltopname #1{%
+  \expandafter\etoc@setlocaltop\csname Etoc@#1@@\endcsname
 }%
 \def\etoc@setlocaltop #1{%
   \ifnum#1=\Etoc@maxlevel
@@ -2399,7 +2399,10 @@
            {\let\protect\etoc@startlocaltoc\protect\@gobble
             \let\protect\etoc@settocdepth\protect\@gobble
             \let\protect\etoc@depthtag\protect\@gobble
-            \let\protect\etoc@setlocaltop\protect\@gobble}{}}%
+            \let\protect\etoc@setlocaltop\protect\@gobble
+            \let\protect\etoc@setlocaltopname\protect\@gobble
+           }{}%
+}%
 \def\etocstandardlines {\Etoc@standardlinestrue}
 \def\etoctoclines      {\Etoc@standardlinesfalse}
 \etocfallbacklines
