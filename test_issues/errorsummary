@@ -120,10 +120,14 @@ entering extended mode
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
-[1;31m
-******************************************************************************
-**** PROBLÈME AVEC gh05_other_test_for_minipage.tex SI WARNING=ERROR À LA SIXIÈME COMPILATION
-******************************************************************************[0m
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+=== gh05_other_test_for_minipage.pdf
+  TOCS  3 top-level TOC structure(s)
+[32m
+ok pour gh05_other_test_for_minipage.tex[0m
+
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
@@ -142,10 +146,14 @@ entering extended mode
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
-[1;31m
-******************************************************************************
-**** PROBLÈME AVEC gh05_warnings_from_minipage.tex SI WARNING=ERROR À LA SIXIÈME COMPILATION
-******************************************************************************[0m
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+=== gh05_warnings_from_minipage.pdf
+  TOCS  5 top-level TOC structure(s)
+[32m
+ok pour gh05_warnings_from_minipage.tex[0m
+
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
@@ -294,10 +302,14 @@ entering extended mode
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
-[1;31m
-******************************************************************************
-**** PROBLÈME AVEC gh10_parbox.tex SI WARNING=ERROR À LA SIXIÈME COMPILATION
-******************************************************************************[0m
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+=== gh10_parbox.pdf
+  TOCS  1 top-level TOC structure(s)
+[32m
+ok pour gh10_parbox.tex[0m
+
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
@@ -618,40 +630,7 @@ entering extended mode
 **** PROBLÈME AVEC test_tagging_toc_as_molecule_b.tex SI WARNING=ERROR À LA SIXIÈME COMPILATION
 ******************************************************************************[0m
 N.B.: auxiliary files have all been removed before compilation
-[1;31m!!!! PROBLÈMES AVEC 8/26 TESTS:[0m
-[1;31mgh05_other_test_for_minipage.tex[0m
-! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
-(tagpdf)                Relation is not allowed! on line 48
-(tagpdf)                struct 168, Reference --> struct 169, semantic-para
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.48 
-     
-
-[1;31mgh05_warnings_from_minipage.tex[0m
-! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
-(tagpdf)                Relation is not allowed! on line 46
-(tagpdf)                struct 168, Reference --> struct 169, semantic-para
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.46 
-     
-
-[1;31mgh10_parbox.tex[0m
-! Package tagpdf Error: Parent-Child ':Reference' --> ':Part'.
-(tagpdf)                Relation is not allowed! on line 17
-(tagpdf)                struct 9, Reference --> struct 10, semantic-para
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.17 
-     
-
+[1;31m!!!! PROBLÈMES AVEC 5/26 TESTS:[0m
 [1;31mgh24_simplest_tabular.tex[0m
 LaTeX2e <2026-11-01>
 L3 programming layer <2026-09-09>
@@ -707,10 +686,7 @@ Type <return> to continue.
 l.181    \the\treetok
                      
 
-[1;31mFAIL=8, PASS=18, TOTAL=26[0m
-fail: gh05_other_test_for_minipage.tex
-fail: gh05_warnings_from_minipage.tex
-fail: gh10_parbox.tex
+[1;31mFAIL=5, PASS=21, TOTAL=26[0m
 fail: gh24_simplest_tabular.tex
 fail: gh25_start_finish.tex
 fail: test_tagging_inline_delayed.tex

@@ -239,10 +239,14 @@ entering extended mode
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
-[1;31m
-******************************************************************************
-**** PROBLÈME AVEC testsnippet-13.tex SI WARNING=ERROR À LA SIXIÈME COMPILATION
-******************************************************************************[0m
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+=== testsnippet-13.pdf
+  TOCS  4 top-level TOC structure(s)
+[32m
+ok pour testsnippet-13.tex[0m
+
 This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
  restricted \write18 enabled.
 entering extended mode
@@ -390,7 +394,7 @@ entering extended mode
 ok pour testsnippet-25.tex[0m
 
 N.B.: auxiliary files have all been removed before compilation
-[1;31m!!!! PROBLÈMES AVEC 6/18 TESTS:[0m
+[1;31m!!!! PROBLÈMES AVEC 5/18 TESTS:[0m
 [1;31mtestsnippet-01.tex[0m
 LaTeX2e <2026-11-01>
 L3 programming layer <2026-09-09>
@@ -424,17 +428,6 @@ For immediate help type H <return>.
  ...                                              
                                                   
 l.52 \endgroup
-[1;31mtestsnippet-13.tex[0m
-! Package tagpdf Error: Parent-Child ':TOC' --> ':P'.
-(tagpdf)                Relation is not allowed! on line 75
-(tagpdf)                struct 11, semantic-para --> struct 12, text-block
-
-Type <return> to continue.
- ...                                              
-                                                  
-l.75 \endgroup
-              
-
 [1;31mtestsnippet-19.tex[0m
 LaTeX2e <2026-11-01>
 L3 programming layer <2026-09-09>
@@ -457,11 +450,10 @@ L3 programming layer <2026-09-09>
 For immediate help type H <return>.
  ...                                              
                                                   
-[1;31mFAIL=6, PASS=12, TOTAL=18[0m
+[1;31mFAIL=5, PASS=13, TOTAL=18[0m
 fail: testsnippet-01.tex
 fail: testsnippet-11.tex
 fail: testsnippet-12.tex
-fail: testsnippet-13.tex
 fail: testsnippet-19.tex
 fail: testsnippet-20.tex
 
