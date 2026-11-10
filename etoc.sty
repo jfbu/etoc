@@ -921,7 +921,17 @@
 %% 2026 NOV
 %%
 %% Use para/restore socket instead of \tagpdfparaOn.
-    \def\Etoc@tagging@starttoc@after{\par\UseTaggingSocket{para/restore}}%
+%%
+%% Assign the default plug of para/restore first, as
+%% \csbc{Etoc@tableofcontents@contents} assigned it noop for the TOC
+%% contents (see there).  We are inside the group of the TOC command, so
+%% this assignment ends with it.  This assumes the document had the default
+%% plug: we have no means to recover the plug which was assigned before.
+    \def\Etoc@tagging@starttoc@after{%
+      \par
+      \AssignSocketPlug{tagsupport/para/restore}{default}%
+      \UseTaggingSocket{para/restore}%
+    }%
   \fi
 %% 2024 JAN
 %%
@@ -935,7 +945,11 @@
 %%
 %% Use para/end and para/begin sockets instead of manual structure/MC handling.
     \UseTaggingSocket{para/end}%
+%% 2026 NOV
+%%
+%% Same remark as above on the default plug of para/restore.
     \def\Etoc@tagging@starttoc@after{%
+      \AssignSocketPlug{tagsupport/para/restore}{default}%
       \UseTaggingSocket{para/restore}%
       \ifhmode
         \UseTaggingSocket{para/begin}%
@@ -1653,6 +1667,22 @@
 %% to hit us at some point...
 \AssignSocketPlug{tagsupport/parbox/before}{noop}%
 \AssignSocketPlug{tagsupport/parbox/after}{noop}%
+%% 2026 NOV
+%%
+%% With the \LaTeX{} release of 2026-11-01, \csa{parbox} and the
+%% \texttt{minipage} environment use the para/restore socket inside their
+%% box.  As paragraph tagging is off in the TOC, this switched it on again
+%% inside the box, and opened a paragraph structure (semantic-para and
+%% text-block) inside the Reference structure of the line, with nested
+%% marked content (\etocissue{5}, \etocissue{10}).  Setting the parbox and
+%% minipage sockets to noop does not prevent this.  The kernel does the same
+%% for headings with the hang format: parbox/before, parbox/after and
+%% para/restore set to noop (latex-lab-testphase-sec-template.sty).
+%%
+%% This assignment is local to the group of the TOC command, but etoc uses
+%% para/restore itself at the end of the TOC: hence
+%% \csbc{Etoc@tagging@starttoc@after} assigns the default plug again first.
+\AssignSocketPlug{tagsupport/para/restore}{noop}%
 \fi
     \gdef\etoclocaltop{-\thr@@}%
 %% 2024 JAN
