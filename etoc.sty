@@ -99,7 +99,6 @@
 \def\etoc@{\etoc@}
 \long\def\Etoc@gobtoetoc@ #1\etoc@{}
 \newtoks\Etoc@toctoks
-%% was using a \csa{def} prior to \etocrelease{1.2e}
 \def\etocinline{\let\Etoc@par\@empty}\let\etocnopar\etocinline
 \def\etocdisplay{\def\Etoc@par{\par}}
 \etocdisplay
@@ -127,12 +126,6 @@
 \def\etocdoesnotcheckemptiness {\Etoc@checksemptinessfalse }
 \newif\ifEtoc@notocifnotoc
 \def\etocnotocifnotoc {\Etoc@checksemptinesstrue\Etoc@notocifnotoctrue }
-%% 2024 JAN
-%%
-%% \etocrelease{1.2e} starts minimal support for the ``\LaTeX{} tagged PDF''
-%% project.  Completely unstable code.   The \csbc{ifEtoc@tagactive}
-%% may not be needed or actually correctly used (as it is frozen here)
-%% but I use it in \csbc{Etoc@addtocontents}.
 \newif\ifEtoc@tagging
 \newif\ifEtoc@tagginginline
 \def\etoctaggingon {\Etoc@taggingtrue\Etoc@tagginginlinetrue}
@@ -466,12 +459,6 @@
 \newif\ifEtoc@emptyline
 \def\Etoc@etoccontentsline@ #1#2#3#4{%
     \Etoc@doendsandbegin
-%% 2024 JAN
-%%
-%% Experimental tagging support at \etocrelease{1.2e}.  We need to manually
-%% insert calls to the \LaTeX{} kernel tagging-related
-%% hooks, which is fragile as upstream will evolve regarding in particular
-%% current usage of ``config points''.
     \Etoc@global\edef\Etoc@prefix  {\expandafter\noexpand
          \csname Etoc@prefix@\the\numexpr\Etoc@level\endcsname }%
     \Etoc@global\edef\Etoc@contents{\expandafter\noexpand
@@ -507,21 +494,6 @@
 %% ATTENTION: this means that this macro will have the same frailty
 %% against \csa{edef} as \csa{etocthename} and one should use
 %% \csa{protected@edef} when using it, or a single expansion.
-%%
-%% 2025 SEP
-%% \csa{__tag_toc_contentsline_begin:nnn} does not exist anymore
-%% (memo: commit c2f7848d5 Sun Jul 14 affecting
-%% required/latex-lab/latex-lab-toc.dtx).
-%% Anyway using it was bad as mentioned earlier.
-%%
-%% At this stage I have no idea why I used only \etocthename
-%% expanded once as second argument (there were only three not four).
-%% To be honest I have no idea what this \etocthetocitembegintag
-%% is supposed to be used for (perhaps I should check what I
-%% said in user manual) and it is not used anywhere in the code,
-%% it must be something for end-user.  This \csa{edef} is a bit
-%% frightening, let's put all the tagging socket in \csa{unexpanded},
-%% and use the raw data, cross fingers and see what my test suite says.
       \Etoc@global\edef\etocthetocitembegintag{%
         \@ifundefined{toclevel@#1}%
           {\etoc@namedef{toclevel@#1}{\the\numexpr\Etoc@level}}%
@@ -529,29 +501,12 @@
         \unexpanded{\UseTaggingSocket{toc/contentsline/before}{%
             {#1}{#2}{#3}{#4}%
         }}%
-%% 2025 SEP
-%%
-%% I also at this stage have no clear idea for the rationale beyond
-%% these next two lines.
 %% 2026 NOV
 %%
 %% Use symbolic structure name instead of hard-coded Reference.
         \tag_struct_begin:n{tag=\UseStructureName{toc/item/text}}%
         \tag_mc_begin:n{artifact=layout}%
       }%
-%% 2024 JAN
-%%
-%% Kernel code has no \csa{tag_if_active:T} in \csa{@contentsline@cfgpoint@after}
-%% expansion.  \csa{edef} to expand |#1| to be symmetrical to start, but
-%% anyhow a priori, |#1| is always a priori simply a string.
-%%
-%% 2025 SEP
-%%
-%% \csa{__tag_toc_contentsline_end:n} does not exist anymore
-%% (memo: commit c2f7848d5 Sun Jul 14 affecting
-%% required/latex-lab/latex-lab-toc.dtx).
-%% Anyway using it was bad as mentioned earlier.
-%% No \csa{edef}.
       \Etoc@global\def\etocthetocitemendtag{%
         \tag_mc_end:
         \tag_struct_end:
@@ -606,12 +561,6 @@
 %%
 %% MEMO: can not use here \csbc{etocthetocitemendtag} which does not
 %% query \csbc{ifEtoc@tagginginline}.
-%%
-%% 2025 SEP
-%%
-%% No idea why I had used \csbc{etocthename} here in 2024 and not |#2|.
-%%
-%% There is no more a \csa{@contentsline@cfgpoint@before}.
       \UseTaggingSocket{toc/contentsline/before}{{#1}{#2}{#3}{#4}}%
     \fi
     \fi
@@ -650,10 +599,6 @@
 %% stage.  No need to worry about using \csbc{etocthename} which may
 %% actually have the same (a priori rare) problem with an unbalanced
 %% group closing in user prefix plus contents code.
-%%
-%% 2025 SEP
-%%
-%% There is no \csa{@contentsline@cfgpoint@after} anymore.
     \ifEtoc@tagging
     \unless\ifEtoc@emptyline
       \UseTaggingSocket{toc/contentsline/after}{{#1}{#2}{#3}{#4}}%
@@ -1012,9 +957,6 @@
 %% unnecessary, normally...
     \let\Etoc@tagging@starttoc@after\@empty
   \fi
-%% 2025 SEP
-%%
-%% No more \@starttoc@cfgpoint@before{toc} (or after)
   \UseTaggingSocket{toc/starttoc/before}{toc}%
 }
 \protected\def\etoctagfinishTOCcontents{%
@@ -1030,10 +972,6 @@
 %%
 %% For local toc gets done in
 %% \csbc{Etoc@@startlocaltoc}/\csbc{Etoc@@startlocallistof}
-%%
-%% 2025 SEP
-%%
-%% No more \@starttoc@cfgpoint@before{toc}%
   \ifEtoc@tagging
     \unless\ifEtoc@localtoc
       \Etoc@tagging@starttoc@before
@@ -1055,10 +993,6 @@
 %% \csa{@starttoc@cfgpoint@after} at some stage, i will have to make it either
 %% localtoc, locallof, or locallot (or whatever has been used with
 %% \csa{@starttoc@cfgpoint@before} or successor.
-%%
-%% 2025 SEP
-%%
-%% No more \@starttoc@cfgpoint@after{localtoc}%
         \UseTaggingSocket{toc/starttoc/after}{toc}%
         \Etoc@tagging@starttoc@after
       \fi
@@ -1099,10 +1033,6 @@
 %% |\@starttoc@cfgpoint@after{toc}| (located in \csbc{Etoc@toctoc}) is done?
 %%
 %% The same addition is made to \csbc{Etoc@@startlocallistof}.
-%%
-%% 2025 SEP
-%%
-%% No more \@starttoc@cfgpoint@before{toc}%
           \ifEtoc@tagging
             \Etoc@tagging@starttoc@before
             \UseTaggingSocket{toc/starttoc/before}{toc}%
@@ -1301,10 +1231,6 @@
 %% to decide how to make the finish macro inherit the argument; which however
 %% attow is disposed of by the \csa{@starttoc@cfgpoint@after} to which it
 %% maps.
-%%
-%% 2025 SEP
-%%
-%% No more \@starttoc@cfgpoint@before
           \ifEtoc@tagging\UseTaggingSocket{toc/starttoc/before}{localtoc}\fi
        \fi
     \fi
@@ -1598,7 +1524,6 @@
    \def\Etoc@tableofcontents@user@after {#2}%
 }%
 \def\etocstoretocstyleinto#1{%
-%%    \@ifdefinable#1{%
       \edef#1{\noexpand\Etoc@etocstylefalse\noexpand\Etoc@classstylefalse
               \def\noexpand\Etoc@tableofcontents@user@before{%
                   \unexpanded\expandafter{\Etoc@tableofcontents@user@before}%
@@ -1607,7 +1532,6 @@
                   \unexpanded\expandafter{\Etoc@tableofcontents@user@after}%
                 }%
              }%
-%%    }%
 }%
 \def\Etoc@tableofcontents {%
     \Etoc@tableofcontents@etoc@before
