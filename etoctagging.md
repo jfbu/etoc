@@ -2,9 +2,36 @@
 
 We will try to keep these items in sync with the actual code, but they may be lagging behind.
 
-IMPORTANT: since 2024/06/18, the code attempting to support tagging is only in the `tagging` branch.  The `master` branch does contain this file but its `etoc.sty` has been trimmed from the tagging code altogether, because it is expected if a new release of `etoc` happens in the next few months (which a priori can only happen as a hotfix to an emerging problem from changes in `hyperref` or other LaTeX itself) that it will not support tagging due to the excessive amount of work needed for that and bleak prospects of actual success.
+The PDF and LaTeX views of what a TOC is are simply too archaic and restrictive to etoc, which flies high above such cages.
 
 [etoctagging.tex](/etoctagging.tex) is a user level companion of the more technical explications which are given here.  It may lag behind even more.
+
+## Dev notes and perspectives at [1.2f]
+
+The tagging support of 1.2f has been checked only with pdfLaTeX and the LaTeX release of 2026-11-01.  The later sections of this file describe the state at 2024-01-16; the items below say where it changed.
+
+Work done:
+- the `@cfgpoint@` macros and the internal tagpdf commands used earlier no longer exist; `etoc` uses the tagging sockets `toc/starttoc/before` and `toc/starttoc/after` around the TOC contents (argument `toc`, or `localtoc` for local lists of figures and tables), and `toc/contentsline/before` and `toc/contentsline/after` with arguments `{#1}{#2}{#3}{#4}` in `\Etoc@etoccontentsline@` (in compatibility mode the kernel `\contentsline` does it),
+- around the TOC, the paragraph state is handled with the sockets `para/end`, `para/restore` and `para/begin`, according to whether the TOC starts in vertical or horizontal mode,
+- the structure names are obtained via `\UseStructureName` from the kernel symbolic names `toc/item/text`, `toc/item/label` and `para/textblock`,
+- a line is a `TOCI` (opened by the socket) containing a `Reference` structure; the prefix and contents are in an artifact marked content; `\etocname`, `\etocnumber` and `\etocpage` end it, insert their data as `Reference` marked content (the number as `Lbl` marked content in an `Lbl` structure which is a child of the `Reference`), then restart an artifact explicitly: `\tag_mc_end_push:` and `\tag_mc_begin_pop:n` can not be used, as the pop restarts a tagged marked content,
+- with hyperref, `\etoclink` tags its argument as `Reference` marked content, as the `Link` structure needs real content; without hyperref its argument remains an artifact,
+- no `TOCI` for a line whose prefix and contents are both empty,
+- boxes typeset only to be measured, then discarded, are built with tagging suspended, else their marked content is referenced in the structure tree although it never reaches the PDF,
+- the fall-back line styles produce a correct structure (leaders and punctuation as artifacts, number as `Lbl`, order name, number, page),
+- during the TOC contents the sockets `parbox/before`, `parbox/after`, `minipage/before`, `minipage/after` and `para/restore` are set to `noop`: with the LaTeX release of 2026-11-01, `\parbox` and `minipage` use `para/restore` inside their box, which re-activated paragraph tagging inside a `Reference`; at the end of the TOC `etoc` assigns the `default` plug of `para/restore` again before using it,
+- contrarily to what the 2024 notes below say, `etoc` defines `\toclevel@<levelname>` from its own level if it is undefined, as latex-lab needs it (see the code comments mentioning jfbu/etoc#22),
+- the `lof` and `lot` package options write the destination of the copied figure and table entries also without hyperref (jfbu/etoc#8),
+- each test file is compiled 7 times, tagpdf warnings being turned into errors for the last 2 only, then `tocchecks.py` checks the structure of the PDF.
+
+Unsolved:
+- material typeset by the `{<start>}` and `{<finish>}` parts of a line style is not tagged at all, neither as content nor as artifact, and a structure created there (for example by `\emph`) becomes a child of the `TOC` (jfbu/etoc#25),
+- displays built from structural environments, such as a `tabular` (jfbu/etoc#24) or lists, whose structures interleave with `TOC` and `TOCI`,
+- the two-stage constructions (TOC as a molecule, delayed inline TOC) raise tagging errors again,
+- a TOC inside a `figure` or `table` (jfbu/etoc#18, upstream),
+- `etoc` can not recover the plug of `para/restore` assigned by the document before the TOC, and assumes it was `default`,
+- the test `\ifhmode` deciding the paragraph handling at the start of the TOC is probably not the right one (for example in a TikZ picture),
+- `etoc`'s level system versus the kernel's `\toclevel@<levelname>`.
 
 ## Perspectives at [2024-01-16]
 
@@ -55,4 +82,5 @@ It is not clear at this stage if the last point is possible in tabular context f
 `etoc` is aware of, and maintains virtually a hierarchical tree of the `.toc` file (or relevant portion to local toc), which seems to be like a potential mirror of  some core low-level actions done by [tagpdf](https://github.com/latex3/tagpdf).  But `etoc` user can arbitrarily reassign levels for doing some rather devious tasks using only the `.toc` file.  As a kind of example, see `etoc`'s own `\locallistoffigures` and `\locallistoftables`.  Some thinking and testing will be needed to see how arbitrary level assignments by user may affect the kernel tagging code which expects a fixed hierarchy.  At least, `etoc` does not define `\toclevel@<levelname` macros for reasons pre-existing tagging, see code comments.  This removes surely potential problems.  Untested, but for example a TOC of all subsections ignoring chapters and sections, as is possible with `etoc` should be tagged fine.  And preliminary testing of `etoc`'s `\locallistoffigures` and `\locallistoftables` seems to be positive.
 
 
+[1.2f]: https://github.com/jfbu/etoc/releases/tag/1.2f
 [2024-01-16]: https://github.com/jfbu/etoc/releases/tag/2024-01-16
