@@ -156,11 +156,17 @@
     \def\Etoc@tagsuspend{\UseName{tag_suspend:n}{etoc}}%
     \def\Etoc@fallbacklines@numpagebox{\hbox{\Etoc@fallbacklines@numpage}}%
   \else
-    \Etoc@taggingfalse
     \def\etoctaggingon{%
       \PackageWarning{etoc}{Tagging is not active in the document\MessageBreak
                             So \string\etoctaggingon\space is ignored}%
     }%
+%% 2026 NOV
+%%
+%% An \csbc{etoctaggingon} from the preamble set both flags: warn now and
+%% reset both, as \csbc{ifEtoc@tagginginline} left true caused undefined
+%% tagpdf commands in \csbc{Etoc@etoccontentsline@}.
+    \ifEtoc@tagging\etoctaggingon\fi
+    \etoctaggingoff
   \fi
 }
 %% 2026 NOV
