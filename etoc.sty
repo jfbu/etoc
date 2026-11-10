@@ -630,8 +630,7 @@
       \UseTaggingSocket{para/restore}%
     }%
   \fi
-  %% Testing for \hmode is no good if in a tikz picture for example
-  \ifhmode %% WIP! This is probably not the good test!
+  \ifhmode
     \UseTaggingSocket{para/end}%
     \def\Etoc@tagging@starttoc@after{%
       \AssignSocketPlug{tagsupport/para/restore}{default}%
