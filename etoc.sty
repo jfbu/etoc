@@ -143,9 +143,6 @@
 \AtBeginDocument{%
   \ifEtoc@tagactive
     \PackageInfo{etoc}{Experimental tagging support activated}%
-%% 2026 NOV
-%%
-%% See \csbc{Etoc@tagsuspend}.
     \def\Etoc@tagsuspend{\UseName{tag_suspend:n}{etoc}}%
     \def\Etoc@fallbacklines@numpagebox{\hbox{\Etoc@fallbacklines@numpage}}%
   \else
@@ -153,29 +150,11 @@
       \PackageWarning{etoc}{Tagging is not active in the document\MessageBreak
                             So \string\etoctaggingon\space is ignored}%
     }%
-%% 2026 NOV
-%%
-%% An \csbc{etoctaggingon} from the preamble set both flags: warn now and
-%% reset both, as \csbc{ifEtoc@tagginginline} left true caused undefined
-%% tagpdf commands in \csbc{Etoc@etoccontentsline@}.
     \ifEtoc@tagging\etoctaggingon\fi
     \etoctaggingoff
   \fi
 }
-%% 2026 NOV
-%%
-%% Used at the start of boxes which are typeset only to be measured and are
-%% then discarded: marked content created there would be referenced in the
-%% structure tree although it never reaches the PDF.  Tagging is suspended
-%% locally, i.e. until the end of the box.  Empty without active tagging.
 \let\Etoc@tagsuspend\@empty
-%% 2026 NOV
-%%
-%% The section and subsection fall-back line styles build the box with
-%% number and page before typesetting the name, to measure it.  With active
-%% tagging this box is built with tagging suspended and typeset again in
-%% place, so that the structure follows the reading order (name, number,
-%% page).  Without active tagging the measured box is used, as before.
 \def\Etoc@fallbacklines@numpagebox{\box\tw@}
 \newcounter{etoc@tocid}
 \def\Etoc@tocext{toc}
@@ -253,40 +232,10 @@
         \etocifunknownlevelTF{#1}{\Etoc@newlevel{#1}}{}%
         \expandafter\let\csname Etoc@#1@@\expandafter\endcsname
                         \csname Etoc@\Etoc@tmp @@\endcsname
-%% 2024 JAN
-%%
-%% TODO:
-%%
-%% Review next code/comment in tagpdf context
-%% So we create |@<levelname>| as aliases to |<levelname>|.  This is really
-%% needed only for the level names actually involved by ``to toc'' thing, but
-%% let's do it systematically to avoid implementation complications.
         \expandafter\edef\csname Etoc@@#1@@\endcsname
                          {\expandafter\noexpand\csname Etoc@#1@@\endcsname}%
-%% 2024 JAN
-%%
-%% TODO:
-%%
-%% Review next code/comment in tagpdf context
-%% As ``to toc'' will use some \csa{addcontentsline}, we must make
-%% \ctanpkg{hyperref} happy and also define the suitable |toclevel@| prefixed
-%% extra macros.
-%% ATTENTION! this means that \csa{toclevel@#1} will exist as \csa{relax} if
-%% it did not exist beforehand (and then |\toclevel@@#1->\toclevel#1|).
         \expandafter\edef\csname toclevel@@#1\endcsname
                          {\expandafter\noexpand\csname toclevel@#1\endcsname}%
-%% 2024 JAN
-%%
-%% TODO:
-%%
-%% Review next code/comment in tagpdf context
-%% But we don't set \ctanpkg{hyperref}'s \csa{toclevel@#1} to be
-%% numerically \csa{Etoc@tmp}, with some hesitation.  The level defined by
-%% \csbc{etocsetlevel} should only be for interpretation by \etoc for the
-%% contents of the |.toc| file.  If it also influences how \ctanpkg{hyperref}
-%% hooks into \csa{section} and like commands influence the PDF bookmarks,
-%% unexpected results could follow.  It is up to user to set-up by themself
-%% possibly needed extra \ctanpkg{hyperref} configuration in this regard.
       \fi
    \else
       \PackageWarning{etoc}
@@ -403,26 +352,7 @@
   \Etoc@next{#1}%
 }
 \ExplSyntaxOn
-%% 2024 JAN
-%%
-%% This version is for all of <prefix><contents> a priori marked as artifact
-%% and \csbc{etocname}, \csbc{etocnumber}, \csbc{etocpage} will be the only
-%% non-artifact chunks.
-%%
-%% These \csa{long}'s look silly.
 \long\protected\def\etoctagReference#1{%
-%% 2026 NOV
-%%
-%% Use symbolic structure name instead of hard-coded Reference.
-%%
-%% Do not use \tag_mc_end_push: and \tag_mc_begin_pop:n here: the stack
-%% records the tag of the interrupted marked content but not that it was an
-%% artifact, so the pop restarted a Reference marked content and all the
-%% rest of the line (leaders, punctuation, ...) was tagged as content.  The
-%% surrounding marked content is by design an artifact (see
-%% \csbc{etocthetocitembegintag} and \csbc{Etoc@etoccontentsline@}), so
-%% restart it as such.  Without active tagging #1 is simply inserted, as
-%% the tagpdf commands were no-ops then.
     \ifEtoc@tagactive
       \expandafter\@firstoftwo
     \else
@@ -437,9 +367,6 @@
     {#1}%
 }%
 \long\protected\def\etoctagLbl #1{%
-%% 2026 NOV
-%%
-%% Use symbolic structure name instead of hard-coded Lbl.
                 \tag_mc_end_push:
                 \tag_struct_begin:n{tag=\UseStructureName{toc/item/label}}%
                 \tag_mc_begin:n{tag=\UseStructureName{toc/item/label}}%
@@ -450,11 +377,6 @@
                 }%
 \let\etocthetocitembegintag\@empty
 \let\etocthetocitemendtag\@empty
-%% 2024 JAN
-%%
-%% TODO:
-%%
-%% Check how this is called in LaTeX3 and use theirs
 \protected\def\etoc@namedef#1{\expandafter\def\csname#1\endcsname}%
 \newif\ifEtoc@emptyline
 \def\Etoc@etoccontentsline@ #1#2#3#4{%
@@ -468,32 +390,6 @@
     \gdef\@contentsline@destination{#4}%
     \Etoc@lxyz{#2}{#3}{#4}%
     \ifEtoc@tagactive
-%% 2024 JAN
-%%
-%% For sophisticated two stages process, we have already at our
-%% disposal \csbc{etocthelink}, but user will need the naked
-%% destination to rebuild a tagging structure.  Should I do
-%% things such as
-%%     \centeredline{|\global\let\etocthedest\@contentsline@destination|}
-%%     \centeredline{|\Etoc@global\def\etocthelevelname{#1}|}
-%% 2024 JAN
-%%
-%% ??
-%%
-%% Attention that it would be wrong to make the next definitions only if
-%% \csbc{ifEtoc@tagging} was true, because in fact this is supposed to
-%% be done under \csbc{etoctaggingoff} regime for sophisticated 2-stage
-%% constructs such as those of the manual for TOCs as mind maps.
-%% MEMO: of course these definitions must be made here before expansion
-%% of user defined prefix and contents!
-%%
-%% Let's avoid submitting \csbc{etocthename} to a full \csa{edef} here.
-%%
-%% ATTENTION: usage of tagpdf internal command is not best practice.
-%%
-%% ATTENTION: this means that this macro will have the same frailty
-%% against \csa{edef} as \csa{etocthename} and one should use
-%% \csa{protected@edef} when using it, or a single expansion.
       \Etoc@global\edef\etocthetocitembegintag{%
         \@ifundefined{toclevel@#1}%
           {\etoc@namedef{toclevel@#1}{\the\numexpr\Etoc@level}}%
@@ -501,9 +397,6 @@
         \unexpanded{\UseTaggingSocket{toc/contentsline/before}{%
             {#1}{#2}{#3}{#4}%
         }}%
-%% 2026 NOV
-%%
-%% Use symbolic structure name instead of hard-coded Reference.
         \tag_struct_begin:n{tag=\UseStructureName{toc/item/text}}%
         \tag_mc_begin:n{artifact=layout}%
       }%
@@ -514,12 +407,6 @@
       }%
     \fi
     \ifEtoc@tagging
-%% 2026 NOV
-%%
-%% A line whose prefix and contents are both empty (for example the levels
-%% below subsubsection with \csbc{etocfallbacklines}) displays nothing: do
-%% not open a TOCI with an empty Reference for it.  The flag is global as
-%% user code in prefix and contents may close groups (see below).
       \global\Etoc@emptylinefalse
       \expandafter\ifx\Etoc@prefix\@empty
         \expandafter\ifx\Etoc@contents\@empty
@@ -527,55 +414,14 @@
         \fi
       \fi
     \unless\ifEtoc@emptyline
-%% 2024 JAN
-%%
-%% UPDATE: latex-lab needs \csa{toclevel@#1} and sets it
-%% to 1 if it does not exist.  But then a problem arise if
-%% the actual level is 0, with a tocdepth at 0... \etocissue{22}!
     \@ifundefined{toclevel@#1}%
       {\expandafter\edef\csname toclevel@#1\endcsname{\the\numexpr\Etoc@level}}%
       {}%
-%% 2024 JAN
-%%
-%%
-%% TODO:
-%%
-%% This ties the hierarchy of levels to the one expected
-%% by the kernel code which is probably good.  Once I will have
-%% understood better though the tagging business perhaps I should
-%% drop this entirely and update the PDF structure tree directly
-%% from \csbc{Etoc@doendsandbegin}, or rather incorporate into the
-%% begins and ends the needed thing.  At this stage indeed it
-%% appears impossible to expect using etoc powerful list of
-%% abilities, all using only the single .toc file will possibly
-%% work with upstream kernel code which only knows about standard
-%% things.
-%%
-%% TODO:
-%%
-%% Perhaps use own code; the kernel code tries to separate name from
-%% number, but this works only if \csa{numberline}, not if for example,
-%% \csa{chapterline} is used.  Having now moved this after \csbc{Etoc@lxyz},
-%% at this stage we are in possession of \csbc{etocthename}. (I think
-%% the \csa{text_purify:n} from kernel code expands its argument)
-%%
-%% MEMO: can not use here \csbc{etocthetocitemendtag} which does not
-%% query \csbc{ifEtoc@tagginginline}.
       \UseTaggingSocket{toc/contentsline/before}{{#1}{#2}{#3}{#4}}%
     \fi
     \fi
-%% 2024 JAN
-%%
-%% In order to fix the |etoc/jfbu#6| issue regarding \csa{emph} which
-%% can not appear as a child of TOCI, I will tag *everything*
-%% as artifact, *except* for the sole \csbc{etocname}, \csbc{etocnumber},
-%% \csbc{etocpage} which will introduce their own marked content,
-%% interrupting and reactivating the artifact.
     \ifEtoc@tagginginline
     \unless\ifEtoc@emptyline
-%% 2026 NOV
-%%
-%% Use symbolic structure name instead of hard-coded Reference.
       \tag_struct_begin:n{tag=\UseStructureName{toc/item/text}}%
       \tag_mc_begin:n{artifact=layout}%
     \fi
@@ -588,42 +434,21 @@
       \tag_struct_end:
     \fi
     \fi
-%% 2024 JAN
-%%
-%% MEMO: Attention that groups may be closed in the certain rare cases
-%% by the user code from prefix and contents: \csbc{etocthetocitemendtag}
-%% is not global, but done with \csbc{Etoc@global}.  But more
-%% importantly it does not check the \csbc{ifEtoc@tagginginline} status.
-%%
-%% MEMO: only |#1| is actually needed by kernel code below at this
-%% stage.  No need to worry about using \csbc{etocthename} which may
-%% actually have the same (a priori rare) problem with an unbalanced
-%% group closing in user prefix plus contents code.
     \ifEtoc@tagging
     \unless\ifEtoc@emptyline
       \UseTaggingSocket{toc/contentsline/after}{{#1}{#2}{#3}{#4}}%
     \fi
     \fi
 }
-%% 2024 JAN
-%%
-%% \etocrelease{1.2e} defines \csbc{etochyperlink} as a \csa{protected} wrapper
-%% to \csa{hyperlink} and uses it in the \csbc{etocthelinkedname} et al.  This
-%% allows easier constructs of 2-stages TOC where first pass will use
-%% \csa{edef} to prepare some structure.
-%% does \csa{long} make any sense here?
 \long\protected\def\etochyperlink{\hyperlink}%
 \def\Etoc@lxyz #1#2#3{%
     \Etoc@global\def\etocthepage{#2}%
     \Etoc@global\def\etocthename{#1}%
     \futurelet\Etoc@getnb@token\Etoc@@getnb #1\hspace\etoc@
     \ifEtoc@hyperref
-%% "tagged" here in case of hyperref means "tagged but not linked"
       \Etoc@global\let\etocthetaggedname  \etocthename
       \Etoc@global\let\etocthetaggedpage  \etocthepage
       \Etoc@global\let\etocthetaggednumber\etocthenumber
-%% \etocthetaggedlink is not public for time being
-%% let's define it now and modify below if tagging is active
       \Etoc@global\def\etocthetaggedlink##1{\etochyperlink{#3}{##1}}%
       \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etochyperlink{#3}{##1}}}%
       \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthelinkedname
@@ -635,12 +460,6 @@
           \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagReference{\etochyperlink{#3}{##1}}}}%
           \expandafter\Etoc@tmp\expandafter{\etocthename}\etocthelinkedname
           \expandafter\Etoc@tmp\expandafter{\etocthepage}\etocthelinkedpage
-%% 2024 JAN
-%%
-%% Should I really use a Reference tag on top of the Lbl?
-%% Should the Lbl not be rather on top of \csa{hyperlink}? I remember more or
-%% less that the current nesting is inspired from what latex-lab does and the way
-%% the hyperref hooks are inserted.
           \def\Etoc@tmp##1##2{\Etoc@global\def##2{%
                                   \etoctagReference{\etochyperlink{#3}{\etoctagLbl{##1}}}%
                                 }%
@@ -652,19 +471,9 @@
           \def\Etoc@tmp##1##2{\Etoc@global\def##2{\etoctagReference{\etoctagLbl{##1}}}}%
           \expandafter\Etoc@tmp\expandafter{\etocthenumber}\etocthetaggednumber
         \else
-%% 2024 JAN
-%%
-%% if inline tagging is turned off, we must let the "thelinked" macros hold
-%% no hyperlinks, contrarily to what their names indicate
           \Etoc@global\let\etocthelinkedname  \etocthename
           \Etoc@global\let\etocthelinkedpage  \etocthepage
           \Etoc@global\let\etocthelinkednumber\etocthenumber
-%% 2024 JAN
-%%
-%% Memo: \csbc{etocthetaggedlink} in that context does add an hyperlink.  Use case
-%% could be "Another compatibility mode" context with \csa{l@chapter} like this:
-%% \centeredline{|\l@chapter{\numberline{\etocnumber}\etocname}{\etoclink{\etocpage}}|}
-%% so chapter page numbers get hyperlinked but not section page numbers.
         \fi
       \fi
     \else
@@ -685,29 +494,12 @@
       \Etoc@global\let\etocthetaggednumber\etocthelinkednumber
       \Etoc@global\let\etocthetaggedpage  \etocthelinkedpage
     \fi
-%% 2024 JAN
-%%
-%% MEMO:
-%%
-%% If tagging is on but inline tagging is off, this \etocthelink does
-%% actually insert an hyperlink.
-%%
-%% TODO:
-%%
-%% Check if the refactoring did not modify in what cases exactly
-%% are the page or number macros let to \csa{@empty}
     \Etoc@global\let\etocthelink\etocthetaggedlink
     \ifx\etocthepage\@empty
         \Etoc@global\let\etocthelinkedpage\@empty
         \Etoc@global\let\etocthetaggedpage\@empty
     \fi
     \ifEtoc@numbered\else
-%% 2024 JAN
-%%
-%% TODO:
-%%
-%% It is possible that I added this |\let\etocthenumber\@empty| now and it
-%% is in fact superfluous
         \let\etocthenumber\@empty
         \let\etocthelinkednumber\@empty
         \let\etocthetaggednumber\@empty
@@ -830,69 +622,17 @@
   \fi
   \global\let\Etoc@openouttoc\empty
 }
-%% 2024 JAN
-%%
-%% \etocrelease{1.2e} adds initial structure to support tagging.  Completely
-%% unstable code.  There is a subtlety here that we can \emph{not} (always)
-%% insert the \csa{@tarttoc} config point ``/before`` material here priori to
-%% |\the\Etoc@toctoks| due to local table of contents which (see the
-%% \csbc{Etoc@@startlocaltoc}) since the \etocrelease{1.2} (see
-%% \csbc{etocclasstocstyle}) may cause the TOC heading to originate from
-%% expansion of |\the\Etoc@toctoks| itself, and the \csa{@starttoc} tagging
-%% ``/before`` addition must not happen before the TOC title is typeset (as
-%% e.g. it may use a \csa{chapter*} command in a \csa{part} for |book|
-%% document class).
-%%
-%% \etoc allows inline TOCs where \toc is encountered midway in a paragraph.
-%% As |<TOC>| can not be a child of |<P>| this would be rather problematic
-%% were it not the kernel upstream introduction of |<text-unit>| and |<text>|
-%% structure and we can try to inscribe ourselves into this flow,
-%% cf.: \centeredline{%
-%% \url{https://github.com/jfbu/etoc/issues/11#issuecomment-1888089994}}
-%% relative to \etocissue{11}.  Our code will require \emph{much} better
-%% knowledge of the complete upstream code.
-%%
-%% The kernel \csa{@starttoc} ``before'' hook turns para-tagging off and
-%% counts on the \csa{endgroup} at end of \csa{@starttoc} to re-enact it.
-%% As \etoc allows inline TOCs and furthermore our \csa{endgroup} gets
-%% executed only \emph{after} the second argument of \csbc{etocsettocstyle}
-%% has been executed, and this argument may contain paragraphs, we need to
-%% take some actions, relative to \etocissue{9}, \etocissue{12} and
-%% \etocissue{13}.  We also need to be careful that with local TOCs,
-%% our copies of the \csa{@starttoc} hooks are executed only if the local
-%% TOC actually will be active.
 \def\Etoc@tagging@starttoc@before{%
   \ifvmode
-%% 2026 NOV
-%%
-%% Use para/restore socket instead of \tagpdfparaOn.
-%%
-%% Assign the default plug of para/restore first, as
-%% \csbc{Etoc@tableofcontents@contents} assigned it noop for the TOC
-%% contents (see there).  We are inside the group of the TOC command, so
-%% this assignment ends with it.  This assumes the document had the default
-%% plug: we have no means to recover the plug which was assigned before.
     \def\Etoc@tagging@starttoc@after{%
       \par
       \AssignSocketPlug{tagsupport/para/restore}{default}%
       \UseTaggingSocket{para/restore}%
     }%
   \fi
-%% 2024 JAN
-%%
-%% for \etocissue{11}
-%% should I worry about an |\if@endpe\@doendpe\fi|?
-%% This all looks very fragile and crude... but does work in the initial
-%% test files!
   %% Testing for \hmode is no good if in a tikz picture for example
   \ifhmode %% WIP! This is probably not the good test!
-%% 2026 NOV
-%%
-%% Use para/end and para/begin sockets instead of manual structure/MC handling.
     \UseTaggingSocket{para/end}%
-%% 2026 NOV
-%%
-%% Same remark as above on the default plug of para/restore.
     \def\Etoc@tagging@starttoc@after{%
       \AssignSocketPlug{tagsupport/para/restore}{default}%
       \UseTaggingSocket{para/restore}%
@@ -902,38 +642,7 @@
     }%
   \fi
 }% \Etoc@tagging@starttoc@before
-%% 2024 JAN
-%%
-%% This is for \etocissue{9}, \etocissue{11}. \etocissue{12} and
-%% \etocissue{13}.  Defined to be empty as fall-back in case the ``before''
-%% did nothing.
 \let\Etoc@tagging@starttoc@after\@empty
-%% 2024 JAN
-%%
-%% User level interface for two-stages TOCs where etoc is used only in first
-%% step to construct for example a TikZ mindmap which is executed later.
-%% Hesitation whether this should check \csbc{ifEtoc@tagging} status.
-%% Or \csbc{ifEtoc@tagactive}.  Hesitation whether it is really useful
-%% to have it take an argument, e.g. \csa{etoctagstartTOCcontentsoftype}
-%% but then I am tied with upstream handling of nature of argument.
-%%
-%% TODO:
-%%
-%% This HAS to be updated in relation to
-%% \csbc{Etoc@tagging@starttoc@before}
-%% and \csbc{Etoc@tagging@starttoc@after}%
-%%
-%% TODO:
-%%
-%% Should I open and close a group therein? I decide yes for time being
-%% so maybe I don't have to worry here too much about the para-tagging bool
-%% status.  Besides this allows me to stop worrying about the minipage and
-%% parbox tagging sockets.
-%%
-%% TODO:
-%%
-%% Should this be conditional on \csbc{ifEtoc@tagactive}? probably not,
-%% as for example \csbc{etoctagReference} isn't.
 \protected\def\etoctagstartTOCcontents{%
   \begingroup
   \AssignSocketPlug{tagsupport/minipage/before}{noop}%
@@ -942,9 +651,6 @@
   \AssignSocketPlug{tagsupport/parbox/after}{noop}%
   %% Testing for \hmode is no good if in a tikz picture for example
   \ifhmode %% WIP! This is probably not the good test!
-%% 2026 NOV
-%%
-%% Use para/end and para/begin sockets instead of manual structure/MC handling.
     \UseTaggingSocket{para/end}%
     \def\Etoc@tagging@starttoc@after{%
       \ifhmode
@@ -952,9 +658,6 @@
       \fi
     }%
   \else
-%% 2024 JAN
-%%
-%% unnecessary, normally...
     \let\Etoc@tagging@starttoc@after\@empty
   \fi
   \UseTaggingSocket{toc/starttoc/before}{toc}%
@@ -968,10 +671,6 @@
   \gdef\Etoc@stackofends{{-3}{}}%
   \global\let\Etoc@level\Etoc@minf
   \global\let\Etoc@virtualtop\Etoc@minf
-%% 2024 JAN
-%%
-%% For local toc gets done in
-%% \csbc{Etoc@@startlocaltoc}/\csbc{Etoc@@startlocallistof}
   \ifEtoc@tagging
     \unless\ifEtoc@localtoc
       \Etoc@tagging@starttoc@before
@@ -987,12 +686,6 @@
   \ifEtoc@tagging
     \ifEtoc@localtoc
       \unless\ifEtoc@notactive
-%% 2024 JAN
-%%
-%% The argument is currently ignored. If it stops being so by
-%% \csa{@starttoc@cfgpoint@after} at some stage, i will have to make it either
-%% localtoc, locallof, or locallot (or whatever has been used with
-%% \csa{@starttoc@cfgpoint@before} or successor.
         \UseTaggingSocket{toc/starttoc/after}{toc}%
         \Etoc@tagging@starttoc@after
       \fi
@@ -1022,17 +715,6 @@
             \fi
           \fi
           \global\Etoc@notactivefalse
-%% 2024 JAN
-%%
-%% \etocrelease{1.2e} locates this here and not before \csbc{Etoc@toctoc} else
-%% \csbc{etocetoclocaltocmaketitle} could have kicked in and typeset a chapter
-%% title creating a Parent-Child tagging problem. \etocissue{2}
-%%
-%% Could this originate a problem perhaps if the toc file contents generate
-%% a |\begingroup/\endgroup| so that the group will be closed before the
-%% |\@starttoc@cfgpoint@after{toc}| (located in \csbc{Etoc@toctoc}) is done?
-%%
-%% The same addition is made to \csbc{Etoc@@startlocallistof}.
           \ifEtoc@tagging
             \Etoc@tagging@starttoc@before
             \UseTaggingSocket{toc/starttoc/before}{toc}%
@@ -1103,25 +785,6 @@
 \let\etoclocaltableofcontentshook\@empty
 \if1\ifEtoc@lof0\fi\ifEtoc@lot0\fi1%
 \else
-%% 2024 JAN
-%%
-%% This fixes \etocissue{7}
-%% Formerly we did
-%% \centeredline{|\def\addcontentsline{\Etoc@hackedaddcontentsline}|}
-%% but this
-%% change of signature of \csa{addcontentsline} breaks the hyperref way to alter
-%% \csa{addcontentsline} (but currently only if tagpdf related code is loaded), as
-%% it uses then generic cmd hooks with arguments to add its code.  Let's not
-%% complicate things, so we unconditionally use the proper signature.  This
-%% should work independently of whether hyperref adds its hook before or
-%% after this is executed but actually the kernel applies the cmd hooks
-%% it seems always both after package ABD code and also after preamble user
-%% ABD code.  So the hyperref cmd/addcontentsline/before will end up inserted
-%% before the \csa{Etoc@hackedcontentsline} token.
-%% \emph{This comment is in need of an updated in Sep.\@ 2025, because this token
-%% does not exist}.  It does not matter actually
-%% before the only code of our hack is to filter |#1| and take appropriate
-%% additional action which does not interfere with hyperref hook.
 \AtBeginDocument{%
   \let\Etoc@originaladdcontentsline\addcontentsline
   \def\addcontentsline#1#2#3{\Etoc@hackedaddcontentsline{#1}{#2}{#3}}%
@@ -1152,9 +815,6 @@
     \expanded{\noexpand\in@{.#1;#2,}}{.lof;figure,.lot;table,}%
     \ifin@
     \addtocontents {toc}{%
-%% 2026 NOV
-%%
-%% Add destination even if no hyperref.
       \protect\contentsline{#2}{#3}{\thepage}{\ifEtoc@hyperref\@currentHref\else\ifEtoc@tagactive\@currentHref\fi\fi}%
       \ifdefined\protected@file@percent\protected@file@percent\fi
     }%
@@ -1174,9 +834,6 @@
     \Etoc@tmp{.lof;figure,.lot;table,}%
     \ifin@
     \addtocontents {toc}{%
-%% 2026 NOV
-%%
-%% Add destination even if no hyperref.
       \protect\contentsline{#2}{#3}{\thepage}{\ifEtoc@hyperref\@currentHref\else\ifEtoc@tagactive\@currentHref\fi\fi}%
       \ifdefined\protected@file@percent\protected@file@percent\fi
     }%
@@ -1184,53 +841,16 @@
     \Etoc@originaladdcontentsline{#1}{#2}{#3}%
   }
 \fi
-%% 2024 JAN
-%%
-%% |#1| is |figure| or |table|
-%%
-%% TODO:
-%%
-%% TODO: decide if it should be rather `lof' or `lot' rather.  But then some
-%% auxiliaries must be renamed.  For example \csbc{etoclocallistoffigureshook}
-%% but unfortunately it is already documented; I am sure noone on Earth has
-%% read the docs and those few who did do not use it anyhow.
 \def\Etoc@@startlocallistof#1#2#3{%
     \ifEtoc@localtoc
        \ifnum #2=#3\relax
           \global\let\etoclocaltop\Etoc@virtualtop
           \global\Etoc@notactivefalse
-%% 2024 JAN
-%%
-%% MEMO: this has been configured in \csbc{locallistoffigures} or
-%% \csbc{locallistoftables} to trigger \csbc{Etoc@@startlocallistof@setlevels}
-%% with |figure| or |table| as argument as it must match the actual first
-%% argument of \csa{contentsline} in the |.toc| file.  But I see here that the
-%% |#1| here is not tied by that.
           \Etoc@@startlocaltochook
-%% 2024 JAN
-%%
-%% TODO:
-%%
-%% Decide if this next one should be before or after the maketitle It
-%% looks odd before, as the maketitle here is executed only in a specific
-%% case, which however is the default package configuration to detect
-%% appropriate level automatically.  If after I could use it to insert the
-%% tagging thing.  Maybe I need a private one, in addition.
           \csname etoclocallistof#1shook\endcsname
           \ifEtoc@etocstyle
               \csname etocetoclistof#1smaketitle\endcsname
           \fi
-%% 2024 JAN
-%%
-%% \etocissue{8}
-%% Same tagging related addition as in \csbc{Etoc@@startlocaltoc}, The macro
-%% uses \csbc{ifEtoc@tagging}.  Can the argument which ends up being passed
-%% to the kernel code (at this stage) have a space? like `local lof'?
-%% Anyway as |#1| is currently figure or table, and localfigure/localtable do
-%% not make much sense, let's simply use `localtoc' here.  And I have
-%% to decide how to make the finish macro inherit the argument; which however
-%% attow is disposed of by the \csa{@starttoc@cfgpoint@after} to which it
-%% maps.
           \ifEtoc@tagging\UseTaggingSocket{toc/starttoc/before}{localtoc}\fi
        \fi
     \fi
@@ -1342,9 +962,6 @@
     \global\let\Etoc@virtualtop\Etoc@minf
     \gdef\Etoc@stackofends{{-3}{}}%
     \begingroup
-%% 2024 JAN
-%%
-%% \etocrelease{1.2e} turns off tagging unconditionally here.
     \Etoc@taggingfalse
       \ifEtoc@localtoc
         \def\etoc@startlocaltoc##1{%
@@ -1577,52 +1194,18 @@
     \Etoc@tocdepthset
     \ifEtoc@parskip\parskip\z@skip\fi
     \Etoc@aftertitlehook
-%% 2024 JAN
-%%
-%% seems we need to deactivate minipage tagging (github issues \etocissue{5},
-%% which is related to \etocissue{4})
 \ifEtoc@tagactive
 \AssignSocketPlug{tagsupport/minipage/before}{noop}%
 \AssignSocketPlug{tagsupport/minipage/after}{noop}%
-%% 2024 JAN
-%%
-%% let's also deactivate parbox tagging hooks (\etocissue{10})
-%% it is expected that this and the above may come back
-%% to hit us at some point...
 \AssignSocketPlug{tagsupport/parbox/before}{noop}%
 \AssignSocketPlug{tagsupport/parbox/after}{noop}%
-%% 2026 NOV
-%%
-%% With the \LaTeX{} release of 2026-11-01, \csa{parbox} and the
-%% \texttt{minipage} environment use the para/restore socket inside their
-%% box.  As paragraph tagging is off in the TOC, this switched it on again
-%% inside the box, and opened a paragraph structure (semantic-para and
-%% text-block) inside the Reference structure of the line, with nested
-%% marked content (\etocissue{5}, \etocissue{10}).  Setting the parbox and
-%% minipage sockets to noop does not prevent this.  The kernel does the same
-%% for headings with the hang format: parbox/before, parbox/after and
-%% para/restore set to noop (latex-lab-testphase-sec-template.sty).
-%%
-%% This assignment is local to the group of the TOC command, but etoc uses
-%% para/restore itself at the end of the TOC: hence
-%% \csbc{Etoc@tagging@starttoc@after} assigns the default plug again first.
 \AssignSocketPlug{tagsupport/para/restore}{noop}%
 \fi
     \gdef\etoclocaltop{-\thr@@}%
-%% 2024 JAN
-%%
-%% the kernel \csa{@starttoc} hooks for tagging will be done from
-%% \csbc{Etoc@toctoc} expansion
     \Etoc@toctoc
     \etocaftercontentshook
 }%
 \def\Etoc@tableofcontents@etoc@after{%
-%% 2024 JAN
-%%
-%% TODO:
-%%
-%% This \csa{nobreakfalse} has been here for ages, probably from upstream
-%% kernel code, check its status
     \@nobreakfalse
     \Etoc@restoretocdepth
     \ifx\Etoc@global\global
@@ -1963,9 +1546,6 @@
 \def\etoc@ruledheading #1{%
    \hb@xt@\linewidth{\color@begingroup
 \ifEtoc@tagactive
-%% 2024 JAN
-%%
-%% \etocissue{15} same root cause as \etocissue{17}
 \AssignSocketPlug{tagsupport/minipage/before}{noop}%
 \AssignSocketPlug{tagsupport/minipage/after}{noop}%
 \AssignSocketPlug{tagsupport/parbox/before}{noop}%
@@ -2004,30 +1584,16 @@
 \newcommand*\etocframedstyle[2][\etocdefaultnbcol]{%
 \etocsettocstyle{%
     \addvspace{\etocabovetocskip}%
-%% 2024 JAN
-%%
-%% same problem as fixed below with the minipage, one can
-%% not enclose not only a minipage but also a \csa{parbox}
-%% in an \csa{hbox},
-%% cf \url{https://github.com/latex3/tagging-project#54}
-%% The location of these things is provisory.
-%% cf \etocissue{17}.
     \sbox\z@{%
 \ifEtoc@tagactive
 \AssignSocketPlug{tagsupport/minipage/before}{noop}%
 \AssignSocketPlug{tagsupport/minipage/after}{noop}%
 \AssignSocketPlug{tagsupport/parbox/before}{noop}%
 \AssignSocketPlug{tagsupport/parbox/after}{noop}%
-%% 2024 JAN
-%%
-%% ... others ?
 \fi
     #2}% title (horizontal material)
     \dimen\z@\dp\z@
     \ifdim\wd\z@<\linewidth \dp\z@\z@ \else \dimen\z@\z@ \fi
-%% 2024 JAN
-%%
-%% attention should I use kernel \csa{sbox} which has an \csa{endgraf} added
     \setbox\etoc@framed@titlebox=\hb@xt@\linewidth{%
         \color@begingroup
         \hss
@@ -2057,17 +1623,10 @@
       \kern\dimen\z@
       \vskip\etocinnertopsep
       \hbox\bgroup
-%% 2024 JAN
-%%
-%% as per |@u-fischer| advice at
-%% \centeredline{\url{https://github.com/latex3/tagging-project/issues/54}}
 \ifEtoc@tagactive
 \AssignSocketPlug{tagsupport/minipage/before}{noop}%
 \AssignSocketPlug{tagsupport/minipage/after}{noop}%
 \fi
-%% 2024 JAN
-%%
-%% the start of a minipage which will hold a multicols if nbofcolumns>1
         \begin{minipage}{\hsize}%
         \etocframedmphook
         \ifnum #1>\@ne
@@ -2633,9 +2192,6 @@
    {}%
   }% end of at begin document
 }% end of not with memoir branch
-%% 2024 JAN
-%%
-%% \etocrelease{1.2e} attempts to mirror upstream \LaTeX{} if tagging is active.
 \def\Etoc@addtocontents #1#2{%
     \addtocontents {toc}{%
       \protect\contentsline{#1}{#2}{\thepage}%
@@ -2643,11 +2199,6 @@
       \ifdefined\protected@file@percent\protected@file@percent\fi
     }%
 }
-%% 2024 JAN
-%%
-%% TODO:
-%%
-%% Review next code/comment in tagpdf context
 \def\Etoc@addcontentsline@ #1#2#3{%
     \@namedef{toclevel@#1}{#3}\addcontentsline {toc}{#1}{#2}%
 }
