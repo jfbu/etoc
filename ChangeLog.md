@@ -2,7 +2,7 @@
 
 Description of the changes to `etoc.sty` since its initial commit in this repo at version `1.2d 2023/10/29`.
 
-[This diff](https://github.com/jfbu/etoc/compare/1.2e...HEAD) compares current HEAD with release `1.2e 2026/05/04`, which did not include the tagging work.
+[This](https://github.com/jfbu/etoc/compare/1.2d-2023-10-29...HEAD) provides a commit per commit view of the evolution to current HEAD since release `1.2d 2023/10/29`, i.e\. basically since the initial commit.  In June 2024 a `tagging` branch was created to hold tagging related work, and the `etoc.sty` from the `master` branch was pruned from it. In May 2026, the `1.2e` release was done from this `master`.  A `1.2d` tag points to after the June 2024 split in the `master` branch, the `1.2d-2023-10-29` tag is the original actual release tag.  In November 2026, the `tagging` branch incorporated the few changes in `master` done on `etoc.sty` and new tagging related work was started.  At the conclusion of this process, `master` was merged into the tagging work, together with its `1.2d` and `1.2e` tags, via `git merge -s ours`.  It was then fast-forwarded and the `tagging` branch, more precisely it and `tagging-2026`, a new branch on top of it used for the November 2026 work, got deleted.  So the repo history is not completely linear but almost so: only a few commits (including the "pruning" one and the ones linked to by the `1.2d` and `1.2e` tags) are on the side of the main history.
 
 These headings map to the diffs between successive tags.
 
