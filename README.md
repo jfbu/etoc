@@ -11,9 +11,6 @@ This repository:
 
 The repository provides only `etoc.sty`, not the full `etoc.dtx` whose latest official release is only on CTAN.
 
-- [compare 1.2e...HEAD](https://github.com/jfbu/etoc/compare/1.2e...HEAD).
-- [compare 1.2d...1.2e](https://github.com/jfbu/etoc/compare/1.2d...1.2e).
-
 ## PDF Tagging
 
 `etoc 1.2f` incorporated at long last in November 2026 the work regarding tagging which had been started in January 2024.  See [`etoctagging.md`](/etoctagging.md) if you are interested into details.
