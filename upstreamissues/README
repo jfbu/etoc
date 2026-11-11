@@ -1,0 +1,8 @@
+This directory was created in January 2024 to hold some test
+files not using etoc and displaying tagging problems.
+However only one issue (tagging-project#55) was then tested
+and no other has been added since.
+
+tagging-project#55: (closed June 2024)
+    - test_tagging_lof.tex
+    - test_tagging_lof_pdf20.tex (added Nov 2026)
